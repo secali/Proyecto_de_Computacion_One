@@ -4,6 +4,9 @@ import requests
 import json
 from bs4 import BeautifulSoup
 from langdetect import detect
+import pandas as pd
+import os
+
 
 
 # We will store all methods and variables related to ShareGPT data extraction.
@@ -28,7 +31,7 @@ def batchOne():
 
     # Get request from Serper
     response = requests.request("POST", url, headers=headers, data=payload)
-    # print(response.json())
+    #print(response.json())
 
     # Filter to obtain the links
     extractedLinks = [item['link'] for item in response.json()['organic']]
@@ -38,7 +41,8 @@ def batchOne():
 
     for thisLink in extractedLinks:
         thisResponse = requests.get(thisLink)
-        # print(thisResponse.text)
+        #print(thisResponse.text)
+
 
         soup = BeautifulSoup(thisResponse.text, 'html.parser')
         humanGeneratedList = soup.findAll('p', class_='pb-2 whitespace-prewrap')
@@ -57,7 +61,9 @@ def batchOne():
     # not english text
 
     cleanHumanGeneratedList = []
+    typeHumanList = []
     cleanIaGeneratedList = []
+    typeIAList = []
 
     for item in humanGeneratedList:
 
@@ -65,8 +71,10 @@ def batchOne():
         text = soup.text
 
         if len(text) > 20 and detect(text) == ENGLISH_TAG:
+            #cleanHumanGeneratedList.append(text)
             cleanHumanGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
             print(text.strip().replace('\t', '').replace('\n', ''))
+            typeHumanList.append('h')
         else:
             print('Removed text')
 
@@ -76,13 +84,50 @@ def batchOne():
         text = soup.text
 
         if len(text) > 20 and detect(text) == ENGLISH_TAG:
+            #cleanIaGeneratedList.append(text)
             cleanIaGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
             print(text.strip().replace('\t', '').replace('\n', ''))
+            typeIAList.append('g')
         else:
             print('Removed text')
 
-    humanGeneratedList = set(cleanHumanGeneratedList)
-    iAGeneratedList = set(cleanIaGeneratedList)
+    # generamos dicionarios con los datos
+    datosHuman ={
+        'Text': cleanHumanGeneratedList,
+        'Type': typeHumanList
+    }
+    datosIA ={
+        'Text': cleanIaGeneratedList,
+        'Type': typeIAList
+    }
+    # creamos los dataFrame y concatenamos.  Generamos un DataSet completo
+    dfHuman=pd.DataFrame(datosHuman)
+    dfIA = pd.DataFrame(datosIA)
+    dfDataSet = pd.concat([dfHuman,dfIA], ignore_index=True)
 
-    print('\nThere are: ', len(humanGeneratedList), 'items in humanGeneratedList')
-    print('There are: ', len(iAGeneratedList), 'items in AIGeneratedList')
+    print (dfDataSet)
+
+    # save DataSet - format TSV
+    ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
+    ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
+    ruta_carpeta = ruta_carpeta[:ruta_carpeta.rfind(os.sep)]+os.sep+'SaveDF'
+    file = os.sep+'DataFrame.tsv'
+    print(ruta_carpeta+file)
+
+    # comprobamos si existe la carpeta
+    if not os.path.exists(ruta_carpeta):
+        # Si no existe, crear la carpeta
+        try:
+            os.makedirs(ruta_carpeta)
+            print(f"La carpeta '{ruta_carpeta}' ha sido creada.")
+        except OSError as error:
+            print(f"No se pudo crear la carpeta '{ruta_carpeta}': {error}")
+    else: # si existe, lo indicamos
+        print(f"La carpeta '{ruta_carpeta}' ya existe.")
+    # guardamos el dataset en csv tabulado
+    dfDataSet.to_csv(ruta_carpeta+file, sep='\t', index=False)
+    print ("Data frame save in: "+ ruta_carpeta+file)
+
+
+
+
