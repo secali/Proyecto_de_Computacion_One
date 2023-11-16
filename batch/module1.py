@@ -74,7 +74,7 @@ def batchOne():
             #cleanHumanGeneratedList.append(text)
             cleanHumanGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
             print(text.strip().replace('\t', '').replace('\n', ''))
-            typeHumanList.append('h')
+            typeHumanList.append('h') # añadimos etiqueta de humano
         else:
             print('Removed text')
 
@@ -87,11 +87,11 @@ def batchOne():
             #cleanIaGeneratedList.append(text)
             cleanIaGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
             print(text.strip().replace('\t', '').replace('\n', ''))
-            typeIAList.append('g')
+            typeIAList.append('g') # añadimos etiqueta de generado
         else:
             print('Removed text')
 
-    # generamos dicionarios con los datos
+    # generamos diccionarios con los arrais
     datosHuman ={
         'Text': cleanHumanGeneratedList,
         'Type': typeHumanList
@@ -101,7 +101,7 @@ def batchOne():
         'Type': typeIAList
     }
     # creamos los dataFrame y concatenamos.  Generamos un DataSet completo
-    dfHuman=pd.DataFrame(datosHuman)
+    dfHuman = pd.DataFrame(datosHuman)
     dfIA = pd.DataFrame(datosIA)
     dfDataSet = pd.concat([dfHuman,dfIA], ignore_index=True)
 
@@ -126,8 +126,4 @@ def batchOne():
         print(f"La carpeta '{ruta_carpeta}' ya existe.")
     # guardamos el dataset en csv tabulado
     dfDataSet.to_csv(ruta_carpeta+file, sep='\t', index=False)
-    print ("Data frame save in: "+ ruta_carpeta+file)
-
-
-
-
+    print("Data frame save in: "+ruta_carpeta+file)
