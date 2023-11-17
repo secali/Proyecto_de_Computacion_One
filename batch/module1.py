@@ -106,6 +106,8 @@ def batchOne():
     dfIA = pd.DataFrame(datosIA)
     dfDataSet = pd.concat([dfHuman,dfIA], ignore_index=True)
 
+    # eliminamos duplicados si existen
+    dfDataSet.drop_duplicates()
     # imprimimos el DataSet
     print (dfDataSet)
     # guardamos el DataSet
