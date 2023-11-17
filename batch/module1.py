@@ -5,7 +5,8 @@ import json
 from bs4 import BeautifulSoup
 from langdetect import detect
 import pandas as pd
-import os
+import batch.module2
+import batch.functions
 
 
 
@@ -105,25 +106,9 @@ def batchOne():
     dfIA = pd.DataFrame(datosIA)
     dfDataSet = pd.concat([dfHuman,dfIA], ignore_index=True)
 
+    # imprimimos el DataSet
     print (dfDataSet)
+    # guardamos el DataSet
+    batch.functions.guardar_dataset(dfDataSet)
+    batch.module2.batchTwo()
 
-    # save DataSet - format TSV
-    ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
-    ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
-    ruta_carpeta = ruta_carpeta[:ruta_carpeta.rfind(os.sep)]+os.sep+'SaveDF'
-    file = os.sep+'DataFrame.tsv'
-    print(ruta_carpeta+file)
-
-    # comprobamos si existe la carpeta
-    if not os.path.exists(ruta_carpeta):
-        # Si no existe, crear la carpeta
-        try:
-            os.makedirs(ruta_carpeta)
-            print(f"La carpeta '{ruta_carpeta}' ha sido creada.")
-        except OSError as error:
-            print(f"No se pudo crear la carpeta '{ruta_carpeta}': {error}")
-    else: # si existe, lo indicamos
-        print(f"La carpeta '{ruta_carpeta}' ya existe.")
-    # guardamos el dataset en csv tabulado
-    dfDataSet.to_csv(ruta_carpeta+file, sep='\t', index=False)
-    print("Data frame save in: "+ruta_carpeta+file)
