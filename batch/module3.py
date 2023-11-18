@@ -1,4 +1,6 @@
 # import required libraries
+import sys
+
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
@@ -57,6 +59,7 @@ def batchThree(dfHuman, dfIA):
 
     # evaluate predictions
     target_names = [label for idx, label in id2label.items()]
+    print ("\n", model)
     print(classification_report(Y_test, predictions, target_names=target_names))
 
     # Calcular mejor algoritmo
@@ -73,29 +76,19 @@ def batchThree(dfHuman, dfIA):
                 if score > best_score:
                     best_score = score
                     best_model = regressor
-                print(f"Model: {name} Macro F1: {score}")
+                print(f"Model: {name} Macro F1: {score:.3f}")
             except Exception as e:
+                print(f"Error en el modelo {name}: {e}")
                 continue
 
     print(f"\nBest Model: {best_model.__class__.__name__}")
     print(f"Macro F1 on Test Data: {best_score}")
 
-    # Solo dios sabe que es esto
-    # log-uniform: understand as search over p = exp(x) by varying x
-    opt = BayesSearchCV(
-        SVC(),
-        {
-            'C': (1e-6, 1e+6, 'log-uniform'),
-            'gamma': (1e-6, 1e+1, 'log-uniform'),
-            'degree': (1, 8),  # integer valued parameter
-            'kernel': ['linear', 'poly', 'rbf'],  # categorical parameter
-        },
-        n_iter=10,
-        cv=10,
-        n_points=5
-    )
+    # Seleccionamos el modelo a entrenar
+    model= best_model.__class__.__name__+"()"
+    model= BernoulliNB()
+    print (model)
+    # Entrenamos el modelo
+    model.fit(X_train,y_train)
 
-    opt.fit(X_train, Y_train)
-
-    print("val. score: %s" % opt.best_score_)
-    print("test score: %s" % opt.score(X_test, Y_test))
+    sys.exit()
