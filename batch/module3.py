@@ -15,7 +15,6 @@ from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 
 
-
 def batchThree(dfHuman, dfIA):
     print("\n############ Ejecutando Batch 3: Clasificador #############")
     max_instances_per_class = 500
@@ -25,13 +24,15 @@ def batchThree(dfHuman, dfIA):
 
     df_union = pd.concat([dfHuman, dfIA], axis=0)
 
-    x = df_union['Text']
+    X = df_union['Text']
     y = df_union['Type']
 
+    # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Dividir los datos en conjuntos de entrenamiento y prueba
-    train_df, test_df = train_test_split(x, y, test_size=0.2, random_state=42)
-
+    # Crear DataFrames para los conjuntos de entrenamiento y prueba
+    train_df = pd.DataFrame({'Text': X_train, 'Type': y_train})
+    test_df = pd.DataFrame({'Text': X_test, 'Type': y_test})
 
     # vectorize data: extract features from our data (from text to numeric vectors)
     vectorizer = TfidfVectorizer(max_features=max_features, stop_words="english", ngram_range=(1, 1))
@@ -40,8 +41,8 @@ def batchThree(dfHuman, dfIA):
 
     # vectorize labels : from text to numeric vectors
     le = LabelEncoder()
-    Y_train = le.fit_transform(train_df["label"])
-    Y_test = le.transform(test_df["label"])
+    Y_train = le.fit_transform(train_df["Type"])
+    Y_test = le.transform(test_df["Type"])
 
     # create model
     # model = LogisticRegression()
@@ -58,9 +59,7 @@ def batchThree(dfHuman, dfIA):
     target_names = [label for idx, label in id2label.items()]
     print(classification_report(Y_test, predictions, target_names=target_names))
 
-
-
-    #Calcular mejor algoritmo
+    # Calcular mejor algoritmo
     best_score = float('-inf')
     best_model = None
 
@@ -80,7 +79,6 @@ def batchThree(dfHuman, dfIA):
 
     print(f"\nBest Model: {best_model.__class__.__name__}")
     print(f"Macro F1 on Test Data: {best_score}")
-
 
     # Solo dios sabe que es esto
     # log-uniform: understand as search over p = exp(x) by varying x
