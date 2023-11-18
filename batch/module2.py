@@ -1,11 +1,13 @@
 import sys
 import batch.functions
+import batch.module3
 from tabulate import tabulate
 import pandas as pd
 import numpy as np
 
 
 def batchTwo():
+    print("\n############ Ejecutando Batch 2: CSV y manejo de datos #############")
     # obtener ruta fichero a cargar
     print("\nCargando fichero...")
     file = batch.functions.obtener_ruta()
@@ -57,4 +59,4 @@ def batchTwo():
     # construimos el dataset final
     dfDataSet = pd.concat([dfHuman, dfIA], ignore_index=True)
 
-    sys.exit()
+    batch.module3.batchThree(dfHuman, dfIA)

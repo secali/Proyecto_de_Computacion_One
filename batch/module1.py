@@ -14,6 +14,7 @@ import batch.functions
 
 
 def batchOne():
+    print("\n############Ejecutando Batch 1: Scraping#############")
     ENGLISH_TAG = 'en'
     url = "https://google.serper.dev/search"  # serper url
     # extractedLinks = []  # links obtained from Serper
