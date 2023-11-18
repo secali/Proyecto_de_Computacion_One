@@ -1,4 +1,5 @@
 # import required libraries
+import os
 import sys
 
 import pandas as pd
@@ -15,6 +16,10 @@ from sklearn.metrics import f1_score
 from skopt import BayesSearchCV
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from joblib import dump
+
+import batch.functions
 
 
 def batchThree(dfHuman, dfIA):
@@ -43,8 +48,8 @@ def batchThree(dfHuman, dfIA):
 
     # vectorize labels : from text to numeric vectors
     le = LabelEncoder()
-    Y_train = le.fit_transform(train_df["Type"])
-    Y_test = le.transform(test_df["Type"])
+    y_train = le.fit_transform(train_df["Type"])
+    y_test = le.transform(test_df["Type"])
 
     # create model
     # model = LogisticRegression()
@@ -52,7 +57,7 @@ def batchThree(dfHuman, dfIA):
     model = GradientBoostingClassifier()
 
     # train model
-    model.fit(X_train, Y_train)
+    model.fit(X_train, y_train)
 
     # get test predictions
     predictions = model.predict(X_test)
@@ -60,7 +65,7 @@ def batchThree(dfHuman, dfIA):
     # evaluate predictions
     target_names = [label for idx, label in id2label.items()]
     print ("\n", model)
-    print(classification_report(Y_test, predictions, target_names=target_names))
+    print(classification_report(y_test, predictions, target_names=target_names))
 
     # Calcular mejor algoritmo
     best_score = float('-inf')
@@ -70,9 +75,9 @@ def batchThree(dfHuman, dfIA):
         if issubclass(ClassifierClass, ClassifierMixin) and hasattr(ClassifierClass, 'fit'):
             try:
                 regressor = ClassifierClass()
-                regressor.fit(X_train, Y_train)
+                regressor.fit(X_train, y_train)
                 y_pred = regressor.predict(X_test)
-                score = f1_score(Y_test, y_pred, average="macro")
+                score = f1_score(y_test, y_pred, average="macro")
                 if score > best_score:
                     best_score = score
                     best_model = regressor
@@ -84,11 +89,14 @@ def batchThree(dfHuman, dfIA):
     print(f"\nBest Model: {best_model.__class__.__name__}")
     print(f"Macro F1 on Test Data: {best_score}")
 
-    # Seleccionamos el modelo a entrenar
-    model= best_model.__class__.__name__+"()"
-    model= BernoulliNB()
-    print (model)
-    # Entrenamos el modelo
-    model.fit(X_train,y_train)
+    try:
+        best_model.fit(X_train, y_train)
+        y_pred = best_model.predict(X_test)
+        best_score = f1_score(y_test, y_pred, average="macro")
+        print(f"Modelo: {best_model.__class__.__name__} entrenado.\nGuardando clasificador...")
+    except Exception as e:
+        print(f"Error al entrenar el mejor modelo: {e}")
 
+    clasificador= Pipeline(['model', best_model])
+    batch.functions.guardar_clasificador(clasificador)
     sys.exit()
