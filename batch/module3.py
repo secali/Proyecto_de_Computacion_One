@@ -18,7 +18,7 @@ from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from joblib import dump
-
+import batch.module4
 import batch.functions
 
 
@@ -99,4 +99,5 @@ def batchThree(dfHuman, dfIA):
 
     clasificador= Pipeline(['model', best_model])
     batch.functions.guardar_clasificador(clasificador)
-    sys.exit()
+
+    batch.module4.batchFour()
