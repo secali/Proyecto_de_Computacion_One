@@ -30,6 +30,7 @@ def batchTwo ():
     long_media_generadas = dfGeneradas[
         'Text'].str.len().mean()
 
+    # Creamos una lista con los datos
     data =[
         ["Número total de instancias", n_total],
         ["Número de instancias humanas", n_humano],
@@ -37,13 +38,10 @@ def batchTwo ():
         ["Longitud media de instancias humanas", f"{long_media_humano:.2f}"],
         ["Longitud media de instancias generadas", f"{long_media_generadas:.2f}"]
         ]
-    print(tabulate(data, headers=["Descripción", "Valor"], tablefmt="grid"))
-    '''# Mostrar los resultados
-    print(f"Número total de instancias: {n_total}")
-    print(f"Número de instancias humanas: {n_humano}")
-    print(f"Número de instancias generadas: {n_generadas}")
-    print(f"Longitud media de instancias humanas: {long_media_humano:.2f}")
-    print(f"Longitud media de instancias generadas: {long_media_generadas:.2f}")'''
+    # imprimimos los datos en forma de tabla tabulada
+    print(tabulate(data, headers=["Campo", "Valor"], tablefmt="grid"))
+
+
 
 
 
