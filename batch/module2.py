@@ -1,5 +1,6 @@
 import sys
 import batch.functions
+import batch.module3
 from tabulate import tabulate
 import pandas as pd
 import numpy as np
@@ -7,6 +8,7 @@ from sklearn.model_selection import train_test_split
 
 
 def batchTwo():
+    print("\n############ Ejecutando Batch 2: CSV y manejo de datos #############")
     # obtener ruta fichero a cargar
     print("\nCargando fichero...")
     file = batch.functions.obtener_ruta()
@@ -99,4 +101,4 @@ def batchTwo():
 
 
 
-    sys.exit()
+    batch.module3.batchThree(dfHuman, dfIA)
