@@ -18,10 +18,15 @@ def batchThree(dfHuman, dfIA):
 
     df_union = pd.concat([dfHuman, dfIA], axis=0)
 
-    X = df_union.drop('Type', axis=1)
+    x = df_union['Text']
     y = df_union['Type']
 
+
     # Dividir los datos en conjuntos de entrenamiento y prueba
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    train, test= train_test_split(x, y, test_size=0.2, random_state=42)
 
 
+    # vectorize data: extract features from our data (from text to numeric vectors)
+    vectorizer = TfidfVectorizer(max_features=max_features, stop_words="english", ngram_range=(1, 1))
+    X_train = vectorizer.fit_transform(train["Text"])
+    X_test = vectorizer.transform(test["Text"])
