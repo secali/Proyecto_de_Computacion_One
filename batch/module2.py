@@ -1,10 +1,10 @@
-import sys
+# import required libraries
+
 import batch.functions
 import batch.module3
 from tabulate import tabulate
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
 
 
 def batchTwo():
@@ -17,22 +17,20 @@ def batchTwo():
     dfDataSet = pd.read_csv(file, delimiter='\t')
     print(dfDataSet)
 
-    # imprimir primera tabla pedida
-
     # Calcular el número total de instancias
     n_total = len(dfDataSet)
+
     # Filtrar instancias humanas y generadas
     dfHuman = dfDataSet[dfDataSet['Type'] == 'h']
     dfIA = dfDataSet[dfDataSet['Type'] == 'g']
+
     # Número de instancias humanas y generadas
     n_humano = len(dfHuman)
     n_generadas = len(dfIA)
 
     # Longitud media de caracteres para instancias humanas y generadas
-    long_media_humano = dfHuman[
-        'Text'].str.len().mean()
-    long_media_generadas = dfIA[
-        'Text'].str.len().mean()
+    long_media_humano = dfHuman['Text'].str.len().mean()
+    long_media_generadas = dfIA['Text'].str.len().mean()
 
     # Creamos una lista de listas con los datos
     data = [

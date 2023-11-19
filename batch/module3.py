@@ -1,23 +1,13 @@
 # import required libraries
-import os
-import sys
 
 import pandas as pd
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.svm import SVC
-from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import classification_report
 from sklearn.utils import all_estimators
 from sklearn.base import ClassifierMixin
 from sklearn.metrics import f1_score
-from skopt import BayesSearchCV
-from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-from joblib import dump
 import batch.module4
 import batch.functions
 from tabulate import tabulate
@@ -25,12 +15,11 @@ from tabulate import tabulate
 
 def batchThree():
     print("\n############ Ejecutando Batch 3: Clasificador #############")
-    max_instances_per_class = 500
+    # max_instances_per_class = 500
     max_features = 2000  # maximum number of features extracted for our instances
-    random_seed = 777  # set random seed for reproducibility
-    id2label = {0: "h", 1: "g"}
+    # random_seed = 777  # set random seed for reproducibility
+    # id2label = {0: "h", 1: "g"}
 
-    #dfDataSet = pd.concat([dfHuman, dfIA], axis=0)
 
     print("\nCargando fichero...")
     file = batch.functions.obtener_ruta_guardado('SaveDF','DataSetFinal.tsv')
@@ -88,33 +77,19 @@ def batchThree():
     y_train = le.fit_transform(train_df["Type"])
     y_test = le.transform(test_df["Type"])
 
-    # create model
-    # model = LogisticRegression()
-    # model = SVC(kernel="poly")
-    # model = GradientBoostingClassifier()
-
-    # train model
-    #  model.fit(X_train, y_train)
-
-    # get test predictions
-    #  predictions = model.predict(X_test)
-
-    # evaluate predictions
-    # target_names = [label for idx, label in id2label.items()]
-    # print ("\n", model)
-    # print(classification_report(y_test, predictions, target_names=target_names))
-
     # Calcular mejor algoritmo
     best_score = float('-inf')
     best_model = None
 
+    # recorremos los algoritmos de clasificacion
     for name, ClassifierClass in all_estimators(type_filter='classifier'):
         if issubclass(ClassifierClass, ClassifierMixin) and hasattr(ClassifierClass, 'fit'):
             try:
                 regressor = ClassifierClass()
+                print (regressor)
                 regressor.fit(X_train, y_train)
                 y_pred = regressor.predict(X_test)
-                print(X_test.shape)
+                # print(X_test.shape)
                 score = f1_score(y_test, y_pred, average="macro")
                 if score > best_score:
                     best_score = score
@@ -128,9 +103,8 @@ def batchThree():
     print(f"Macro F1 on Test Data: {best_score}")
 
     try:
+        print (best_model)
         best_model.fit(X_train, y_train)
-        #y_pred = best_model.predict(X_test)
-        #best_score = f1_score(y_test, y_pred, average="macro")
         print(f"Modelo: {best_model.__class__.__name__} entrenado.\nGuardando clasificador...")
     except Exception as e:
         print(f"Error al entrenar el mejor modelo: {e}")
