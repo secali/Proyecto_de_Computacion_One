@@ -66,7 +66,7 @@ def guardar_dataset(dfDataSet):
     dfDataSet.to_csv(ruta_carpeta + file, sep='\t', index=False)
     print("Data frame save in: " + ruta_carpeta + file)
 
-def guardar_clasificador(clf):
+def guardar_clf(clf):
     print("\nGuardando el fichero...")
     # save DataSet - format TSV
     file, ruta_carpeta = obtener_ruta_guardado_clf()
@@ -85,6 +85,25 @@ def guardar_clasificador(clf):
     dump(clf,ruta_carpeta+file)
     print("Clasificador save in: " + ruta_carpeta + file)
 
+def guardar_vct(vct):
+    print("\nGuardando el fichero...")
+    # save DataSet - format TSV
+    file, ruta_carpeta = obtener_ruta_guardado_vct()
+    # print(ruta_carpeta + file)
+    # comprobamos si existe la carpeta
+    if not os.path.exists(ruta_carpeta):
+        # Si no existe, crear la carpeta
+        try:
+            os.makedirs(ruta_carpeta)
+            print(f"La carpeta '{ruta_carpeta}' ha sido creada.")
+        except OSError as error:
+            print(f"No se pudo crear la carpeta '{ruta_carpeta}': {error}")
+    else:  # si existe, lo indicamos
+        print(f"La carpeta '{ruta_carpeta}' ya existe.")
+    # guardamos vectorizador en formato .joblib
+    dump(vct,ruta_carpeta+file)
+    print("Vectorizador save in: " + ruta_carpeta + file)
+
 def obtener_ruta_guardado():
     ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
     ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
@@ -97,6 +116,12 @@ def obtener_ruta_guardado_clf():
     ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
     ruta_carpeta = ruta_carpeta[:ruta_carpeta.rfind(os.sep)] + os.sep + 'SaveCLF'
     file = os.sep + 'clf.joblib'
+    return file, ruta_carpeta
+def obtener_ruta_guardado_vct():
+    ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
+    ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
+    ruta_carpeta = ruta_carpeta[:ruta_carpeta.rfind(os.sep)] + os.sep + 'SaveVCT'
+    file = os.sep + 'vct.joblib'
     return file, ruta_carpeta
 
 def obtener_ruta():

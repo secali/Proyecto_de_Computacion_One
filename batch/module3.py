@@ -77,6 +77,7 @@ def batchThree(dfHuman, dfIA):
                 regressor = ClassifierClass()
                 regressor.fit(X_train, y_train)
                 y_pred = regressor.predict(X_test)
+                print(X_test.shape)
                 score = f1_score(y_test, y_pred, average="macro")
                 if score > best_score:
                     best_score = score
@@ -91,13 +92,14 @@ def batchThree(dfHuman, dfIA):
 
     try:
         best_model.fit(X_train, y_train)
-        y_pred = best_model.predict(X_test)
-        best_score = f1_score(y_test, y_pred, average="macro")
+        #y_pred = best_model.predict(X_test)
+        #best_score = f1_score(y_test, y_pred, average="macro")
         print(f"Modelo: {best_model.__class__.__name__} entrenado.\nGuardando clasificador...")
     except Exception as e:
         print(f"Error al entrenar el mejor modelo: {e}")
 
     clasificador= Pipeline(['model', best_model])
-    batch.functions.guardar_clasificador(clasificador)
+    batch.functions.guardar_clf(clasificador)
+    batch.functions.guardar_vct(vectorizer)
 
     batch.module4.batchFour()
