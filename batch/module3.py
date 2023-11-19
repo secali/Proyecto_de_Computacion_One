@@ -67,6 +67,8 @@ def batchThree():
     train_df = pd.DataFrame({'Text': X_train, 'Type': y_train})
     test_df = pd.DataFrame({'Text': X_test, 'Type': y_test})
 
+    # print(test_df)
+
     # vectorize data: extract features from our data (from text to numeric vectors)
     vectorizer = TfidfVectorizer(max_features=max_features, stop_words="english", ngram_range=(1, 1))
     X_train = vectorizer.fit_transform(train_df["Text"])
@@ -76,6 +78,8 @@ def batchThree():
     le = LabelEncoder()
     y_train = le.fit_transform(train_df["Type"])
     y_test = le.transform(test_df["Type"])
+
+    # print (y_test)
 
     # Calcular mejor algoritmo
     best_score = float('-inf')
@@ -89,7 +93,7 @@ def batchThree():
                 print (regressor)
                 regressor.fit(X_train, y_train)
                 y_pred = regressor.predict(X_test)
-                # print(X_test.shape)
+                print(y_pred)
                 score = f1_score(y_test, y_pred, average="macro")
                 if score > best_score:
                     best_score = score
@@ -98,7 +102,7 @@ def batchThree():
             except Exception as e:
                 print(f"Error en el modelo {name}: {e}")
                 continue
-
+    # imprimimos los resultados
     print(f"\nBest Model: {best_model.__class__.__name__}")
     print(f"Macro F1 on Test Data: {best_score}")
 
@@ -109,8 +113,7 @@ def batchThree():
     except Exception as e:
         print(f"Error al entrenar el mejor modelo: {e}")
 
-    clasificador= Pipeline(['model', best_model])
-    batch.functions.guardar_clf_vct('clf',clasificador)
+    batch.functions.guardar_clf_vct('clf', best_model)
     batch.functions.guardar_clf_vct('vct',vectorizer)
 
     batch.module4.batchFour()
