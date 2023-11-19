@@ -11,7 +11,7 @@ def batchTwo():
     print("\n############ Ejecutando Batch 2: CSV y manejo de datos #############")
     # obtener ruta fichero a cargar
     print("\nCargando fichero...")
-    file = batch.functions.obtener_ruta('DataFrame.tsv')
+    file = batch.functions.obtener_ruta_guardado('SaveDF', 'DataFrame.tsv')
 
     # creamos dataframe con datos fichero
     dfDataSet = pd.read_csv(file, delimiter='\t')
@@ -63,4 +63,4 @@ def batchTwo():
     # guardamos el DataSet final
     batch.functions.guardar_dataset(dfDataSet_final, 'DataSetFinal.tsv')
 
-    batch.module3.batchThree(dfHuman, dfIA)
+    batch.module3.batchThree()

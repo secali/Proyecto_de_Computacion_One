@@ -9,15 +9,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 def batchFour():
     print("\n############ Ejecutando Batch 4: Carga clasificador y realizar predicciones #############")
 
-    file_clf,ruta_clf =functions.obtener_ruta_guardado_clf()
-    file_vct, ruta_vct = functions.obtener_ruta_guardado_vct()
-
     # Cargar el clasificador desde el archivo
-    loaded_classifier = load(ruta_clf+file_clf)
-    print("Clasificador "+file_clf+ " cargado")
+    loaded_classifier = load(functions.obtener_ruta_guardado('SaveCLF','clf.joblib'))
+    print("Clasificador cargado")
     # Cargar el vectorizador desde un archivo
-    loaded_vectorizador = load(ruta_vct+file_vct)
-    print("Vectorizador " + file_vct + " cargado")
+    loaded_vectorizador = load(functions.obtener_ruta_guardado('SaveVCT','vct.joblib'))
+    print("Vectorizador cargado")
 
     valores_aceptados = ['S', 'N']
     entrada = 'a'

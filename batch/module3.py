@@ -23,7 +23,7 @@ import batch.functions
 from tabulate import tabulate
 
 
-def batchThree(dfHuman, dfIA):
+def batchThree():
     print("\n############ Ejecutando Batch 3: Clasificador #############")
     max_instances_per_class = 500
     max_features = 2000  # maximum number of features extracted for our instances
@@ -33,7 +33,7 @@ def batchThree(dfHuman, dfIA):
     #dfDataSet = pd.concat([dfHuman, dfIA], axis=0)
 
     print("\nCargando fichero...")
-    file = batch.functions.obtener_ruta('DataSetFinal.tsv')
+    file = batch.functions.obtener_ruta_guardado('SaveDF','DataSetFinal.tsv')
 
     # creamos dataframe con datos fichero
     dfDataSet = pd.read_csv(file, delimiter='\t')

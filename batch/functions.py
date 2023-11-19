@@ -7,7 +7,7 @@ from joblib import dump
 def obtener_datos():
     global ruta_script, ruta_carpeta, file
     # obtener ruta si existe dataset DataSet - format TSV
-    obtener_ruta_existe()
+    file = os.sep + 'SaveDF' + os.sep + 'DataFrame.tsv'
 
     # Verificar si el archivo existe en la ruta proporcionada
     if os.path.exists(file):
@@ -39,58 +39,30 @@ def obtener_datos():
         batch.module1.batchOne()
 
 
-def obtener_ruta_existe():
-    global ruta_script, ruta_carpeta, file
-    #ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
-    #ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
-    # ruta_carpeta = ruta_carpeta[:ruta_carpeta.rfind(os.sep)] + os.sep + 'SaveDF'
-    file = os.sep + 'SaveDF' + os.sep + 'DataFrame.tsv'
-
-
 def guardar_dataset(dfDataSet, archivo):
     print("\nGuardando el fichero...")
     # save DataSet - format TSV
-    ruta_carpeta = obtener_ruta_guardado_df()
-    file = os.sep +archivo
-    # print(ruta_carpeta + file)
-    # comprobamos si existe la carpeta
-    if not os.path.exists(ruta_carpeta):
-        # Si no existe, crear la carpeta
-        try:
-            os.makedirs(ruta_carpeta)
-            print(f"La carpeta '{ruta_carpeta}' ha sido creada.")
-        except OSError as error:
-            print(f"No se pudo crear la carpeta '{ruta_carpeta}': {error}")
-    else:  # si existe, lo indicamos
-        print(f"La carpeta '{ruta_carpeta}' ya existe.")
-    # guardamos el dataset en csv tabulado
-    dfDataSet.to_csv(ruta_carpeta + file, sep='\t', index=False)
-    print("Data frame save in: " + ruta_carpeta + file)
+    ruta_carpeta = obtener_ruta_guardado('SaveDF', archivo)
+    dfDataSet.to_csv(ruta_carpeta, sep='\t', index=False)
+    print("Data frame save in: " + ruta_carpeta)
 
 def guardar_clf(clf):
     print("\nGuardando el fichero...")
-    # save DataSet - format TSV
-    file, ruta_carpeta = obtener_ruta_guardado_clf()
-    # print(ruta_carpeta + file)
-    # comprobamos si existe la carpeta
-    if not os.path.exists(ruta_carpeta):
-        # Si no existe, crear la carpeta
-        try:
-            os.makedirs(ruta_carpeta)
-            print(f"La carpeta '{ruta_carpeta}' ha sido creada.")
-        except OSError as error:
-            print(f"No se pudo crear la carpeta '{ruta_carpeta}': {error}")
-    else:  # si existe, lo indicamos
-        print(f"La carpeta '{ruta_carpeta}' ya existe.")
-    # guardamos clasificador en formato .joblib
-    dump(clf,ruta_carpeta+file)
-    print("Clasificador save in: " + ruta_carpeta + file)
+    ruta_carpeta = obtener_ruta_guardado('SaveCLF', 'CLF.joblib')
+    dump(clf,ruta_carpeta)
+    print("Clasificador save in: " + ruta_carpeta)
 
 def guardar_vct(vct):
     print("\nGuardando el fichero...")
-    # save DataSet - format TSV
-    file, ruta_carpeta = obtener_ruta_guardado_vct()
-    # print(ruta_carpeta + file)
+    ruta_carpeta= obtener_ruta_guardado('SaveVCT', 'vct.joblib')
+    dump(vct,ruta_carpeta)
+    print("Vectorizador save in: " + ruta_carpeta)
+
+
+def obtener_ruta_guardado(carpeta, fichero):
+    ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
+    ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
+    ruta_carpeta = (ruta_carpeta[:ruta_carpeta.rfind(os.sep)] + os.sep + carpeta)
     # comprobamos si existe la carpeta
     if not os.path.exists(ruta_carpeta):
         # Si no existe, crear la carpeta
@@ -99,35 +71,7 @@ def guardar_vct(vct):
             print(f"La carpeta '{ruta_carpeta}' ha sido creada.")
         except OSError as error:
             print(f"No se pudo crear la carpeta '{ruta_carpeta}': {error}")
-    else:  # si existe, lo indicamos
-        print(f"La carpeta '{ruta_carpeta}' ya existe.")
-    # guardamos vectorizador en formato .joblib
-    dump(vct,ruta_carpeta+file)
-    print("Vectorizador save in: " + ruta_carpeta + file)
-
-def obtener_ruta_guardado_df():
-    ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
-    ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
-    ruta_carpeta = ruta_carpeta[:ruta_carpeta.rfind(os.sep)] + os.sep + 'SaveDF'
-    #file = os.sep + 'DataFrame.tsv'
-    return ruta_carpeta
-
-def obtener_ruta_guardado_clf():
-    ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
-    ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
-    ruta_carpeta = ruta_carpeta[:ruta_carpeta.rfind(os.sep)] + os.sep + 'SaveCLF'
-    file = os.sep + 'clf.joblib'
-    return file, ruta_carpeta
-def obtener_ruta_guardado_vct():
-    ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
-    ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
-    ruta_carpeta = ruta_carpeta[:ruta_carpeta.rfind(os.sep)] + os.sep + 'SaveVCT'
-    file = os.sep + 'vct.joblib'
-    return file, ruta_carpeta
-
-def obtener_ruta(archivo):
-    ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
-    ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
-    ruta_carpeta = ruta_carpeta[:ruta_carpeta.rfind(os.sep)] + os.sep + 'SaveDF'
-    file = ruta_carpeta + os.sep + archivo
-    return file
+    #else:  # si existe, lo indicamos
+     #   print(f"La carpeta '{ruta_carpeta}' ya existe.")
+    ruta_completa = ruta_carpeta + os.sep + fichero
+    return ruta_completa
