@@ -46,17 +46,15 @@ def guardar_dataset(dfDataSet, archivo):
     dfDataSet.to_csv(ruta_carpeta, sep='\t', index=False)
     print("Data frame save in: " + ruta_carpeta)
 
-def guardar_clf(clf):
-    print("\nGuardando el fichero...")
-    ruta_carpeta = obtener_ruta_guardado('SaveCLF', 'CLF.joblib')
-    dump(clf,ruta_carpeta)
-    print("Clasificador save in: " + ruta_carpeta)
 
-def guardar_vct(vct):
+def guardar_clf_vct(tipo, fichero):
+    if tipo =='clf':
+        ruta_carpeta = obtener_ruta_guardado('SaveCLF', 'CLF.joblib')
+    else :
+        ruta_carpeta = obtener_ruta_guardado('SaveVCT', 'vct.joblib')
     print("\nGuardando el fichero...")
-    ruta_carpeta= obtener_ruta_guardado('SaveVCT', 'vct.joblib')
-    dump(vct,ruta_carpeta)
-    print("Vectorizador save in: " + ruta_carpeta)
+    dump(fichero ,ruta_carpeta)
+    print("Clasificador save in: " + ruta_carpeta)
 
 
 def obtener_ruta_guardado(carpeta, fichero):

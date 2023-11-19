@@ -136,7 +136,7 @@ def batchThree():
         print(f"Error al entrenar el mejor modelo: {e}")
 
     clasificador= Pipeline(['model', best_model])
-    batch.functions.guardar_clf(clasificador)
-    batch.functions.guardar_vct(vectorizer)
+    batch.functions.guardar_clf_vct('clf',clasificador)
+    batch.functions.guardar_clf_vct('vct',vectorizer)
 
     batch.module4.batchFour()
