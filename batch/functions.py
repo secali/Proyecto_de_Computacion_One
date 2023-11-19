@@ -41,16 +41,17 @@ def obtener_datos():
 
 def obtener_ruta_existe():
     global ruta_script, ruta_carpeta, file
-    ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
-    ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
+    #ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
+    #ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
     # ruta_carpeta = ruta_carpeta[:ruta_carpeta.rfind(os.sep)] + os.sep + 'SaveDF'
     file = os.sep + 'SaveDF' + os.sep + 'DataFrame.tsv'
 
 
-def guardar_dataset(dfDataSet):
+def guardar_dataset(dfDataSet, archivo):
     print("\nGuardando el fichero...")
     # save DataSet - format TSV
-    file, ruta_carpeta = obtener_ruta_guardado()
+    ruta_carpeta = obtener_ruta_guardado_df()
+    file = os.sep +archivo
     # print(ruta_carpeta + file)
     # comprobamos si existe la carpeta
     if not os.path.exists(ruta_carpeta):
@@ -104,12 +105,12 @@ def guardar_vct(vct):
     dump(vct,ruta_carpeta+file)
     print("Vectorizador save in: " + ruta_carpeta + file)
 
-def obtener_ruta_guardado():
+def obtener_ruta_guardado_df():
     ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
     ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
     ruta_carpeta = ruta_carpeta[:ruta_carpeta.rfind(os.sep)] + os.sep + 'SaveDF'
-    file = os.sep + 'DataFrame.tsv'
-    return file, ruta_carpeta
+    #file = os.sep + 'DataFrame.tsv'
+    return ruta_carpeta
 
 def obtener_ruta_guardado_clf():
     ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
@@ -124,9 +125,9 @@ def obtener_ruta_guardado_vct():
     file = os.sep + 'vct.joblib'
     return file, ruta_carpeta
 
-def obtener_ruta():
+def obtener_ruta(archivo):
     ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
     ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
     ruta_carpeta = ruta_carpeta[:ruta_carpeta.rfind(os.sep)] + os.sep + 'SaveDF'
-    file = ruta_carpeta + os.sep + 'DataFrame.tsv'
+    file = ruta_carpeta + os.sep + archivo
     return file

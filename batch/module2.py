@@ -11,7 +11,7 @@ def batchTwo():
     print("\n############ Ejecutando Batch 2: CSV y manejo de datos #############")
     # obtener ruta fichero a cargar
     print("\nCargando fichero...")
-    file = batch.functions.obtener_ruta()
+    file = batch.functions.obtener_ruta('DataFrame.tsv')
 
     # creamos dataframe con datos fichero
     dfDataSet = pd.read_csv(file, delimiter='\t')
@@ -60,45 +60,7 @@ def batchTwo():
     # construimos el dataset final
     dfDataSet_final = pd.concat([dfHuman, dfIA], ignore_index=True)
 
-    # Separar las características (X) del objetivo (y)
-    X = dfDataSet_final['Text']  # Características, en este caso, la columna 'Text'
-    y = dfDataSet_final['Type']  # Objetivo, en este caso, la columna 'Type'
-
-    # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    # Número total de instancias en el dataset original
-    n_total = len(dfDataSet)
-    # Número de instancias en el conjunto de entrenamiento
-    n_train = len(X_train)
-    # Número de instancias en el conjunto de prueba
-    n_test = len(X_test)
-    # Número de instancias humanas en el conjunto de entrenamiento
-    n_human_train = sum(y_train == 'h')
-    # Número de instancias generadas en el conjunto de entrenamiento
-    n_generated_train = sum(y_train == 'g')
-    # Número de instancias humanas en el conjunto de prueba
-    n_human_test = sum(y_test == 'h')
-    # Número de instancias generadas en el conjunto de prueba
-    n_generated_test = sum(y_test == 'g')
-
-    # Creamos una lista de listas con los datos
-    data = [
-        ["Número de instancias del training", n_train],
-        ["Número de instancias del test", n_test],
-        ["Número de instancias humanas en el training", n_human_train],
-        ["Número de instancias generadas en el training", n_generated_train],
-        ["Número de instancias humanas en el test", n_human_test],
-        ["Número de instancias generadas en el test", n_generated_test]
-    ]
-
-    # Imprimimos los datos en forma de tabla tabulada
-    print(tabulate(data, headers=["Descripción", "Valor"], tablefmt="grid"))
-
-    # print(y_train + " - " + X_train + "\n")
-    # print(y_test + " - " + X_test + "\n")
-
-
-
+    # guardamos el DataSet final
+    batch.functions.guardar_dataset(dfDataSet_final, 'DataSetFinal.tsv')
 
     batch.module3.batchThree(dfHuman, dfIA)
