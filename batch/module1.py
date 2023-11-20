@@ -21,7 +21,7 @@ def batchOne():
     # method that extracts Serper links and visits them to extract Human and AI conversations.
     payload = json.dumps({
         "q": "site:sharegpt.com",
-        "num": 1000
+        "num": 100
     })
     headers = {
         'X-API-KEY': 'f89a56ab46725993c40a6939284b05fdfe7ecce4',
@@ -47,11 +47,9 @@ def batchOne():
 
         soup = BeautifulSoup(thisResponse.text, 'html.parser')
         humanGeneratedList.append(soup.findAll('p', class_='pb-2 whitespace-prewrap'))
-        print(len(humanGeneratedList))
 
         soup = BeautifulSoup(thisResponse.text, 'html.parser')
         iAGeneratedList.append(soup.findAll('div', class_='utils_response__b5jEi'))
-        print(len(iAGeneratedList))
 
     print('Hay: ', len(humanGeneratedList), 'items en humanGeneratedList')
     print('Hay: ', len(iAGeneratedList), 'items en AIGeneratedList')
@@ -64,31 +62,33 @@ def batchOne():
     cleanIaGeneratedList = []
     typeIAList = []
 
-    for item in humanGeneratedList:
+    for extractedResponses in humanGeneratedList:
+        for item in extractedResponses:
 
-        soup = BeautifulSoup(item.text, "html.parser")
-        text = soup.text
+            soup = BeautifulSoup(item.text, "html.parser")
+            text = soup.text
 
-        if len(text) > 20 and detect(text) == ENGLISH_TAG:
-            # cleanHumanGeneratedList.append(text)
-            cleanHumanGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
-            print(text.strip().replace('\t', '').replace('\n', ''))
-            typeHumanList.append('h')  # añadimos etiqueta de humano
-        else:
-            print('Removed text')
+            if len(text) > 20 and detect(text) == ENGLISH_TAG:
+                # cleanHumanGeneratedList.append(text)
+                cleanHumanGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
+                print(text.strip().replace('\t', '').replace('\n', ''))
+                typeHumanList.append('h')  # añadimos etiqueta de humano
+            else:
+                print('Removed text')
 
-    for item in iAGeneratedList:
+    for extractedResponses in iAGeneratedList:
+        for item in extractedResponses:
 
-        soup = BeautifulSoup(item.text, "html.parser")
-        text = soup.text
+            soup = BeautifulSoup(item.text, "html.parser")
+            text = soup.text
 
-        if len(text) > 20 and detect(text) == ENGLISH_TAG:
-            # cleanIaGeneratedList.append(text)
-            cleanIaGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
-            print(text.strip().replace('\t', '').replace('\n', ''))
-            typeIAList.append('g')  # añadimos etiqueta de generado
-        else:
-            print('Removed text')
+            if len(text) > 20 and detect(text) == ENGLISH_TAG:
+                # cleanIaGeneratedList.append(text)
+                cleanIaGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
+                print(text.strip().replace('\t', '').replace('\n', ''))
+                typeIAList.append('g')  # añadimos etiqueta de generado
+            else:
+                print('Removed text')
 
     # generamos diccionarios con los arrais
     datosHuman = {
