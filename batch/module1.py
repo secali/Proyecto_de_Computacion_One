@@ -20,11 +20,13 @@ def batchOne():
 
     # method that extracts Serper links and visits them to extract Human and AI conversations.
     payload = json.dumps({
-        "q": "site:sharegpt.com"
+        "q": "site:sharegpt.com",
+        "num": 100
     })
     headers = {
         'X-API-KEY': 'f89a56ab46725993c40a6939284b05fdfe7ecce4',
         'Content-Type': 'application/json'
+
     }
 
     # Get request from Serper
