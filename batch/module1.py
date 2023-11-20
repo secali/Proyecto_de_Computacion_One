@@ -71,10 +71,10 @@ def batchOne():
             if len(text) > 20 and detect(text) == ENGLISH_TAG:
                 # cleanHumanGeneratedList.append(text)
                 cleanHumanGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
-                print(text.strip().replace('\t', '').replace('\n', ''))
+                # print(text.strip().replace('\t', '').replace('\n', ''))
                 typeHumanList.append('h')  # añadimos etiqueta de humano
             else:
-                print('Removed text')
+                print('Texto Eliminado!')
 
     for extractedResponses in iAGeneratedList:
         for item in extractedResponses:
@@ -85,10 +85,10 @@ def batchOne():
             if len(text) > 20 and detect(text) == ENGLISH_TAG:
                 # cleanIaGeneratedList.append(text)
                 cleanIaGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
-                print(text.strip().replace('\t', '').replace('\n', ''))
+                # print(text.strip().replace('\t', '').replace('\n', ''))
                 typeIAList.append('g')  # añadimos etiqueta de generado
             else:
-                print('Removed text')
+                print('Texto Eliminado!')
 
     # generamos diccionarios con los arrais
     datosHuman = {
