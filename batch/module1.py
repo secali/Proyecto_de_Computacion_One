@@ -40,18 +40,18 @@ def batchOne():
     i = 0
     # Visit all links and GET clasify conversation in human or generated
     for thisLink in extractedLinks:
-        print(i)
+        print("Cargando: ", i % 100, "%")
         i += 1
         thisResponse = requests.get(thisLink)
         # print(thisResponse.text)
 
         soup = BeautifulSoup(thisResponse.text, 'html.parser')
-        humanGeneratedList = soup.findAll('p', class_='pb-2 whitespace-prewrap')
-        # print(humanGeneratedList)
+        humanGeneratedList.append(soup.findAll('p', class_='pb-2 whitespace-prewrap'))
+        print(len(humanGeneratedList))
 
         soup = BeautifulSoup(thisResponse.text, 'html.parser')
-        iAGeneratedList = soup.findAll('div', class_='utils_response__b5jEi')
-        # print(AIGeneratedList)
+        iAGeneratedList.append(soup.findAll('div', class_='utils_response__b5jEi'))
+        print(len(iAGeneratedList))
 
     print('Hay: ', len(humanGeneratedList), 'items en humanGeneratedList')
     print('Hay: ', len(iAGeneratedList), 'items en AIGeneratedList')
