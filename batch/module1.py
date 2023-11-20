@@ -21,7 +21,7 @@ def batchOne():
     # method that extracts Serper links and visits them to extract Human and AI conversations.
     payload = json.dumps({
         "q": "site:sharegpt.com",
-        "num": 100
+        "num": 1000
     })
     headers = {
         'X-API-KEY': 'f89a56ab46725993c40a6939284b05fdfe7ecce4',
@@ -35,10 +35,13 @@ def batchOne():
 
     # Filter to obtain the links
     extractedLinks = [item['link'] for item in response.json()['organic']]
-    print(extractedLinks)
+    print("Se ha encontrado ", len(extractedLinks), " links en Serper")
 
+    i = 0
     # Visit all links and GET clasify conversation in human or generated
     for thisLink in extractedLinks:
+        print(i)
+        i += 1
         thisResponse = requests.get(thisLink)
         # print(thisResponse.text)
 
@@ -50,8 +53,8 @@ def batchOne():
         iAGeneratedList = soup.findAll('div', class_='utils_response__b5jEi')
         # print(AIGeneratedList)
 
-    print('There are: ', len(humanGeneratedList), 'items in humanGeneratedList')
-    print('There are: ', len(iAGeneratedList), 'items in AIGeneratedList')
+    print('Hay: ', len(humanGeneratedList), 'items en humanGeneratedList')
+    print('Hay: ', len(iAGeneratedList), 'items en AIGeneratedList')
 
     # Triying to clean html tags after human/AI filter, less than 20 character and
     # not english text
