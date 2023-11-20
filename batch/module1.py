@@ -21,7 +21,7 @@ def batchOne():
     # method that extracts Serper links and visits them to extract Human and AI conversations.
     payload = json.dumps({
         "q": "site:sharegpt.com",
-        "num": 100
+        "num": 60
     })
     headers = {
         'X-API-KEY': 'f89a56ab46725993c40a6939284b05fdfe7ecce4',
@@ -37,11 +37,9 @@ def batchOne():
     extractedLinks = [item['link'] for item in response.json()['organic']]
     print("Se ha encontrado ", len(extractedLinks), " links en Serper")
 
-    i = 0
     # Visit all links and GET clasify conversation in human or generated
+    print("Cargando contenido de los links...")
     for thisLink in extractedLinks:
-        print("Cargando: ", i % 100, "%")
-        i += 1
         thisResponse = requests.get(thisLink)
         # print(thisResponse.text)
 
