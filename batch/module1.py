@@ -73,6 +73,7 @@ def batchOne():
                 cleanHumanGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
                 # print(text.strip().replace('\t', '').replace('\n', ''))
                 typeHumanList.append('h')  # añadimos etiqueta de humano
+                print("Texto añadido a Humano!")
             else:
                 print('Texto Eliminado!')
 
@@ -87,6 +88,7 @@ def batchOne():
                 cleanIaGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
                 # print(text.strip().replace('\t', '').replace('\n', ''))
                 typeIAList.append('g')  # añadimos etiqueta de generado
+                print("Texto añadido a Generado!")
             else:
                 print('Texto Eliminado!')
 
