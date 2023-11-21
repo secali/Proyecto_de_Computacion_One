@@ -1,4 +1,3 @@
-import batch.module1_ant
 import batch.module1
 import batch.module2
 import os
