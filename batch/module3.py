@@ -13,6 +13,7 @@ import batch.functions
 from tabulate import tabulate
 
 
+# batch 3 - modulo que usamos para crear los test, elegir modelo, entrenar y guardar clasificador y vectorizador
 def batchThree():
     print("\n############ Ejecutando Batch 3: Clasificador #############")
     max_instances_per_class = 100

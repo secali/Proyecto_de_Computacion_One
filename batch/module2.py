@@ -18,22 +18,22 @@ def batchTwo():
     dfDataSet = pd.read_csv(file, delimiter='\t')
     print(dfDataSet)
 
-    # Calcular el número total de instancias
+    # calcular el número total de instancias
     n_total = len(dfDataSet)
 
-    # Filtrar instancias humanas y generadas
+    # dividir instancias humanas y generadas
     dfHuman = dfDataSet[dfDataSet['Type'] == 'h']
     dfIA = dfDataSet[dfDataSet['Type'] == 'g']
 
-    # Número de instancias humanas y generadas
+    # número de instancias humanas y generadas
     n_humano = len(dfHuman)
     n_generadas = len(dfIA)
 
-    # Longitud media de caracteres para instancias humanas y generadas
+    # longitud media de caracteres para instancias humanas y generadas
     long_media_humano = dfHuman['Text'].str.len().mean()
     long_media_generadas = dfIA['Text'].str.len().mean()
 
-    # Creamos una lista de listas con los datos
+    # creamos una lista de listas con los datos
     data = [
         ["Número total de instancias", n_total],
         ["Número de instancias humanas", n_humano],
@@ -41,10 +41,10 @@ def batchTwo():
         ["Longitud media de instancias humanas", f"{long_media_humano:.2f}"],
         ["Longitud media de instancias generadas", f"{long_media_generadas:.2f}"]
     ]
-    # Imprimimos los datos en forma de tabla tabulada
+    # imprimimos los datos en forma de tabla tabulada
     print(tabulate(data, headers=["Campo", "Valor"], tablefmt="grid"))
 
-    # Balanceamos el numero de resultados
+    # balanceamos el numero de resultados
     if n_humano > n_generadas:
         # elegimos de forma random los indices a borrar
         indices_to_remove = np.random.choice(dfHuman.index, (n_humano - n_generadas), replace=False)
