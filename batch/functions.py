@@ -36,7 +36,7 @@ def obtener_datos():
             entrada = input("\n¿Desea actualizar los datos? S/N:\n")
             if entrada in ['S','s']:
                 print("Obteniendo datos....")
-                batch.modulo1.batchOne()
+                batch.module1.batchOne()
             elif entrada in ['N', 'n']:
                 batch.module2.batchTwo()
             else:

@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 import batch.module4
 import batch.functions
 from tabulate import tabulate
+from sklearn.metrics import classification_report
 
 
 # batch 3 - modulo que usamos para crear los test, elegir modelo, entrenar y guardar clasificador y vectorizador
@@ -95,11 +96,14 @@ def batchThree():
                 print (regressor)
                 regressor.fit(X_train, y_train)
                 y_pred = regressor.predict(X_test)
+                # Calcular precision, recall, f1-score y soporte
+                report = classification_report(y_test, y_pred)
                 # print(y_pred)
                 score = f1_score(y_test, y_pred, average="macro")
                 if score > best_score:
                     best_score = score
                     best_model = regressor
+                    best_report = report
                 print(f"Model: {name} Macro F1: {score:.3f}")
             except Exception as e:
                 #print(f"Error en el modelo {name}: {e}")
@@ -107,6 +111,9 @@ def batchThree():
     # imprimimos los resultados
     print(f"\nBest Model: {best_model.__class__.__name__}")
     print(f"Macro F1 on Test Data: {best_score:.3f}")
+
+    print(f"\nModel: {best_model.__class__.__name__}")
+    print (best_report)
 
     # entrenamos clasificador ocn mejor modelo
     try:
