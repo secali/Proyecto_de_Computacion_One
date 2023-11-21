@@ -106,7 +106,7 @@ def batchThree():
                 continue
     # imprimimos los resultados
     print(f"\nBest Model: {best_model.__class__.__name__}")
-    print(f"Macro F1 on Test Data: {best_score}")
+    print(f"Macro F1 on Test Data: {best_score:.3f}")
 
     # entrenamos clasificador ocn mejor modelo
     try:
