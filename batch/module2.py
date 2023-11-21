@@ -16,7 +16,7 @@ def batchTwo():
 
     # creamos dataframe con datos fichero
     dfDataSet = pd.read_csv(file, delimiter='\t')
-    print(dfDataSet)
+    #print(dfDataSet)
 
     # calcular el número total de instancias
     n_total = len(dfDataSet)

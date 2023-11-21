@@ -69,7 +69,6 @@ def batchOne():
         # buscamos etiqueta que identifica texto generado
         iAGeneratedList.append(soup.find_all('div', class_='utils_response__b5jEi'))
 
-
     # filtramos los textos humanos y eliminamos los que no cumplen las condiciones
     print("Filtrando los textos humanos y eliminando los que no cumplen las condiciones")
     for extractedResponses in humanGeneratedList:

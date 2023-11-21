@@ -12,6 +12,7 @@ import batch.module4
 import batch.functions
 from tabulate import tabulate
 from sklearn.metrics import classification_report
+from sklearn.exceptions import UndefinedMetricWarning
 
 
 # batch 3 - modulo que usamos para crear los test, elegir modelo, entrenar y guardar clasificador y vectorizador
@@ -90,7 +91,7 @@ def batchThree():
 
     # Ignorar FutureWarning y ConvergenceWarning
     warnings.filterwarnings("ignore", category=FutureWarning)
-    #warnings.filterwarnings("ignore", category=ConvergenceWarning)
+    warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 
     print("\nEligiendo calsificador")
     # recorremos los algoritmos de clasificacion, entrenamos, medimos y actualizamos best_model con el mejor
