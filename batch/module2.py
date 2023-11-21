@@ -7,8 +7,9 @@ import pandas as pd
 import numpy as np
 
 
+# batch 2 - modulo que usamos para cargar fichero, hacer estadísticas y balancear los datos
 def batchTwo():
-    print("\n############ Ejecutando Batch 2: CSV y manejo de datos #############")
+    print("\n############ Ejecutando Batch 2: carga fichero, estdística y manejo de datos #############")
     # obtener ruta fichero a cargar
     print("\nCargando fichero...")
     file = batch.functions.obtener_ruta_guardado('SaveDF', 'DataFrame.tsv')

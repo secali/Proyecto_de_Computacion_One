@@ -15,10 +15,10 @@ from tabulate import tabulate
 
 def batchThree():
     print("\n############ Ejecutando Batch 3: Clasificador #############")
-    # max_instances_per_class = 500
-    max_features = 2000  # maximum number of features extracted for our instances
-    # random_seed = 777  # set random seed for reproducibility
-    # id2label = {0: "h", 1: "g"}
+    max_instances_per_class = 100
+    max_features = 1000  # maximum number of features extracted for our instances
+    random_seed = 777  # set random seed for reproducibility
+    id2label = {0: "h", 1: "g"}
 
 
     print("\nCargando fichero...")
@@ -68,7 +68,8 @@ def batchThree():
     test_df = pd.DataFrame({'Text': X_test, 'Type': y_test})
 
     # print(test_df)
-
+    # downsample training data to train faster
+    train_df = train_df.groupby("Type").sample(n=max_instances_per_class, random_state=random_seed)
     # vectorize data: extract features from our data (from text to numeric vectors)
     vectorizer = TfidfVectorizer(max_features=max_features, stop_words="english", ngram_range=(1, 1))
     X_train = vectorizer.fit_transform(train_df["Text"])
