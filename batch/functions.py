@@ -1,8 +1,16 @@
-import batch.module1
+import batch.module1_ant
+import batch.modulo1
 import batch.module2
 import os
 import datetime
 from joblib import dump
+from bs4 import BeautifulSoup
+
+def extraer_texto_iAGenerated(text):
+    soup = BeautifulSoup(text, 'html.parser')
+    tags_permitidas = ["p", "h1", "h2", "h3", "b", "a"]
+    texto_extraido = ' '.join([tag.get_text() for tag in soup.find_all(tags_permitidas)])
+    return texto_extraido
 
 def obtener_datos():
     global ruta_script, ruta_carpeta, file
@@ -28,7 +36,7 @@ def obtener_datos():
             entrada = input("\n¿Desea actualizar los datos? S/N:\n")
             if entrada in ['S','s']:
                 print("Obteniendo datos....")
-                batch.module1.batchOne()
+                batch.modulo1_rehecho.batchOne()
             elif entrada in ['N', 'n']:
                 batch.module2.batchTwo()
             else:

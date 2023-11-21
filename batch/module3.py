@@ -93,7 +93,7 @@ def batchThree():
                 print (regressor)
                 regressor.fit(X_train, y_train)
                 y_pred = regressor.predict(X_test)
-                print(y_pred)
+                # print(y_pred)
                 score = f1_score(y_test, y_pred, average="macro")
                 if score > best_score:
                     best_score = score
