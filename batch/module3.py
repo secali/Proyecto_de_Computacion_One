@@ -7,7 +7,6 @@ from sklearn.utils import all_estimators
 from sklearn.base import ClassifierMixin
 from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
 import batch.module4
 import batch.functions
 from tabulate import tabulate
