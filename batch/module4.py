@@ -3,19 +3,20 @@ import sys
 import pandas as pd
 from joblib import load
 from batch import functions
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 
+# batch 4 - modulo que usamos para cargar clasificador y vectorizador y realizar predicciones
 def batchFour():
     print("\n############ Ejecutando Batch 4: Carga clasificador y realizar predicciones #############")
 
-    # Cargar el clasificador desde el archivo
+    # cargamos el clasificador desde el archivo
     loaded_classifier = load(functions.obtener_ruta_guardado('SaveCLF', 'clf.joblib'))
     print("Clasificador cargado")
-    # Cargar el vectorizador desde un archivo
+    # cargar el vectorizador desde un archivo
     loaded_vectorizador = load(functions.obtener_ruta_guardado('SaveVCT', 'vct.joblib'))
     print("Vectorizador cargado")
 
+    # bucle para indicar si queremos hacer alguna predicción
     valores_aceptados = ['S', 'N']
     entrada = 'a'
     while entrada != valores_aceptados:
@@ -24,8 +25,10 @@ def batchFour():
             texto = input("Ingresa el texto:")
             data = {'Text': [texto],
                     'Type': ['f']}
+            # preparamos texto introducido
             dfTexto = pd.DataFrame(data, index=['Fila_1'])
             texto_vectorizado = loaded_vectorizador.transform(dfTexto["Text"])
+            # lanzamos la prediccion
             y_pred = loaded_classifier.predict(texto_vectorizado)
             if y_pred == 0:
                 print('El texto introducido ha sido escrito por un humano')
