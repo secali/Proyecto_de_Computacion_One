@@ -3,10 +3,11 @@
 import requests
 import json
 from bs4 import BeautifulSoup
-from langdetect import detect
+from langdetect import detect, detect_langs
 import pandas as pd
 import batch.module2
 import batch.functions
+import re
 
 
 # We will store all methods and variables related to ShareGPT data extraction.
@@ -66,8 +67,16 @@ def batchOne():
             soup = BeautifulSoup(item.text, "html.parser")
             text = soup.text
 
-            if len(text) > 20 and detect(text) == ENGLISH_TAG:
-                # cleanHumanGeneratedList.append(text)
+            languageFirst = ""
+            try:
+                languageFirst = max(detect_langs(text))
+                print("Idioma detectado: ", languageFirst)
+
+            except:
+                continue
+
+            if len(text) > 20 and (languageFirst.lang == "en" and languageFirst.prob > 0.55):
+                print(text)
                 cleanHumanGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
                 # print(text.strip().replace('\t', '').replace('\n', ''))
                 typeHumanList.append('h')  # añadimos etiqueta de humano
@@ -81,14 +90,24 @@ def batchOne():
             soup = BeautifulSoup(item.text, "html.parser")
             text = soup.text
 
-            if len(text) > 20 and detect(text) == ENGLISH_TAG:
-                # cleanIaGeneratedList.append(text)
+            languageFirst = ""
+            try:
+                languageFirst = max(detect_langs(text))
+                print("Idioma detectado: ", detect_langs(text))
+
+            except:
+                continue
+
+            if len(text) > 20 and (languageFirst.lang == "en" and languageFirst.prob > 0.55):
+                print(text)
                 cleanIaGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
                 # print(text.strip().replace('\t', '').replace('\n', ''))
                 typeIAList.append('g')  # añadimos etiqueta de generado
                 print("Texto añadido a Generado!")
             else:
                 print('Texto Eliminado!')
+
+        print(cleanIaGeneratedList)
 
     # generamos diccionarios con los arrais
     datosHuman = {
