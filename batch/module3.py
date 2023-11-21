@@ -1,6 +1,7 @@
 # import required libraries
 
 import pandas as pd
+import warnings
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.utils import all_estimators
@@ -86,6 +87,10 @@ def batchThree():
     # Calcular mejor algoritmo
     best_score = float('-inf')
     best_model = None
+
+    # Ignorar FutureWarning y ConvergenceWarning
+    warnings.filterwarnings("ignore", category=FutureWarning)
+    #warnings.filterwarnings("ignore", category=ConvergenceWarning)
 
     print("\nEligiendo calsificador")
     # recorremos los algoritmos de clasificacion, entrenamos, medimos y actualizamos best_model con el mejor
