@@ -4,12 +4,14 @@ import os
 import datetime
 from joblib import dump
 from bs4 import BeautifulSoup
+from langdetect import detect
 
-def extraer_texto_iAGenerated(text):
-    soup = BeautifulSoup(text, 'html.parser')
-    tags_permitidas = ["p", "h1", "h2", "h3", "b", "a"]
-    texto_extraido = ' '.join([tag.get_text() for tag in soup.find_all(tags_permitidas)])
-    return texto_extraido
+def limpia_texto(list):
+    lista_txt_limpio = []
+    for text in list:
+        if len(text.get_text()) >= 20 and detect(text.get_text()) == 'en':
+            lista_txt_limpio.append(text.get_text())
+    return lista_txt_limpio
 
 def obtener_datos():
     global ruta_script, ruta_carpeta, file

@@ -2,7 +2,7 @@
 
 import batch.functions
 
-# comprobamos dato y los obtenemos si es necesario
+# lanzamos la logica para obtener datos
 file = batch.functions.obtener_datos()
 
 # comentarios

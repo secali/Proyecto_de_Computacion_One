@@ -24,7 +24,7 @@ def batchFour():
         if entrada in ['S', 's']:
             texto = input("Ingresa el texto:")
             data = {'Text': [texto],
-                    'Type': ['f']}
+                    'Label': ['f']}
             # preparamos texto introducido
             dfTexto = pd.DataFrame(data, index=['Fila_1'])
             texto_vectorizado = loaded_vectorizador.transform(dfTexto["Text"])

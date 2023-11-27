@@ -22,8 +22,8 @@ def batchTwo():
     n_total = len(dfDataSet)
 
     # dividir instancias humanas y generadas
-    dfHuman = dfDataSet[dfDataSet['Type'] == 'h']
-    dfIA = dfDataSet[dfDataSet['Type'] == 'g']
+    dfHuman = dfDataSet[dfDataSet['Label'] == 'h']
+    dfIA = dfDataSet[dfDataSet['Label'] == 'g']
 
     # número de instancias humanas y generadas
     n_humano = len(dfHuman)

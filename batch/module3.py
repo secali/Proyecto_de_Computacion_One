@@ -1,4 +1,5 @@
 # import required libraries
+import sys
 
 import pandas as pd
 import warnings
@@ -13,6 +14,7 @@ import batch.functions
 from tabulate import tabulate
 from sklearn.metrics import classification_report
 from sklearn.exceptions import UndefinedMetricWarning
+
 
 
 # batch 3 - modulo que usamos para crear los test, elegir modelo, entrenar y guardar clasificador y vectorizador
@@ -33,7 +35,7 @@ def batchThree():
 
     # Separar las características (X) del objetivo (y)
     X = dfDataSet['Text']
-    y = dfDataSet['Type']
+    y = dfDataSet['Label']
 
     # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
     print ("Creando ficheros de entranamiento y test\n")
@@ -69,9 +71,15 @@ def batchThree():
 
     print("\nPreparando datos para hacer entrenamiento y test")
     # Crear DataFrames para los conjuntos de entrenamiento y prueba
-    train_df = pd.DataFrame({'Text': X_train, 'Type': y_train})
-    test_df = pd.DataFrame({'Text': X_test, 'Type': y_test})
-
+    # ojo!!! cambio Type por Label
+    train_df = pd.DataFrame({'Text': X_train, 'Label': y_train}) #'Type': y_train})
+    test_df = pd.DataFrame({'Text': X_test, 'Label': y_test}) #X_test, 'Type': y_test})
+    # Guardamos los dataset
+    print("\nGuardando DataSet train y test")
+    batch.functions.guardar_dataset(train_df, 'train.tsv')
+    batch.functions.guardar_dataset(test_df, 'test.tsv')
+    sys.exit()
+'''
     # retocamos train_df, agrupandolo por tipo y tomamos muestra aleatoria de filas
     train_df = train_df.groupby("Type").sample(n=max_instances_per_class, random_state=random_seed)
     # definimos el vectorizador
@@ -134,4 +142,4 @@ def batchThree():
     batch.functions.guardar_clf_vct('clf', best_model)
     batch.functions.guardar_clf_vct('vct',vectorizer)
 
-    batch.module4.batchFour()
+    batch.module4.batchFour()'''

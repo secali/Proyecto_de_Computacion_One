@@ -13,16 +13,10 @@ import http.client
 # batch 1 - lo usamos para hacer el crawling y el scraping
 def batchOne():
     print("\n############Ejecutando Batch 1: Crawling y Scraping#############\n")
-    ENGLISH_TAG = 'en'  # definimos el idioma que vamos a usar
-    url = "https://google.serper.dev/search"  # serper url
 
     # definimos las listas que vamos a usar
-    humanGeneratedList = []
-    iAGeneratedList = []
-    cleanHumanGeneratedList = []
-    typeHumanList = []
-    cleanIaGeneratedList = []
-    typeIAList = []
+    ListaHumanosClean = set()
+    ListaGeneradosClean = set()
 
     print("Descargando links de sharegpt.com")
     # definimos la conexión
@@ -50,70 +44,43 @@ def batchOne():
     print("Links descargados totales: ", len(df))
 
     # eliminamos lo que no sean conversaciones antes de hacer la descarga
-    iEliminar = []
-    print("Borrando los links que no contienen conversaciones")
-    # eliminamos links que no incluyan en titulo  'ShareGPT conversation'
-    for index, row in df.iterrows():
-        if 'ShareGPT conversation' not in row['title']:
-            iEliminar.append(index)
-    df = df.drop(iEliminar)
+    df = df[df['title'].str.contains('ShareGPT conversation')]
     print("Quedan ", len(df), " links oprativos para usar")
 
-    # hacemos separacion de humano y generado
-    print("Descargando los textos de cada link y realizando la separacion entre humanos y generados")
-    for index, row in df.iterrows():
-        response = requests.get(row['link'])
-        soup = BeautifulSoup(response.text, 'html.parser')
-        # buscamos etiqueta que identifica humano
-        humanGeneratedList.append(soup.find_all('p', class_='pb-2 whitespace-prewrap'))
-        # buscamos etiqueta que identifica texto generado
-        iAGeneratedList.append(soup.find_all('div', class_='utils_response__b5jEi'))
+    # definimos tags para la IA
+    allowed_tags = ["p", "h1", "h2", "h3", "b", "a"]
+    # pasamos los link a una lista
+    links = df['link'].values.tolist()
+    # recorremos los links
+    for url in links:
+        # Enviamos peticion GET al URL
+        response = requests.get(url)
+        if response.status_code == 200:  # Verificamos si la pagina se descargo correctamente
+            print("Descarga Correcta: ", url)
+            # Extraemos el contenido HTML legible de la pagina
+            soup = BeautifulSoup(response.text, 'html.parser')
+            # Buscamos etiqueta que identifica al humano
+            ListaHumanos = soup.find_all('p', class_='pb-2 whitespace-prewrap')
+            # Buscamos etiqueta que identifica al texto generado
+            ListaGenerados = soup.find_all('div', class_='utils_response__b5jEi')
+            for elemento in ListaGenerados:
+                if elemento.name in allowed_tags:
+                    ListaGeneradosClean.add(elemento.getText())
+            # Creamos la lista con los textos limpios
+            ListaHumanosClean.update(batch.functions.limpia_texto(ListaHumanos))
+            ListaGeneradosClean.update(batch.functions.limpia_texto(ListaGenerados))
+        else:
+            print(f"Failed to retrieve the webpage. Status code: {response.status_code}")
 
-    # filtramos los textos humanos y eliminamos los que no cumplen las condiciones
-    print("Filtrando los textos humanos y eliminando los que no cumplen las condiciones")
-    for extractedResponses in humanGeneratedList:
-        for item in extractedResponses:
-            # parseamos con BeautifulSoup
-            soup = BeautifulSoup(item.text, "html.parser")
-            text = soup.text # extraemos el texto
-            # filtramos y creamos lista filtrada
-            if len(text) > 20 and detect(text) == ENGLISH_TAG:
-                cleanHumanGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
-                typeHumanList.append('h')  # añadimos etiqueta de humano
-
-    # filtramos los textos humanos y eliminamos los que no cumplen las condiciones
-    print("Filtrando los textos generados y eliminando los que no cumplen las condiciones")
-    for extractedResponses in iAGeneratedList:
-        for item in extractedResponses:
-            # parseamos con BeautifulSoup
-            soup = BeautifulSoup(item.text, "html.parser")
-            text = soup.text
-            '''texto_extraido = []
-            # Encontramos todos los tags que coinciden con los tipos específicos
-            tags_permitidas = ["p", "h1", "h2", "h3", "b", "a"]
-            tags_encontrados = soup.find_all(tags_permitidas)
-
-            # Extraemos el texto de los tags encontrados y lo agregamos a la lista de texto extraído
-            texto_tags = ' '.join([tag.get_text() for tag in tags_encontrados])
-            texto_extraido.append(texto_tags)'''
-            # filtramos y creamos lista filtrada
-            if len(text) > 20 and detect(text) == ENGLISH_TAG:
-                cleanIaGeneratedList.append(text.strip().replace('\t', '').replace('\n', ''))
-                typeIAList.append('g')  # añadimos etiqueta de generado
-
-    # generamos diccionarios con los arrays
-    datosHuman = {
-        'Text': cleanHumanGeneratedList,
-        'Type': typeHumanList
-    }
-    datosIA = {
-        'Text': cleanIaGeneratedList,
-        'Type': typeIAList
-    }
     # creamos los dataFrame y concatenamos.  Generamos un DataSet completo
-    dfHuman = pd.DataFrame(datosHuman)
-    dfIA = pd.DataFrame(datosIA)
+    dfHuman = pd.DataFrame({'Text':list(ListaHumanosClean)})
+    dfIA = pd.DataFrame ({'Text':list(ListaGeneradosClean)})
+    # añadimos el tipo en la columna Label
+    dfHuman ['Label'] = 'h'
+    dfIA['Label'] = 'g'
+
     dfDataSet = pd.concat([dfHuman, dfIA], ignore_index=True)
+
 
     # eliminamos duplicados si existen
     dfDataSet.drop_duplicates()
