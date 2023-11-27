@@ -59,10 +59,11 @@ def batchOne():
             print("Descarga Correcta: ", url)
             # Extraemos el contenido HTML legible de la pagina
             soup = BeautifulSoup(response.text, 'html.parser')
-            # Buscamos etiqueta que identifica al humano
+            # Buscamos etiqueta de humano
             ListaHumanos = soup.find_all('p', class_='pb-2 whitespace-prewrap')
-            # Buscamos etiqueta que identifica al texto generado
+            # Buscamos etiqueta de generado
             ListaGenerados = soup.find_all('div', class_='utils_response__b5jEi')
+            # Filtramos la lista de generados pasandolos por los tag que nos han indicado
             for elemento in ListaGenerados:
                 if elemento.name in allowed_tags:
                     ListaGeneradosClean.add(elemento.getText())
