@@ -10,7 +10,7 @@ def limpia_texto(list):
     lista_txt_limpio = []
     for text in list:
         if len(text.get_text()) >= 20 and detect(text.get_text()) == 'en':
-            lista_txt_limpio.append(text.get_text())
+            lista_txt_limpio.append(text.get_text().replace('\t', '').replace('\n', ''))
     return lista_txt_limpio
 
 def obtener_datos():
