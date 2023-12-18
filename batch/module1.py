@@ -14,6 +14,9 @@ import http.client
 def batchOne():
     print("\n############Ejecutando Batch 1: Crawling y Scraping#############\n")
 
+    # ApiKey - Simulamos tenerla en otro sitio o solicitarla
+    api_key= '1ce666e8226e13a920c07399dabfbe95c500d087'
+
     # definimos las listas que vamos a usar
     ListaHumanosClean = set()
     ListaGeneradosClean = set()
@@ -26,7 +29,7 @@ def batchOne():
         "num": 100
     })
     headers = {
-        'X-API-KEY': '1ce666e8226e13a920c07399dabfbe95c500d087',
+        'X-API-KEY': api_key,
         'Content-Type': 'application/json'
     }
     # creamos conexion de la consulta
