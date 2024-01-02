@@ -1,0 +1,142 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  h1 {
+    font-size: 48px;
+    font-weight: 300;
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  p {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilos del menú */
+  nav {
+    height: 44px;
+    background: #323232;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+  }
+  
+  nav ul {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    list-style: none;
+    align-items: center;
+  }
+  
+  nav li {
+    flex: 1;
+  }
+  
+  nav a {
+    display: block;
+    height: 44px;
+    line-height: 44px;
+    color: white;
+    font-size: 15px;
+    font-weight: 100;
+    text-decoration: none;
+    text-align: center;
+    transition: 0.3s;
+  }
+  
+  nav a:hover {
+    color: #B8B8B8;
+  }
+  
+  /* Estilos del formulario */
+  form {
+    max-width: 800px;
+    margin: 100px auto 50px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  select, textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: inherit;
+  }
+  
+  input[type="submit"] {
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+    padding: 10px;
+    border: none;
+    background: #007AFF;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  input[type="submit"]:hover {
+    background: #005AC8;
+  }
+  
+  /* Estilos del resultado */
+  #resultado {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  #resultado h2 {
+    font-size: 24px;
+    font-weight: 300;
+    margin-bottom: 10px;
+  }
+  
+  #resultado p {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  #resultado span {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    line-height: 100px;
+    text-align: center;
+    font-size: 36px;
+    font-weight: 300;
+    color: white;
+    background: linear-gradient(to right, green, lime);
+  }
+  
