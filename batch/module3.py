@@ -34,8 +34,8 @@ def batchThree():
     dfDataSet = pd.read_csv(file, delimiter='\t')
 
     # Separar las características (X) del objetivo (y)
-    X = dfDataSet['Text']
-    y = dfDataSet['Label']
+    X = dfDataSet['text']
+    y = dfDataSet['label']
 
     # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
     print ("Creando ficheros de entranamiento y test\n")
@@ -141,5 +141,5 @@ def batchThree():
     print("Clasificador y vectorizador guardado en fichero")
     batch.functions.guardar_clf_vct('clf', best_model)
     batch.functions.guardar_clf_vct('vct',vectorizer)
-
-    batch.module4.batchFour()'''
+'''
+#batch.module4.batchFour()

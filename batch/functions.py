@@ -1,5 +1,5 @@
-import batch.module1
-import batch.module2
+import batch.antiguo_module1
+import batch.antiguo_module2
 import os
 import datetime
 from joblib import dump

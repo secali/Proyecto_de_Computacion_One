@@ -1,15 +1,15 @@
 # import required libraries
 
-from batch import module1
+from batch import module1and2
 
 
 # lanzamos la logica para obtener datos
 
 
 def runScript():
-    module1.batchOne()
+    module1and2.scriptExecution()
 
 
-module1.batchOne()
+module1and2.scriptExecution()
 
 # comentarios

@@ -16,22 +16,22 @@ def batchTwo():
 
     # creamos dataframe con datos fichero
     dfDataSet = pd.read_csv(file, delimiter='\t')
-    #print(dfDataSet)
+    print(dfDataSet)
 
     # calcular el número total de instancias
     n_total = len(dfDataSet)
 
     # dividir instancias humanas y generadas
-    dfHuman = dfDataSet[dfDataSet['Label'] == 'h']
-    dfIA = dfDataSet[dfDataSet['Label'] == 'g']
+    dfHuman = dfDataSet[dfDataSet['label'] == '0']
+    dfIA = dfDataSet[dfDataSet['label'] == '1']
 
     # número de instancias humanas y generadas
     n_humano = len(dfHuman)
     n_generadas = len(dfIA)
 
     # longitud media de caracteres para instancias humanas y generadas
-    long_media_humano = dfHuman['Text'].str.len().mean()
-    long_media_generadas = dfIA['Text'].str.len().mean()
+    long_media_humano = dfHuman['text'].str.len().mean()
+    long_media_generadas = dfIA['text'].str.len().mean()
 
     # creamos una lista de listas con los datos
     data = [
