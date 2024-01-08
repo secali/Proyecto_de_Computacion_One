@@ -7,9 +7,9 @@ from batch import module1
 
 
 def runScript():
-    module1
+    module1.batchOne()
 
 
-module1
+module1.batchOne()
 
 # comentarios
