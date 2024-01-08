@@ -1,15 +1,15 @@
 # import required libraries
 
-import batch.functions
+from batch import module1
 
 
 # lanzamos la logica para obtener datos
 
 
 def runScript():
-    file = batch.functions.obtener_datos()
+    module1
 
 
-file = batch.functions.obtener_datos()
+module1
 
 # comentarios
