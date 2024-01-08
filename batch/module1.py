@@ -2,6 +2,7 @@
 
 import requests
 import json
+import gdown
 from bs4 import BeautifulSoup
 from langdetect import detect
 import pandas as pd
@@ -14,47 +15,37 @@ import http.client
 def batchOne():
     print("\n############Ejecutando Batch 1: Crawling y Scraping#############\n")
 
-    # ApiKey - Simulamos tenerla en otro sitio o solicitarla
-    api_key= '1ce666e8226e13a920c07399dabfbe95c500d087'
+
 
     # definimos las listas que vamos a usar
     ListaHumanosClean = set()
     ListaGeneradosClean = set()
 
-    print("Descargando links de sharegpt.com")
-    # definimos la conexión
-    conn = http.client.HTTPSConnection("google.serper.dev")
-    payload = json.dumps({
-        "q": "site:sharegpt.com",
-        "num": 100
-    })
-    headers = {
-        'X-API-KEY': api_key,
-        'Content-Type': 'application/json'
-    }
-    # creamos conexion de la consulta
-    conn.request("POST", "/search", payload, headers)
-    # obtenemos la respuesta
-    response = conn.getresponse()
-    # guardamos la respuesta
-    data = response.read()
-    # decodificamos la respuesta
-    decoded_data = json.loads(data)
+    #TODO: CONECTAR CON GOOGLE DRIVE Y OBTENER LOS DATOS CON GDOWN, LUEGO PARSEAMOS A JSON
+    url_dev_subtaskA_mono = 'https://drive.google.com/file/d/1e_G-9a66AryHxBOwGWhriePYCCa4_29e'
+    output_dev_subtaskA_mono = 'downloaded_dev_data_taskA.jsonl'
+    gdown.download(url_dev_subtaskA_mono, output_dev_subtaskA_mono)
+
+    with open(output_dev_subtaskA_mono, 'r') as f:
+        for line in f:
+            # Decodificar cada línea como un objeto JSON
+            decoded_data = json.loads(line)
+
+
     # crear un DataFrame e incluimos la respuesta
     # filtramos contenidos en la clave organic
-    df = pd.DataFrame(decoded_data['organic'])
+    df = pd.DataFrame(decoded_data, ['label', 'text'])
 
-    print("Links descargados totales: ", len(df))
-
-    # eliminamos lo que no sean conversaciones antes de hacer la descarga
-    df = df[df['title'].str.contains('ShareGPT conversation')]
-    print("Quedan ", len(df), " links oprativos para usar")
+    print("Tamaño del dataframe generado: ", len(df))
 
     # definimos tags para la IA
     allowed_tags = ["p", "h1", "h2", "h3", "b", "a"]
     # pasamos los link a una lista
     links = df['link'].values.tolist()
     # recorremos los links
+
+
+    # -----------------------------------------------------
     for url in links:
         # Enviamos peticion GET al URL
         response = requests.get(url)

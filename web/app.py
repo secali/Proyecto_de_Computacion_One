@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from main import runScript
 
 app = Flask(__name__)
 
@@ -20,4 +21,6 @@ def analizar(resultado=None):
     # nlp = pipeline(modelo)
     # resultado = nlp(texto)
     # Devuelve el resultado del análisis en el archivo de plantilla resultado.html
+
+    runScript() #LANZA NUESTRO SCRIPT DE LA PRACTICA 1
     return render_template('resultado.html', resultado=resultado)
