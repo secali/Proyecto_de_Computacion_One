@@ -9,3 +9,6 @@ Para ejecutar el frontend desarrollado con Flask, hay que lanzar en la terminal 
 flask --app .\web\app.py run
 
 Se abrirá una conexión local en http://127.0.0.1:5000/
+
+
+<img src="https://github.com/secali/Proyecto_de_Computacion_One/blob/master/photo1704231351.jpeg">
