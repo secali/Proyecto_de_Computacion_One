@@ -46,60 +46,23 @@ def batchThree():
     df_test_A = df_test_A[df_test_A['text'] != '']
     df_test_A = df_test_A[df_test_A['label'] != '']
 
+    # Imrpimimos estadistica
+    batch.functions.imprime_estadistica_subtarea_A(df_train_A, df_test_A, df_fase_1)
 
-    # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
-    print("Creando ficheros de entranamiento y test\n")
-    X_train = df_train_A['text']
-    y_train = df_train_A['label']
-    X_test = df_test_A['text']
-    y_test = df_test_A['label']
-    X_test_f01 = df_fase_1['text']
-    y_test_f01 = df_fase_1['label']
-    # print(y_train)
-
-    # Número total de instancias en el dataset original
-    n_total = len(df_train_A) + len(df_test_A) + len(df_fase_1)
-    # Número de instancias en el conjunto de entrenamiento
-    n_train = len(df_train_A)
-    # Número de instancias en el conjunto de prueba
-    n_test = len(df_test_A)
-    # Número de instancias en el conjunto de prueba fase 01
-    n_test_f01 = len(df_fase_1)
-    # Número de instancias humanas en el conjunto de entrenamiento
-    n_human_train = sum(y_train == 0)
-    # Número de instancias generadas en el conjunto de entrenamiento
-    n_generated_train = sum(y_train == 1)
-    # Número de instancias humanas en el conjunto de prueba
-    n_human_test = sum(y_test == 0)
-    # Número de instancias generadas en el conjunto de prueba
-    n_generated_test = sum(y_test == 1)
-    # Número de instancias humanas en el conjunto de prueba
-    n_human_test_f01 = sum(y_test_f01 == 0)
-    # Número de instancias generadas en el conjunto de prueba
-    n_generated_test_f01 = sum(y_test_f01 == 1)
-
-    # Creamos una lista de listas con los datos
-    data = [
-        ["Número total de instancias", n_total],
-        ["Número de instancias del training", n_train],
-        ["Número de instancias del test", n_test],
-        ["Número de instancias del test fase_01", n_test_f01],
-        ["Número de instancias humanas en el training", n_human_train],
-        ["Número de instancias generadas en el training", n_generated_train],
-        ["Número de instancias humanas en el test", n_human_test],
-        ["Número de instancias generadas en el test", n_generated_test],
-        ["Número de instancias humanas en el test fase_01", n_human_test_f01],
-        ["Número de instancias generadas en el test fase_01", n_generated_test_f01]
-    ]
-    # Imprimimos los datos en forma de tabla tabulada
-    print(tabulate(data, headers=["Descripción", "Valor"], tablefmt="grid"))
+    # Balanceando fichero de train
+    print("Balanceamos los ficheros")
+    df_train_A = batch.functions.balacearDF(df_train_A)
+    df_test_A = batch.functions.balacearDF(df_test_A)
+    # Imrpimimos estadistica
+    print("\nEstadistica con fichero balanceado")
+    batch.functions.imprime_estadistica_subtarea_A(df_train_A, df_test_A, df_fase_1)
 
     print("\nPreparando datos para hacer entrenamiento y test")
     # Crear DataFrames para los conjuntos de entrenamiento y prueba
-    train_df = df_train_A# pd.DataFrame({'text': X_train, 'label': y_train})  # 'Type': y_train})
-    test_df = df_test_A#pd.DataFrame({'text': X_test, 'label': y_test})  # X_test, 'Type': y_test})
+    train_df = df_train_A  # pd.DataFrame({'text': X_train, 'label': y_train})  # 'Type': y_train})
+    test_df = df_test_A  # pd.DataFrame({'text': X_test, 'label': y_test})  # X_test, 'Type': y_test})
     # batch.functions.guardar_dataset(test_df, 'test_df_borrar.tsv')
-    test_df_f01 = df_fase_1#pd.DataFrame({'text': X_test_f01, 'label': y_test_f01})  # X_test, 'Type': y_test})
+    test_df_f01 = df_fase_1  # pd.DataFrame({'text': X_test_f01, 'label': y_test_f01})  # X_test, 'Type': y_test})
 
     # retocamos train_df, agrupandolo por tipo y tomamos muestra aleatoria de filas
     train_df = train_df.groupby("label").sample(n=max_instances_per_class, random_state=random_seed)
@@ -226,4 +189,5 @@ def batchThree():
     batch.functions.guardar_clf_vct('clf', best_model)
     batch.functions.guardar_clf_vct('vct', vectorizer)
 
+    exit()
     # batch.module4.batchFour()

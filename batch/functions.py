@@ -1,3 +1,5 @@
+import numpy as np
+
 import batch
 import os
 import datetime
@@ -8,6 +10,7 @@ import json
 import gdown
 from tqdm import tqdm
 from tabulate import tabulate
+import pandas as pd
 
 
 def limpia_texto(list):
@@ -228,3 +231,77 @@ def imprime_estadistica(dfDataSet, name):
     # imprimimos los datos en forma de tabla tabulada
     print("\n" + name)
     print(tabulate(data, headers=["Campo", "Valor"], tablefmt="grid"))
+
+def imprime_estadistica_subtarea_A(df_train_A, df_test_A, df_fase_1):
+    # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
+    print("Imprimiendo estadistica Subtarea A\n")
+    X_train = df_train_A['text']
+    y_train = df_train_A['label']
+    X_test = df_test_A['text']
+    y_test = df_test_A['label']
+    X_test_f01 = df_fase_1['text']
+    y_test_f01 = df_fase_1['label']
+    # print(y_train)
+
+    # Número total de instancias en el dataset original
+    n_total = len(df_train_A) + len(df_test_A) + len(df_fase_1)
+    # Número de instancias en el conjunto de entrenamiento
+    n_train = len(df_train_A)
+    # Número de instancias en el conjunto de prueba
+    n_test = len(df_test_A)
+    # Número de instancias en el conjunto de prueba fase 01
+    n_test_f01 = len(df_fase_1)
+    # Número de instancias humanas en el conjunto de entrenamiento
+    n_human_train = sum(y_train == 0)
+    # Número de instancias generadas en el conjunto de entrenamiento
+    n_generated_train = sum(y_train == 1)
+    # Número de instancias humanas en el conjunto de prueba
+    n_human_test = sum(y_test == 0)
+    # Número de instancias generadas en el conjunto de prueba
+    n_generated_test = sum(y_test == 1)
+    # Número de instancias humanas en el conjunto de prueba
+    n_human_test_f01 = sum(y_test_f01 == 0)
+    # Número de instancias generadas en el conjunto de prueba
+    n_generated_test_f01 = sum(y_test_f01 == 1)
+
+    # Creamos una lista de listas con los datos
+    data = [
+        ["Número total de instancias", n_total],
+        ["Número de instancias del training", n_train],
+        ["Número de instancias del test", n_test],
+        ["Número de instancias del test fase_01", n_test_f01],
+        ["Número de instancias humanas en el training", n_human_train],
+        ["Número de instancias generadas en el training", n_generated_train],
+        ["Número de instancias humanas en el test", n_human_test],
+        ["Número de instancias generadas en el test", n_generated_test],
+        ["Número de instancias humanas en el test fase_01", n_human_test_f01],
+        ["Número de instancias generadas en el test fase_01", n_generated_test_f01]
+    ]
+    # Imprimimos los datos en forma de tabla tabulada
+    print(tabulate(data, headers=["Descripción", "Valor"], tablefmt="grid"))
+
+def balacearDF(dfDataSet):
+    # dividir instancias humanas y generadas
+    dfHuman = dfDataSet[dfDataSet['label'] == 0]
+    dfIA = dfDataSet[dfDataSet['label'] != 0]
+
+    # número de instancias humanas y generadas
+    n_humano = len(dfHuman)
+    n_generadas = len(dfIA)
+
+    # balanceamos el numero de resultados
+    if n_humano > n_generadas:
+        # elegimos de forma random los indices a borrar
+        indices_to_remove = np.random.choice(dfHuman.index, (n_humano - n_generadas), replace=False)
+        # ajustamos el dataframe al tamaño adecuado
+        dfHuman = dfHuman.drop(indices_to_remove)
+    if n_humano < n_generadas:
+        # elegimos de forma random los indices a borrar
+        indices_to_remove = np.random.choice(dfIA.index, (n_generadas - n_humano), replace=False)
+        # ajustamos el dataframe al tamaño adecuado
+        dfIA = dfIA.drop(indices_to_remove)
+
+    # construimos el dataset final
+    dfDataSet_final = pd.concat([dfHuman, dfIA], ignore_index=True)
+
+    return dfDataSet_final
