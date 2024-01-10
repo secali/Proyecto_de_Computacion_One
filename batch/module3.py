@@ -23,7 +23,7 @@ def batchThree():
     print("\n############ Ejecutando Batch 3: Clasificador #############")
     # creamos y asignamos valor a las variables
     max_instances_per_class = 100  # numero de instancias por clase
-    max_features = 2000  # maximum number of features extracted for our instances
+    max_features = 3000  # maximum number of features extracted for our instances
     random_seed = 777  # set random seed for reproducibility
 
     # obtener ficheros a cargar
@@ -39,6 +39,7 @@ def batchThree():
     df_test_A = pd.read_csv(fileATest, delimiter='\t')
     df_fase_1 = pd.read_csv(fileFase1, delimiter='\t')
 
+    # esto hay que borrarlo cuando se vuelvan a cargar los datos.
     df_test_A = df_test_A.drop_duplicates()
     df_test_A = df_test_A.dropna(subset=['text'])
     df_test_A = df_test_A.dropna(subset=['label'])
@@ -97,7 +98,7 @@ def batchThree():
     # Crear DataFrames para los conjuntos de entrenamiento y prueba
     train_df = df_train_A# pd.DataFrame({'text': X_train, 'label': y_train})  # 'Type': y_train})
     test_df = df_test_A#pd.DataFrame({'text': X_test, 'label': y_test})  # X_test, 'Type': y_test})
-    batch.functions.guardar_dataset(test_df, 'test_df_borrar.tsv')
+    # batch.functions.guardar_dataset(test_df, 'test_df_borrar.tsv')
     test_df_f01 = df_fase_1#pd.DataFrame({'text': X_test_f01, 'label': y_test_f01})  # X_test, 'Type': y_test})
 
     # retocamos train_df, agrupandolo por tipo y tomamos muestra aleatoria de filas
