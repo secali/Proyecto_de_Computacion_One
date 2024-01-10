@@ -39,8 +39,11 @@ def batchThree():
     df_test_A = pd.read_csv(fileATest, delimiter='\t')
     df_fase_1 = pd.read_csv(fileFase1, delimiter='\t')
 
-    df_test_A.dropna(subset=['text'])
+    df_test_A = df_test_A.drop_duplicates()
+    df_test_A = df_test_A.dropna(subset=['text'])
+    df_test_A = df_test_A.dropna(subset=['label'])
     df_test_A = df_test_A[df_test_A['text'] != '']
+    df_test_A = df_test_A[df_test_A['label'] != '']
 
 
     # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
@@ -92,10 +95,10 @@ def batchThree():
 
     print("\nPreparando datos para hacer entrenamiento y test")
     # Crear DataFrames para los conjuntos de entrenamiento y prueba
-    train_df = pd.DataFrame({'text': X_train, 'label': y_train})  # 'Type': y_train})
-    test_df = pd.DataFrame({'text': X_test, 'label': y_test})  # X_test, 'Type': y_test})
+    train_df = df_train_A# pd.DataFrame({'text': X_train, 'label': y_train})  # 'Type': y_train})
+    test_df = df_test_A#pd.DataFrame({'text': X_test, 'label': y_test})  # X_test, 'Type': y_test})
     batch.functions.guardar_dataset(test_df, 'test_df_borrar.tsv')
-    test_df_f01 = pd.DataFrame({'text': X_test_f01, 'label': y_test_f01})  # X_test, 'Type': y_test})
+    test_df_f01 = df_fase_1#pd.DataFrame({'text': X_test_f01, 'label': y_test_f01})  # X_test, 'Type': y_test})
 
     # retocamos train_df, agrupandolo por tipo y tomamos muestra aleatoria de filas
     train_df = train_df.groupby("label").sample(n=max_instances_per_class, random_state=random_seed)

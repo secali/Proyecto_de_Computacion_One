@@ -147,9 +147,11 @@ def limpia_texto_df(df):
     pbar.close()
 
     print("Eliminando duplicados y filas vacías")
-    df_limpio.drop_duplicates()
-    df_limpio.dropna(subset=['text'])
-    df_limpio.dropna(subset=['label'])
+    df_limpio = df_limpio.drop_duplicates()
+    df_limpio = df_limpio.dropna(subset=['text'])
+    df_limpio = df_limpio.dropna(subset=['label'])
+    df_limpio = df_limpio[df_limpio['text'] != '']
+    df_limpio = df_limpio[df_limpio['label'] != '']
 
     return df_limpio
 
