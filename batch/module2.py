@@ -28,6 +28,8 @@ def batchTwo():
     df_fase_1.columns = ['text', 'label']
     df_fase_1['label'].replace({'h': 0, 'g': 1}, inplace=True)
 
+    # Preparamos datos
+    print("\nPreparando los datos...")
     batch.functions.guardar_dataset(df_train_A, 'DSTrain_A_sucio.tsv')
     df_train_A = batch.functions.limpia_texto_df(df_train_A)
     batch.functions.guardar_dataset(df_train_A, 'DSTrain_A.tsv')
@@ -36,9 +38,14 @@ def batchTwo():
     df_test_A = batch.functions.limpia_texto_df(df_test_A)
     batch.functions.guardar_dataset(df_test_A, 'DSTest_A.tsv')
 
+    batch.functions.guardar_dataset(df_train_B, 'DSTrain_B_sucio.tsv')
+    df_train_B = batch.functions.limpia_texto_df(df_train_B)
     batch.functions.guardar_dataset(df_train_B, 'DSTrain_B.tsv')
+
+    batch.functions.guardar_dataset(df_test_B, 'DSTest_B_sucio.tsv')
+    df_test_B = batch.functions.limpia_texto_df(df_test_B)
     batch.functions.guardar_dataset(df_test_B, 'DSTest_B.tsv')
-    batch.functions.guardar_dataset(df_train_A, 'DSTrain_A.tsv')
+
     batch.functions.guardar_dataset(df_fase_1, 'DSTest_fase01.tsv')
 
     # Imprimimos estadisticas

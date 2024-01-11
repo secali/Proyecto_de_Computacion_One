@@ -139,7 +139,8 @@ def limpia_texto_df(df):
                     df_limpio.at[index, 'text'] = ''
             except Exception as e:
                 # Manejar posibles excepciones de la detección de idioma
-                print(f"\nError en detección de idioma: {e}")
+                # print(f"\nError en detección de idioma: {e}")
+                # Borramos textos y luego eliminaremos filas
                 df_limpio.at[index, 'text'] = ''
         else:
             df_limpio.at[index, 'text'] = ''
