@@ -22,6 +22,11 @@ from sklearn.feature_extraction.text import HashingVectorizer
 #from gensim.models import Word2Vec
 #from gensim.models import Doc2Vec, TaggedDocument
 
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, classification_report
+
 
 # batch 3 - modulo que usamos para crear los test, elegir modelo, entrenar y guardar clasificador y vectorizador
 def batchThree():
@@ -56,11 +61,24 @@ def batchThree():
     batch.functions.imprime_estadistica_subtarea_A(df_train_A, df_test_A, df_fase_1)
 
     print("\nPreparando datos para hacer entrenamiento y test")
-    # Crear DataFrames para los conjuntos de entrenamiento y prueba
+    '''# Crear DataFrames para los conjuntos de entrenamiento y prueba
     train_df = df_train_A  # pd.DataFrame({'text': X_train, 'label': y_train})  # 'Type': y_train})
     test_df = df_test_A  # pd.DataFrame({'text': X_test, 'label': y_test})  # X_test, 'Type': y_test})
     # batch.functions.guardar_dataset(test_df, 'test_df_borrar.tsv')
-    test_df_f01 = df_fase_1  # pd.DataFrame({'text': X_test_f01, 'label': y_test_f01})  # X_test, 'Type': y_test})
+    test_df_f01 = df_fase_1  # pd.DataFrame({'text': X_test_f01, 'label': y_test_f01})  # X_test, 'Type': y_test})'''
+
+    # Separar las características (X) del objetivo (y)
+    X = df_train_A['text']
+    y = df_train_A['label']
+
+    # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
+    print("Creando ficheros de entranamiento y test\n")
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Crear DataFrames para los conjuntos de entrenamiento y prueba
+    # ojo!!! cambio Type por Label
+    train_df = pd.DataFrame({'text': X_train, 'label': y_train}) #'Type': y_train})
+    test_df = pd.DataFrame({'text': X_test, 'label': y_test}) #X_test, 'Type': y_test})
 
     # retocamos train_df, agrupandolo por tipo y tomamos muestra aleatoria de filas
     train_df = train_df.groupby("label").sample(n=max_instances_per_class, random_state=random_seed)
@@ -77,7 +95,7 @@ def batchThree():
     # vectorizamos textos de train y test
     X_train = vectorizer.fit_transform(train_df["text"])
     X_test = vectorizer.transform(test_df["text"])
-    X_test_f01 = vectorizer.transform(test_df_f01["text"])
+    #X_test_f01 = vectorizer.transform(test_df_f01["text"])
 
     '''ruta_carpeta_xtrain= batch.functions.obtener_ruta_guardado('SaveDF', 'X_train.csv')
     ruta_carpeta_xtest = batch.functions.obtener_ruta_guardado('SaveDF', 'X_test.csv')
