@@ -6,12 +6,10 @@ import datetime
 from joblib import dump
 from bs4 import BeautifulSoup
 from langdetect import detect
-import json
 import gdown
 from tqdm import tqdm
 from tabulate import tabulate
 import pandas as pd
-import batch.module3_bis_prueba_Bayes
 
 
 def limpia_texto(list):
@@ -57,7 +55,6 @@ def obtener_datos():
                         print("Seleccione una opción válida")
             elif entrada in ['N', 'n']:
                 batch.module3.batchThree()
-                #batch.module3_bis_prueba_Bayes.batchThree()
             else:
                 print("Seleccione una opción válida")
     else:
