@@ -1,14 +1,9 @@
 # import required libraries
 
-import requests
 import json
 import gdown
-from bs4 import BeautifulSoup
-from langdetect import detect
 import pandas as pd
-import batch.antiguo_module2
 import batch.functions
-import http.client
 
 
 # batch 1 - lo usamos para hacer el crawling y el scraping
