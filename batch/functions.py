@@ -24,8 +24,8 @@ def obtener_datos():
     global ruta_script, ruta_carpeta, file_01
     # obtener ruta si existe dataset DataSet - format TSV
     #file = os.sep + 'SaveDF' + os.sep + 'DSTest_B.tsv'
-    file_01= obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
-    file_02= obtener_ruta_guardado('Descargas', 'subtaskB_train.jsonl')
+    file_02= obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
+    file_01= obtener_ruta_guardado('Descargas', 'subtaskB_train.jsonl')
 
     # Verificar si el archivo existe en la ruta proporcionada
     if os.path.exists(file_01):
@@ -54,7 +54,12 @@ def obtener_datos():
                     else:
                         print("Seleccione una opción válida")
             elif entrada in ['N', 'n']:
-                batch.module3.batchThree()
+                if os.path.exists(file_02):
+                    print("Existe un fichero con los datos tratados.  Los usamos.")
+                    batch.module3.batchThree()
+                else:
+                    print("No existen los datos tratados.  Vamos a volver a generar los datos tratados")
+                    batch.module2.batchTwo()
             else:
                 print("Seleccione una opción válida")
     else:
