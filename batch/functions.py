@@ -73,7 +73,7 @@ def guardar_dataset(dfDataSet, archivo):
     # save DataSet - format TSV
     ruta_carpeta = obtener_ruta_guardado('SaveDF', archivo)
     dfDataSet.to_csv(ruta_carpeta, sep='\t', index=False)
-    print("Data frame save in: " + ruta_carpeta)
+    print("DataFrame save in: " + ruta_carpeta)
 
 
 def guardar_clf_vct(tipo, fichero):

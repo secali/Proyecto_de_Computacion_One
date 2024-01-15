@@ -3,13 +3,14 @@ from main import runScript
 
 app = Flask(__name__)
 
+# código Flask que crea la app web
 
 @app.route('/')
 def index():
     # Renderiza el archivo de plantilla index.html
     return render_template('index.html')
 
-
+# Ruta que recibe datos del formulario a través de 'POST'
 @app.route('/analizar', methods=['POST'])
 def analizar(resultado=None):
     # Obtiene los datos del formulario
@@ -22,5 +23,9 @@ def analizar(resultado=None):
     # resultado = nlp(texto)
     # Devuelve el resultado del análisis en el archivo de plantilla resultado.html
 
+
     runScript() #LANZA NUESTRO SCRIPT DE LA PRACTICA 1
     return render_template('resultado.html', resultado=resultado)
+
+
+

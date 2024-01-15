@@ -6,7 +6,7 @@ import batch.module3
 
 # batch 2 - modulo que usamos para cargar fichero, hacer estadísticas y balancear los datos
 def batchTwo():
-    print("\n############ Ejecutando Batch 2: carga ficheros, estdística y manejo de datos #############")
+    print("\n############ Ejecutando Batch 2: carga ficheros, estadística y manejo de datos #############")
     # obtener ficheros a cargar
     print("\nCargando ficheros...")
     fileATrain = batch.functions.obtener_ruta_guardado('Descargas', 'subtaskA_train_monolingual.jsonl')
@@ -24,7 +24,7 @@ def batchTwo():
     df_fase_1 = pd.read_csv(fileFase1, delimiter='\t')
 
     # Actualizamos nombre columnas df_fase_1 para estandarizarlas con el resto
-    print("\nActualizando datos Data Frame fase_01...")
+    print("\nActualizando datos DataFrame fase_01...")
     df_fase_1.columns = ['text', 'label']
     df_fase_1['label'].replace({'h': 0, 'g': 1}, inplace=True)
 
