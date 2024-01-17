@@ -14,8 +14,9 @@ import batch.functions
 import http.client
 import urllib.request
 
+
 # batch 1 - lo usamos para hacer el crawling y el scraping
-def batchOne():
+def batchOne(modelo, texto):
     print("\n############ Ejecutando Batch 1: Descarga de ficheros #############\n")
     # TODO: CONECTAR CON GOOGLE DRIVE Y OBTENER LOS DATOS CON GDOWN, LUEGO PARSEAMOS A JSON
 
@@ -28,7 +29,8 @@ def batchOne():
     # descargamos los archivos
     batch.functions.descarga_archivos(archivos)
 
-    batch.module2.batchTwo()
+    batch.module2.batchTwo(modelo, texto)
+
 
 '''
     url_dev_subtaskA = 'https://drive.google.com/file/d/1e_G-9a66AryHxBOwGWhriePYCCa4_29e/view'

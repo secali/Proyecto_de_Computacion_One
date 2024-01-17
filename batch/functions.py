@@ -1,6 +1,11 @@
 import numpy as np
 
+import sys
+
 import batch
+
+sys.path.append("../batch")
+from batch import module1
 import os
 import datetime
 from joblib import dump
@@ -15,15 +20,19 @@ import nltk
 from nltk.tokenize import word_tokenize
 
 
-
+# Function to tokenize and reduce to 50 words
+def tokenize_and_reduce(text):
+    # Download NLTK resources
+    nltk.download('punkt')
+    tokens = word_tokenize(text)
+    return ' '.join(tokens[:50])
 
 
 # Function to tokenize and reduce to 50 words
 def tokenize_and_reduce(text):
-    # Download NLTK resources
-    #nltk.download('punkt')
     tokens = word_tokenize(text)
-    return ' '.join(tokens[:441])
+    return ' '.join(tokens[:50])
+
 
 def limpia_texto(list):
     lista_txt_limpio = []
@@ -36,9 +45,9 @@ def limpia_texto(list):
 def obtener_datos():
     global ruta_script, ruta_carpeta, file_01
     # obtener ruta si existe dataset DataSet - format TSV
-    #file = os.sep + 'SaveDF' + os.sep + 'DSTest_B.tsv'
-    file_02= obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
-    file_01= obtener_ruta_guardado('Descargas', 'subtaskB_train.jsonl')
+    # file = os.sep + 'SaveDF' + os.sep + 'DSTest_B.tsv'
+    file_02 = obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
+    file_01 = obtener_ruta_guardado('Descargas', 'subtaskB_train.jsonl')
 
     # Verificar si el archivo existe en la ruta proporcionada
     if os.path.exists(file_01):
@@ -61,24 +70,47 @@ def obtener_datos():
                 while entrada != valores_aceptados:
                     entrada = input("\n¿Desea omitir descarga y tratar los datos existentes? S/N:\n")
                     if entrada in ['S', 's']:
-                        batch.module2.batchTwo()
+                        batch.module2.batchTwo("modelo", "mi texto")
                     elif entrada in ['N', 'n']:
-                        batch.module1.batchOne()
+                        batch.module1.batchOne("modelo", "mi texto")
                     else:
                         print("Seleccione una opción válida")
             elif entrada in ['N', 'n']:
                 if os.path.exists(file_02):
                     print("Existe un fichero con los datos tratados.  Los usamos.")
-                    batch.module3.batchThree()
+                    batch.module3.batchThree("modelo", "mi texto")
                 else:
                     print("No existen los datos tratados.  Vamos a volver a generar los datos tratados")
-                    batch.module2.batchTwo()
+                    batch.module2.batchTwo("modelo", "mi texto")
             else:
                 print("Seleccione una opción válida")
     else:
         print("El archivo no existe en la ruta proporcionada.")
         print("Obteniendo datos....")
-        batch.module1.batchOne()
+        batch.module1.batchOne("modelo", "mi texto")
+
+
+def obtener_datos_web(modelo, texto):
+    global ruta_script, ruta_carpeta, file_01
+    # obtener ruta si existe dataset DataSet - format TSV
+    # file = os.sep + 'SaveDF' + os.sep + 'DSTest_B.tsv'
+    file_02 = obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
+    file_01 = obtener_ruta_guardado('Descargas', 'subtaskB_train.jsonl')
+
+    # Verificar si el archivo existe en la ruta proporcionada
+    if os.path.exists(file_01):
+        # Obtener la fecha de modificación del archivo
+        fecha_modificacion = datetime.datetime.fromtimestamp(os.path.getmtime(file_01))
+        # Obtener la fecha de creación del archivo (solo disponible en algunos sistemas)
+        fecha_creacion = datetime.datetime.fromtimestamp(os.path.getctime(file_01))
+
+        # Mostrar las fechas
+        print(f"El archivo existe.\nFecha de modificación: {fecha_modificacion}")
+        if 'fecha_creacion' in locals():
+            print(f"Fecha de creación: {fecha_creacion}")
+        else:
+            print("No se pudo obtener la fecha de creación en este sistema.")
+        batch.module1.batchOne(modelo, texto)
 
 
 def guardar_dataset(dfDataSet, archivo):
@@ -120,7 +152,7 @@ def obtener_ruta_guardado(carpeta, fichero):
 def descarga_archivos(archivos):
     for elemento in archivos:
         url, nombre_archivo = elemento  # Desempaquetar la tupla en dos variables
-        ruta = obtener_ruta_guardado('Descargas',nombre_archivo)
+        ruta = obtener_ruta_guardado('Descargas', nombre_archivo)
         gdown.download(url, ruta, fuzzy=True)
 
 
@@ -176,6 +208,7 @@ def limpia_texto_df(df):
 
     return df_limpio
 
+
 def remove_unwanted_tags(html_content):
     allowed_tags = ["p", "h1", "h2", "h3", "b", "a"]
     # Parsea el contenido HTML utilizando BeautifulSoup
@@ -187,6 +220,7 @@ def remove_unwanted_tags(html_content):
             tag.unwrap()  # Elimina la etiqueta manteniendo su contenido
     # Retorna el contenido limpio sin las etiquetas no permitidas
     return str(soup)
+
 
 def imprime_estadistica(dfDataSet, name):
     # calcular el número total de instancias
@@ -250,6 +284,7 @@ def imprime_estadistica(dfDataSet, name):
     print("\n" + name)
     print(tabulate(data, headers=["Campo", "Valor"], tablefmt="grid"))
 
+
 def imprime_estadistica_subtarea_A(df_train_A, df_test_A, df_fase_1):
     # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
     print("Imprimiendo estadistica Subtarea A\n")
@@ -297,6 +332,7 @@ def imprime_estadistica_subtarea_A(df_train_A, df_test_A, df_fase_1):
     ]
     # Imprimimos los datos en forma de tabla tabulada
     print(tabulate(data, headers=["Descripción", "Valor"], tablefmt="grid"))
+
 
 def balacearDF(dfDataSet):
     # dividir instancias humanas y generadas

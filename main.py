@@ -4,13 +4,8 @@ from batch import module1
 from batch import functions
 
 
-# lanzamos la logica para obtener datos
-file_01 =functions.obtener_datos()
-'''
+file_01 = functions.obtener_datos()
+
 def runScript():
-    module1.scriptExecution()
+    file_01 = functions.obtener_datos_web("modelo","mi texto")
 
-
-module1.scriptExecution()
-'''
-# comentarios

@@ -3,6 +3,7 @@ import sys
 
 import pandas as pd
 import warnings
+import batch.module4
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.utils import all_estimators
@@ -30,7 +31,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 
 # batch 3 - modulo que usamos para crear los test, elegir modelo, entrenar y guardar clasificador y vectorizador
-def batchThree():
+def batchThree(modelo, texto):
     print("\n############ Ejecutando Batch 3: Clasificador #############")
     # creamos y asignamos valor a las variables
     max_instances_per_class = 1000 #100  # numero de instancias por clase
@@ -185,9 +186,8 @@ def batchThree():
     batch.functions.guardar_clf_vct('clf', best_model)
     batch.functions.guardar_clf_vct('vct', vectorizer)
 
+    batch.module4.batchFour(modelo, texto)
     exit()
-    # batch.module4.batchFour()
-
     '''
     best_model = None
     best_score = -np.inf
