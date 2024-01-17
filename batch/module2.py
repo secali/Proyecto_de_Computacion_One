@@ -2,6 +2,7 @@
 import batch.functions
 import pandas as pd
 import batch.module3
+import nltk
 
 
 # batch 2 - modulo que usamos para cargar fichero, hacer estadísticas y balancear los datos
@@ -29,24 +30,32 @@ def batchTwo():
     df_fase_1['label'].replace({'h': 0, 'g': 1}, inplace=True)
 
     # Preparamos datos
+    nltk.download('punkt')
     print("\nPreparando los datos...")
     batch.functions.guardar_dataset(df_train_A, 'DSTrain_A_sucio.tsv')
     df_train_A = batch.functions.limpia_texto_df(df_train_A)
+    df_train_A['tokenized_text'] = df_train_A['text'].apply(batch.functions.tokenize_and_reduce)
     batch.functions.guardar_dataset(df_train_A, 'DSTrain_A.tsv')
 
     batch.functions.guardar_dataset(df_test_A, 'DSTest_A_sucio.tsv')
     df_test_A = batch.functions.limpia_texto_df(df_test_A)
+    df_test_A['tokenized_text'] = df_test_A['text'].apply(batch.functions.tokenize_and_reduce)
     batch.functions.guardar_dataset(df_test_A, 'DSTest_A.tsv')
 
     batch.functions.guardar_dataset(df_train_B, 'DSTrain_B_sucio.tsv')
     df_train_B = batch.functions.limpia_texto_df(df_train_B)
+    df_train_B['tokenized_text'] = df_train_B['text'].apply(batch.functions.tokenize_and_reduce)
     batch.functions.guardar_dataset(df_train_B, 'DSTrain_B.tsv')
 
     batch.functions.guardar_dataset(df_test_B, 'DSTest_B_sucio.tsv')
     df_test_B = batch.functions.limpia_texto_df(df_test_B)
+    df_test_B['tokenized_text'] = df_test_B['text'].apply(batch.functions.tokenize_and_reduce)
     batch.functions.guardar_dataset(df_test_B, 'DSTest_B.tsv')
 
+    batch.functions.guardar_dataset(df_fase_1, 'DSTest_fase01_largo.tsv')
+    df_fase_1['tokenized_text'] = df_fase_1['text'].apply(batch.functions.tokenize_and_reduce)
     batch.functions.guardar_dataset(df_fase_1, 'DSTest_fase01.tsv')
+
 
     # Imprimimos estadisticas
     print("\nImprimiendo estadísticas...")

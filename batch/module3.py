@@ -26,14 +26,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, classification_report
-
+import nltk
+from nltk.tokenize import word_tokenize
 
 # batch 3 - modulo que usamos para crear los test, elegir modelo, entrenar y guardar clasificador y vectorizador
 def batchThree():
     print("\n############ Ejecutando Batch 3: Clasificador #############")
     # creamos y asignamos valor a las variables
-    max_instances_per_class = 2500 #100  # numero de instancias por clase
-    max_features = 3000  # maximum number of features extracted for our instances
+    max_instances_per_class = 1000 #100  # numero de instancias por clase
+    max_features = 5000  # maximum number of features extracted for our instances
     random_seed = 777  # set random seed for reproducibility
 
     # obtener ficheros a cargar
@@ -56,6 +57,21 @@ def batchThree():
     print("Balanceamos los ficheros")
     df_train_A = batch.functions.balacearDF(df_train_A)
     df_test_A = batch.functions.balacearDF(df_test_A)
+
+    # determine avg text length in tokens
+    num=int(df_train_A["text"].map(lambda x: len(x.split(" "))).mean())
+    print("Numero de caracteres al que reducimos el texto",num)
+    '''
+    # Apply the function to the 'text' column
+    nltk.download('punkt')
+    print ("Limitamos a ",num," caracteres")
+    df_train_A['tokenized_text'] = df_train_A['text'].apply(batch.functions.tokenize_and_reduce)
+    df_test_A['tokenized_text'] = df_test_A['text'].apply(batch.functions.tokenize_and_reduce)
+    batch.functions.guardar_dataset(df_train_A, 'DSTrain_A.tsv')
+    batch.functions.guardar_dataset(df_test_A, 'DSTest_A.tsv')
+    print("Limitamos a 50 caracteres")
+    '''
+
     # Imrpimimos estadistica
     print("\nEstadistica con fichero balanceado")
     batch.functions.imprime_estadistica_subtarea_A(df_train_A, df_test_A, df_fase_1)
@@ -87,16 +103,18 @@ def batchThree():
 
     # definimos el vectorizador
     # TFIDF
-    #vectorizer = TfidfVectorizer(max_features=max_features, stop_words="english", ngram_range=(1, 1))
+    vectorizer = TfidfVectorizer(max_features=max_features, stop_words="english", ngram_range=(1, 1))
     # CountVectorizer
-    vectorizer = CountVectorizer(max_features=max_features, stop_words="english", ngram_range=(1, 1))
+    #vectorizer = CountVectorizer(max_features=max_features, stop_words="english", ngram_range=(1, 1))
     # HashingVectorizer
     # vectorizer = HashingVectorizer(n_features=max_features, stop_words="english", ngram_range=(1, 1))
 
 
     # vectorizamos textos de train y test
-    X_train = vectorizer.fit_transform(train_df["text"])
-    X_test = vectorizer.transform(test_df["text"])
+    #X_train = vectorizer.fit_transform(train_df["text"])
+    #X_test = vectorizer.transform(test_df["text"])
+    X_train = vectorizer.fit_transform(train_df["tokenized_text"])
+    X_test = vectorizer.transform(test_df["tokenized_text"])
     #X_test_f01 = vectorizer.transform(test_df_f01["text"])
 
     '''ruta_carpeta_xtrain= batch.functions.obtener_ruta_guardado('SaveDF', 'X_train.csv')
@@ -171,52 +189,52 @@ def batchThree():
     # batch.module4.batchFour()
 
     '''
-        best_model = None
-        best_score = -np.inf
-        best_report = None
+    best_model = None
+    best_score = -np.inf
+    best_report = None
 
-        # Definir tu conjunto de datos
-        iris = load_iris()
-        X_train, X_test, y_train, y_test = iris.data, iris.data, iris.target, iris.target
+    # Definir tu conjunto de datos
+    iris = load_iris()
+    X_train, X_test, y_train, y_test = iris.data, iris.data, iris.target, iris.target
 
-        # Iterar sobre cada clasificador
-        for name, ClassifierClass in classifiers:
-            if issubclass(ClassifierClass, ClassifierMixin) and hasattr(ClassifierClass, 'fit'):
-                try:
-                    # Definir el espacio de búsqueda de hiperparámetros
-                    param_grid = {
-                        'n_estimators': [50, 100],
-                        'max_depth': [None, 10],
-                        'min_samples_split': [2, 5],
-                        'min_samples_leaf': [1, 2]
-                    }
+    # Iterar sobre cada clasificador
+    for name, ClassifierClass in classifiers:
+        if issubclass(ClassifierClass, ClassifierMixin) and hasattr(ClassifierClass, 'fit'):
+            try:
+                # Definir el espacio de búsqueda de hiperparámetros
+                param_grid = {
+                    'n_estimators': [50, 100],
+                    'max_depth': [None, 10],
+                    'min_samples_split': [2, 5],
+                    'min_samples_leaf': [1, 2]
+                }
 
-                    # Inicializar el GridSearchCV
-                    grid_search = GridSearchCV(ClassifierClass(), param_grid, cv=5, scoring='f1_macro')
+                # Inicializar el GridSearchCV
+                grid_search = GridSearchCV(ClassifierClass(), param_grid, cv=5, scoring='f1_macro')
 
-                    # Entrenar el modelo con búsqueda de hiperparámetros
-                    grid_search.fit(X_train, y_train)
+                # Entrenar el modelo con búsqueda de hiperparámetros
+                grid_search.fit(X_train, y_train)
 
-                    # Obtener el mejor modelo y predecir en el conjunto de prueba
-                    best_model = grid_search.best_estimator_
-                    y_pred = best_model.predict(X_test)
+                # Obtener el mejor modelo y predecir en el conjunto de prueba
+                best_model = grid_search.best_estimator_
+                y_pred = best_model.predict(X_test)
 
-                    # Calcular la puntuación F1 y el informe de clasificación
-                    score = f1_score(y_test, y_pred, average="macro")
-                    report = classification_report(y_test, y_pred)
+                # Calcular la puntuación F1 y el informe de clasificación
+                score = f1_score(y_test, y_pred, average="macro")
+                report = classification_report(y_test, y_pred)
 
-                    # Almacenar el mejor modelo y su rendimiento si supera el anterior
-                    if score > best_score:
-                        best_score = score
-                        best_model = best_model
-                        best_report = report
+                # Almacenar el mejor modelo y su rendimiento si supera el anterior
+                if score > best_score:
+                    best_score = score
+                    best_model = best_model
+                    best_report = report
 
-                    print(f"Model: {name} Macro F1: {score:.3f}")
-                except Exception as e:
-                    continue
+                print(f"Model: {name} Macro F1: {score:.3f}")
+            except Exception as e:
+                continue
 
-        # Mostrar el mejor modelo y su rendimiento
-        print(f"Best Model: {best_model}")
-        print(f"Best Score: {best_score}")
-        print(f"Best Report: {best_report}")
-        '''
+    # Mostrar el mejor modelo y su rendimiento
+    print(f"Best Model: {best_model}")
+    print(f"Best Score: {best_score}")
+    print(f"Best Report: {best_report}")
+    '''

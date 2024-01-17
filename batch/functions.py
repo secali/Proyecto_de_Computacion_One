@@ -21,14 +21,9 @@ from nltk.tokenize import word_tokenize
 # Function to tokenize and reduce to 50 words
 def tokenize_and_reduce(text):
     # Download NLTK resources
-    nltk.download('punkt')
+    #nltk.download('punkt')
     tokens = word_tokenize(text)
-    return ' '.join(tokens[:50])
-
-# Function to tokenize and reduce to 50 words
-def tokenize_and_reduce(text):
-    tokens = word_tokenize(text)
-    return ' '.join(tokens[:50])
+    return ' '.join(tokens[:441])
 
 def limpia_texto(list):
     lista_txt_limpio = []
