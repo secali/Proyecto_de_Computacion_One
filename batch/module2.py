@@ -5,7 +5,7 @@ import batch.module3
 
 
 # batch 2 - modulo que usamos para cargar fichero, hacer estadísticas y balancear los datos
-def batchTwo():
+def batchTwo(modelo, texto):
     print("\n############ Ejecutando Batch 2: carga ficheros, estadística y manejo de datos #############")
     # obtener ficheros a cargar
     print("\nCargando ficheros...")
@@ -120,7 +120,7 @@ def batchTwo():
     # batch.functions.guardar_dataset(df_test_B, 'df_test_B.tsv')
     # batch.functions.guardar_dataset(df_fase_1, 'df_fase_1.tsv')
 '''
-    batch.module3.batchThree()
+    batch.module3.batchThree(modelo, texto)
     #batch.module4.batchFour(df_train_B, df_test_B, df_fase_1)
 
 

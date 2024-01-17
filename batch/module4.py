@@ -7,7 +7,7 @@ from batch import functions
 
 # batch 4 - modulo que usamos para cargar clasificador y vectorizador y realizar predicciones
 # el vectorizador se utiliza para convertir el texto en una representación numérica antes de alimentarlo al modelo de clasificación
-def batchFour():
+def batchFour(modelo, texto):
     print("\n############ Ejecutando Batch 4: Carga clasificador y realizar predicciones #############")
 
     # cargamos el clasificador desde el archivo
