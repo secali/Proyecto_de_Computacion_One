@@ -32,7 +32,7 @@ from sklearn.metrics import accuracy_score, classification_report
 def batchThree():
     print("\n############ Ejecutando Batch 3: Clasificador #############")
     # creamos y asignamos valor a las variables
-    max_instances_per_class = 500 #100  # numero de instancias por clase
+    max_instances_per_class = 2500 #100  # numero de instancias por clase
     max_features = 3000  # maximum number of features extracted for our instances
     random_seed = 777  # set random seed for reproducibility
 
@@ -61,13 +61,14 @@ def batchThree():
     batch.functions.imprime_estadistica_subtarea_A(df_train_A, df_test_A, df_fase_1)
 
     print("\nPreparando datos para hacer entrenamiento y test")
-    '''# Crear DataFrames para los conjuntos de entrenamiento y prueba
+
+    # Crear DataFrames para los conjuntos de entrenamiento y prueba
     train_df = df_train_A  # pd.DataFrame({'text': X_train, 'label': y_train})  # 'Type': y_train})
     test_df = df_test_A  # pd.DataFrame({'text': X_test, 'label': y_test})  # X_test, 'Type': y_test})
     # batch.functions.guardar_dataset(test_df, 'test_df_borrar.tsv')
     test_df_f01 = df_fase_1  # pd.DataFrame({'text': X_test_f01, 'label': y_test_f01})  # X_test, 'Type': y_test})'''
 
-    # Separar las características (X) del objetivo (y)
+    '''# Separar las características (X) del objetivo (y)
     X = df_train_A['text']
     y = df_train_A['label']
 
@@ -79,6 +80,7 @@ def batchThree():
     # ojo!!! cambio Type por Label
     train_df = pd.DataFrame({'text': X_train, 'label': y_train}) #'Type': y_train})
     test_df = pd.DataFrame({'text': X_test, 'label': y_test}) #X_test, 'Type': y_test})
+    '''
 
     # retocamos train_df, agrupandolo por tipo y tomamos muestra aleatoria de filas
     train_df = train_df.groupby("label").sample(n=max_instances_per_class, random_state=random_seed)

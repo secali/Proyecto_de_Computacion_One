@@ -1,18 +1,39 @@
 import numpy as np
 
+import sys
+
 import batch
+
+sys.path.append("../batch")
+from batch import module1
 import os
 import datetime
 from joblib import dump
 from bs4 import BeautifulSoup
 from langdetect import detect
-import json
 import gdown
 from tqdm import tqdm
 from tabulate import tabulate
 import pandas as pd
-import batch.module3_bis_prueba_Bayes
+import pandas as pd
+import nltk
+from nltk.tokenize import word_tokenize
 
+
+
+
+
+# Function to tokenize and reduce to 50 words
+def tokenize_and_reduce(text):
+    # Download NLTK resources
+    nltk.download('punkt')
+    tokens = word_tokenize(text)
+    return ' '.join(tokens[:50])
+
+# Function to tokenize and reduce to 50 words
+def tokenize_and_reduce(text):
+    tokens = word_tokenize(text)
+    return ' '.join(tokens[:50])
 
 def limpia_texto(list):
     lista_txt_limpio = []
@@ -26,8 +47,8 @@ def obtener_datos():
     global ruta_script, ruta_carpeta, file_01
     # obtener ruta si existe dataset DataSet - format TSV
     #file = os.sep + 'SaveDF' + os.sep + 'DSTest_B.tsv'
-    file_01= obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
-    file_02= obtener_ruta_guardado('Descargas', 'subtaskB_train.jsonl')
+    file_02= obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
+    file_01= obtener_ruta_guardado('Descargas', 'subtaskB_train.jsonl')
 
     # Verificar si el archivo existe en la ruta proporcionada
     if os.path.exists(file_01):
@@ -56,22 +77,49 @@ def obtener_datos():
                     else:
                         print("Seleccione una opción válida")
             elif entrada in ['N', 'n']:
-                batch.module3.batchThree()
-                #batch.module3_bis_prueba_Bayes.batchThree()
+                if os.path.exists(file_02):
+                    print("Existe un fichero con los datos tratados.  Los usamos.")
+                    batch.module3.batchThree()
+                else:
+                    print("No existen los datos tratados.  Vamos a volver a generar los datos tratados")
+                    batch.module2.batchTwo()
             else:
                 print("Seleccione una opción válida")
     else:
         print("El archivo no existe en la ruta proporcionada.")
         print("Obteniendo datos....")
-        batch.module1.batchOne()
 
+
+
+
+def obtener_datos_Web():
+    global ruta_script, ruta_carpeta, file_01
+    # obtener ruta si existe dataset DataSet - format TSV
+    #file = os.sep + 'SaveDF' + os.sep + 'DSTest_B.tsv'
+    file_02= obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
+    file_01= obtener_ruta_guardado('Descargas', 'subtaskB_train.jsonl')
+
+    # Verificar si el archivo existe en la ruta proporcionada
+    if os.path.exists(file_01):
+        # Obtener la fecha de modificación del archivo
+        fecha_modificacion = datetime.datetime.fromtimestamp(os.path.getmtime(file_01))
+        # Obtener la fecha de creación del archivo (solo disponible en algunos sistemas)
+        fecha_creacion = datetime.datetime.fromtimestamp(os.path.getctime(file_01))
+
+        # Mostrar las fechas
+        print(f"El archivo existe.\nFecha de modificación: {fecha_modificacion}")
+        if 'fecha_creacion' in locals():
+            print(f"Fecha de creación: {fecha_creacion}")
+        else:
+            print("No se pudo obtener la fecha de creación en este sistema.")
+        batch.module1.batchOne()
 
 def guardar_dataset(dfDataSet, archivo):
     print("\nGuardando el fichero...")
     # save DataSet - format TSV
     ruta_carpeta = obtener_ruta_guardado('SaveDF', archivo)
     dfDataSet.to_csv(ruta_carpeta, sep='\t', index=False)
-    print("Data frame save in: " + ruta_carpeta)
+    print("DataFrame save in: " + ruta_carpeta)
 
 
 def guardar_clf_vct(tipo, fichero):

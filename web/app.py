@@ -1,8 +1,12 @@
-from flask import Flask, render_template, request
-from main import runScript
+from flask import *
+import sys
+sys.path.append("../batch") # Añade la ruta de la carpeta batch al sys.path
+from batch import functions
 
 app = Flask(__name__)
 
+
+# código Flask que crea la app web
 
 @app.route('/')
 def index():
@@ -10,8 +14,9 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/analizar', methods=['POST'])
-def analizar(resultado=None):
+# Ruta que recibe datos del formulario a través de 'POST'
+@app.route('/resultado', methods=['POST'])
+def resultado(resultado=None):
     # Obtiene los datos del formulario
     modelo = request.form['modelo']
     texto = request.form['texto']
@@ -22,5 +27,7 @@ def analizar(resultado=None):
     # resultado = nlp(texto)
     # Devuelve el resultado del análisis en el archivo de plantilla resultado.html
 
-    runScript() #LANZA NUESTRO SCRIPT DE LA PRACTICA 1
-    return render_template('resultado.html', resultado=resultado)
+    functions.obtener_datos_Web()
+
+
+    return render_template("resultado.html")

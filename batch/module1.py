@@ -12,11 +12,11 @@ import pandas as pd
 import batch.module2
 import batch.functions
 import http.client
-
+import urllib.request
 
 # batch 1 - lo usamos para hacer el crawling y el scraping
 def batchOne():
-    print("\n############Ejecutando Batch 1: Descarga de ficheros#############\n")
+    print("\n############ Ejecutando Batch 1: Descarga de ficheros #############\n")
     # TODO: CONECTAR CON GOOGLE DRIVE Y OBTENER LOS DATOS CON GDOWN, LUEGO PARSEAMOS A JSON
 
     archivos = [
@@ -30,7 +30,8 @@ def batchOne():
 
     batch.module2.batchTwo()
 
-    '''url_dev_subtaskA = 'https://drive.google.com/file/d/1e_G-9a66AryHxBOwGWhriePYCCa4_29e/view'
+'''
+    url_dev_subtaskA = 'https://drive.google.com/file/d/1e_G-9a66AryHxBOwGWhriePYCCa4_29e/view'
     url_train_subtaskA = 'https://drive.google.com/file/d/1HeCgnLuDoUHhP-2OsTSSC3FXRLVoI6OG/view'
     url_dev_subtaskB = 'https://drive.google.com/file/d/1oh9c-d0fo3NtETNySmCNLUc6H1j4dSWE/view'
     url_train_subtaskB = 'https://drive.google.com/file/d/1k5LMwmYF7PF-BzYQNE2ULBae79nbM268/view'
@@ -43,7 +44,7 @@ def batchOne():
     gdown.download(url_train_subtaskA, output_train_subtaskA, fuzzy=True)
     gdown.download(url_dev_subtaskB, output_dev_subtaskB, fuzzy=True)
     gdown.download(url_train_subtaskB, output_train_subtaskB, fuzzy=True)
- 
+    
 
 
     dfHuman = pd.DataFrame()
