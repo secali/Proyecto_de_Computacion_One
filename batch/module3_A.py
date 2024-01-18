@@ -12,6 +12,7 @@ from sklearn.metrics import f1_score
 from sklearn.model_selection import GridSearchCV
 
 import batch.functions
+import batch.module3_B
 from tabulate import tabulate
 from sklearn.metrics import classification_report
 from sklearn.exceptions import UndefinedMetricWarning
@@ -20,8 +21,8 @@ import numpy as np
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import HashingVectorizer
-#from gensim.models import Word2Vec
-#from gensim.models import Doc2Vec, TaggedDocument
+# from gensim.models import Word2Vec
+# from gensim.models import Doc2Vec, TaggedDocument
 
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
@@ -30,11 +31,12 @@ from sklearn.metrics import accuracy_score, classification_report
 import nltk
 from nltk.tokenize import word_tokenize
 
+
 # batch 3 - modulo que usamos para crear los test, elegir modelo, entrenar y guardar clasificador y vectorizador
 def batchThree(modelo, texto):
-    print("\n############ Ejecutando Batch 3: Clasificador #############")
+    print("\n############ Ejecutando Batch 3: Clasificador - Subtarea A #############")
     # creamos y asignamos valor a las variables
-    max_instances_per_class = 1000 #100  # numero de instancias por clase
+    max_instances_per_class = 1000  # 100  # numero de instancias por clase
     max_features = 5000  # maximum number of features extracted for our instances
     random_seed = 777  # set random seed for reproducibility
 
@@ -42,7 +44,6 @@ def batchThree(modelo, texto):
     print("\nCargando ficheros...")
     fileATrain = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTrain_A.tsv')
     fileATest = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTest_A.tsv')
-    # fileFase1 = batch.functions.obtener_ruta_guardado('SaveDF', 'DataSetFinal.tsv')
     fileFase1 = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTest_fase01.tsv')
 
     # creamos dataframe con datos de los ficheros
@@ -58,10 +59,11 @@ def batchThree(modelo, texto):
     print("Balanceamos los ficheros")
     df_train_A = batch.functions.balacearDF(df_train_A)
     df_test_A = batch.functions.balacearDF(df_test_A)
+    # No balanceamos df_fase_1 porque ya viene balanceado de la actividad 01
 
     # determine avg text length in tokens
-    num=int(df_train_A["text"].map(lambda x: len(x.split(" "))).mean())
-    print("Numero de caracteres al que reducimos el texto",num)
+    num = int(df_train_A["text"].map(lambda x: len(x.split(" "))).mean())
+    print("Numero de caracteres al que reducimos el texto", num)
     '''
     # Apply the function to the 'text' column
     nltk.download('punkt')
@@ -106,17 +108,16 @@ def batchThree(modelo, texto):
     # TFIDF
     vectorizer = TfidfVectorizer(max_features=max_features, stop_words="english", ngram_range=(1, 1))
     # CountVectorizer
-    #vectorizer = CountVectorizer(max_features=max_features, stop_words="english", ngram_range=(1, 1))
+    # vectorizer = CountVectorizer(max_features=max_features, stop_words="english", ngram_range=(1, 1))
     # HashingVectorizer
     # vectorizer = HashingVectorizer(n_features=max_features, stop_words="english", ngram_range=(1, 1))
 
-
     # vectorizamos textos de train y test
-    #X_train = vectorizer.fit_transform(train_df["text"])
-    #X_test = vectorizer.transform(test_df["text"])
+    # X_train = vectorizer.fit_transform(train_df["text"])
+    # X_test = vectorizer.transform(test_df["text"])
     X_train = vectorizer.fit_transform(train_df["tokenized_text"])
     X_test = vectorizer.transform(test_df["tokenized_text"])
-    #X_test_f01 = vectorizer.transform(test_df_f01["text"])
+    # X_test_f01 = vectorizer.transform(test_df_f01["text"])
 
     '''ruta_carpeta_xtrain= batch.functions.obtener_ruta_guardado('SaveDF', 'X_train.csv')
     ruta_carpeta_xtest = batch.functions.obtener_ruta_guardado('SaveDF', 'X_test.csv')
@@ -124,7 +125,6 @@ def batchThree(modelo, texto):
     X_train.to_csv(ruta_carpeta_xtrain, index=False)
     X_test.to_csv(ruta_carpeta_xtest, index=False)
     X_test_f01.to_csv(ruta_carpeta_xtest_f01, index=False)'''
-
 
     # pasamos a numérico la columna label
     le = LabelEncoder()
@@ -134,7 +134,6 @@ def batchThree(modelo, texto):
     print("\nEligiendo calsificador")
     # Obtener una lista de todos los clasificadores disponibles
     classifiers = all_estimators(type_filter='classifier')
-
 
     # Calcular mejor algoritmo
     best_model = None
@@ -183,11 +182,11 @@ def batchThree(modelo, texto):
 
     # guardamos clasificador y vectorizador
     print("Clasificador y vectorizador guardado en fichero")
-    batch.functions.guardar_clf_vct('clf', best_model)
-    batch.functions.guardar_clf_vct('vct', vectorizer)
+    batch.functions.guardar_clf_vct('clf_A', best_model)
+    batch.functions.guardar_clf_vct('vct_A', vectorizer)
 
-    batch.module4.batchFour(modelo, texto)
-    exit()
+    batch.module3_B.batchThree()
+
     '''
     best_model = None
     best_score = -np.inf

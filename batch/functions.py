@@ -6,6 +6,9 @@ import batch
 
 sys.path.append("../batch")
 from batch import module1
+from batch import module2
+from batch import module3_A
+from batch import module3_B
 import os
 import datetime
 from joblib import dump
@@ -70,7 +73,7 @@ def obtener_datos():
             elif entrada in ['N', 'n']:
                 if os.path.exists(file_02):
                     print("Existe un fichero con los datos tratados.  Los usamos.")
-                    batch.module3.batchThree("modelo", "mi texto")
+                    batch.module3_B.batchThree("modelo", "mi texto")
                 else:
                     print("No existen los datos tratados.  Vamos a volver a generar los datos tratados")
                     batch.module2.batchTwo("modelo", "mi texto")
@@ -160,10 +163,9 @@ def limpia_texto_df(df):
     # df_limpio['text'] = df_limpio.apply(lambda row: remove_unwanted_tags(row['text']) if row['label'] != 0 else row['text'], axis=1)
 
     # print (df_limpio)
-    # Inicializa la barra de progreso
-    pbar = tqdm(total=total_filas)
 
     print("\nLimpiar texto")
+    pbar = tqdm(total=total_filas) # Inicializa la barra de progreso
     for index, row in df_limpio.iterrows():
         text = df_limpio.at[index, 'text']
         '''if len(text) >= 20 and detect(text) == 'en':
@@ -176,6 +178,7 @@ def limpia_texto_df(df):
                 # Intentar detectar el idioma si el texto tiene longitud suficiente
                 if detect(text) == 'en':
                     df_limpio.at[index, 'text'] = text.replace('\t', '').replace('\n', '').replace('  ', '')
+
                 else:
                     df_limpio.at[index, 'text'] = ''
             except Exception as e:
@@ -197,6 +200,8 @@ def limpia_texto_df(df):
     df_limpio = df_limpio.dropna(subset=['label'])
     df_limpio = df_limpio[df_limpio['text'] != '']
     df_limpio = df_limpio[df_limpio['label'] != '']
+    print("Tokenizando texto")
+    df_limpio['tokenized_text'] = df_limpio['text'].apply(tokenize_and_reduce)
 
     return df_limpio
 
