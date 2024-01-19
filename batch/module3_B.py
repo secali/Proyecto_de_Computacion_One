@@ -35,7 +35,7 @@ def batchThree(modelo, texto):
     print("\n############ Ejecutando Batch 3: Clasificador - Subtarea B #############")
     # creamos y asignamos valor a las variables
     max_instances_per_class = 1000 #100  # numero de instancias por clase
-    max_features = 5000  # maximum number of features extracted for our instances
+    max_features = 500  # maximum number of features extracted for our instances
     random_seed = 777  # set random seed for reproducibility
 
     # obtener ficheros a cargar
@@ -54,53 +54,28 @@ def batchThree(modelo, texto):
     # Imrpimimos estadistica
     batch.functions.imprime_estadistica_subtarea_A(df_train_B, df_test_B, df_fase_1)
 
-    # Balanceando fichero de train
+    '''# Balanceando fichero de train
     print("Balanceamos los ficheros")
     df_train_B = batch.functions.balacearDF(df_train_B)
-    df_test_B = batch.functions.balacearDF(df_test_B)
+    df_test_B = batch.functions.balacearDF(df_test_B)'''
 
 
     # determine avg text length in tokens
     num=int(df_train_B["text"].map(lambda x: len(x.split(" "))).mean())
     print("Numero de caracteres al que reducimos el texto",num)
 
-    # Apply the function to the 'text' column
-    nltk.download('punkt')
-    print ("Limitamos a ",num," caracteres")
-    df_train_B['tokenized_text'] = df_train_B['text'].apply(batch.functions.tokenize_and_reduce)
-    df_test_B['tokenized_text'] = df_test_B['text'].apply(batch.functions.tokenize_and_reduce)
-    df_fase_1['tokenized_text'] = df_fase_1['text'].apply(batch.functions.tokenize_and_reduce)
-    batch.functions.guardar_dataset(df_train_B, 'DSTrain_B.tsv')
-    batch.functions.guardar_dataset(df_test_B, 'DSTest_B.tsv')
-    batch.functions.guardar_dataset(df_fase_1, 'DSTest_fase01.tsv')
-    print("Limitamos a 50 caracteres")
-
 
     # Imrpimimos estadistica
     print("\nEstadistica con fichero balanceado")
-    batch.functions.imprime_estadistica_subtarea_A(df_train_B, df_test_B, df_fase_1)
+    batch.functions.imprime_estadistica_subtarea_B(df_train_B, df_test_B, df_fase_1)
 
     print("\nPreparando datos para hacer entrenamiento y test")
 
     # Crear DataFrames para los conjuntos de entrenamiento y prueba
-    train_df = df_train_B  # pd.DataFrame({'text': X_train, 'label': y_train})  # 'Type': y_train})
-    test_df = df_test_B  # pd.DataFrame({'text': X_test, 'label': y_test})  # X_test, 'Type': y_test})
-    # batch.functions.guardar_dataset(test_df, 'test_df_borrar.tsv')
-    test_df_f01 = df_fase_1  # pd.DataFrame({'text': X_test_f01, 'label': y_test_f01})  # X_test, 'Type': y_test})'''
+    train_df = df_train_B
+    test_df = df_test_B
+    test_df_f01 = df_fase_1
 
-    '''# Separar las características (X) del objetivo (y)
-    X = df_train_A['text']
-    y = df_train_A['label']
-
-    # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
-    print("Creando ficheros de entranamiento y test\n")
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    # Crear DataFrames para los conjuntos de entrenamiento y prueba
-    # ojo!!! cambio Type por Label
-    train_df = pd.DataFrame({'text': X_train, 'label': y_train}) #'Type': y_train})
-    test_df = pd.DataFrame({'text': X_test, 'label': y_test}) #X_test, 'Type': y_test})
-    '''
 
     # retocamos train_df, agrupandolo por tipo y tomamos muestra aleatoria de filas
     train_df = train_df.groupby("label").sample(n=max_instances_per_class, random_state=random_seed)
@@ -115,18 +90,12 @@ def batchThree(modelo, texto):
 
 
     # vectorizamos textos de train y test
-    #X_train = vectorizer.fit_transform(train_df["text"])
-    #X_test = vectorizer.transform(test_df["text"])
-    X_train = vectorizer.fit_transform(train_df["tokenized_text"])
-    X_test = vectorizer.transform(test_df["tokenized_text"])
+    X_train = vectorizer.fit_transform(train_df["text"])
+    X_test = vectorizer.transform(test_df["text"])
+    #X_train = vectorizer.fit_transform(train_df["tokenized_text"])
+    #X_test = vectorizer.transform(test_df["tokenized_text"])
     #X_test_f01 = vectorizer.transform(test_df_f01["text"])
 
-    '''ruta_carpeta_xtrain= batch.functions.obtener_ruta_guardado('SaveDF', 'X_train.csv')
-    ruta_carpeta_xtest = batch.functions.obtener_ruta_guardado('SaveDF', 'X_test.csv')
-    ruta_carpeta_xtest_f01 = batch.functions.obtener_ruta_guardado('SaveDF', 'X_test_f01.csv')
-    X_train.to_csv(ruta_carpeta_xtrain, index=False)
-    X_test.to_csv(ruta_carpeta_xtest, index=False)
-    X_test_f01.to_csv(ruta_carpeta_xtest_f01, index=False)'''
 
 
     # pasamos a numérico la columna label
@@ -190,54 +159,3 @@ def batchThree(modelo, texto):
     batch.functions.guardar_clf_vct('vct_B', vectorizer)
 
     batch.module4.batchFour(modelo, texto)
-    exit()
-    '''
-    best_model = None
-    best_score = -np.inf
-    best_report = None
-
-    # Definir tu conjunto de datos
-    iris = load_iris()
-    X_train, X_test, y_train, y_test = iris.data, iris.data, iris.target, iris.target
-
-    # Iterar sobre cada clasificador
-    for name, ClassifierClass in classifiers:
-        if issubclass(ClassifierClass, ClassifierMixin) and hasattr(ClassifierClass, 'fit'):
-            try:
-                # Definir el espacio de búsqueda de hiperparámetros
-                param_grid = {
-                    'n_estimators': [50, 100],
-                    'max_depth': [None, 10],
-                    'min_samples_split': [2, 5],
-                    'min_samples_leaf': [1, 2]
-                }
-
-                # Inicializar el GridSearchCV
-                grid_search = GridSearchCV(ClassifierClass(), param_grid, cv=5, scoring='f1_macro')
-
-                # Entrenar el modelo con búsqueda de hiperparámetros
-                grid_search.fit(X_train, y_train)
-
-                # Obtener el mejor modelo y predecir en el conjunto de prueba
-                best_model = grid_search.best_estimator_
-                y_pred = best_model.predict(X_test)
-
-                # Calcular la puntuación F1 y el informe de clasificación
-                score = f1_score(y_test, y_pred, average="macro")
-                report = classification_report(y_test, y_pred)
-
-                # Almacenar el mejor modelo y su rendimiento si supera el anterior
-                if score > best_score:
-                    best_score = score
-                    best_model = best_model
-                    best_report = report
-
-                print(f"Model: {name} Macro F1: {score:.3f}")
-            except Exception as e:
-                continue
-
-    # Mostrar el mejor modelo y su rendimiento
-    print(f"Best Model: {best_model}")
-    print(f"Best Score: {best_score}")
-    print(f"Best Report: {best_report}")
-    '''

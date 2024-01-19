@@ -28,6 +28,14 @@ def tokenize_and_reduce(text):
     tokens = word_tokenize(text)
     return ' '.join(tokens[:441])
 
+def tokenize_and_reduce_50(text):
+    tokens = word_tokenize(text)
+    return ' '.join(tokens[:50])
+
+def tokenize_and_reduce_150(text):
+    tokens = word_tokenize(text)
+    return ' '.join(tokens[:150])
+
 
 def limpia_texto(list):
     lista_txt_limpio = []
@@ -165,26 +173,20 @@ def limpia_texto_df(df):
     # print (df_limpio)
 
     print("\nLimpiar texto")
-    pbar = tqdm(total=total_filas) # Inicializa la barra de progreso
+    pbar = tqdm(total=total_filas)  # Inicializa la barra de progreso
     for index, row in df_limpio.iterrows():
         text = df_limpio.at[index, 'text']
-        '''if len(text) >= 20 and detect(text) == 'en':
-            df_limpio.at[index, 'text'] = text.replace('\t', '').replace('\n', '')
-        else:
-            df_limpio.at[index, 'text'] = ''
-'''
+        # Desechamos los textos menores de 20 caracteres
         if len(text) >= 20:
             try:
                 # Intentar detectar el idioma si el texto tiene longitud suficiente
                 if detect(text) == 'en':
                     df_limpio.at[index, 'text'] = text.replace('\t', '').replace('\n', '').replace('  ', '')
-
+                # Desechamos textos que no sean en ingles
                 else:
                     df_limpio.at[index, 'text'] = ''
             except Exception as e:
-                # Manejar posibles excepciones de la detección de idioma
-                # print(f"\nError en detección de idioma: {e}")
-                # Borramos textos y luego eliminaremos filas
+                # Desechamos textos que generen una excepcion
                 df_limpio.at[index, 'text'] = ''
         else:
             df_limpio.at[index, 'text'] = ''
@@ -194,15 +196,20 @@ def limpia_texto_df(df):
     # Cierra la barra de progreso al finalizar
     pbar.close()
 
+    # Eliminamos duplicados, filas vacias y filas con algun campo vacio
     print("Eliminando duplicados y filas vacías")
     df_limpio = df_limpio.drop_duplicates()
     df_limpio = df_limpio.dropna(subset=['text'])
     df_limpio = df_limpio.dropna(subset=['label'])
     df_limpio = df_limpio[df_limpio['text'] != '']
     df_limpio = df_limpio[df_limpio['label'] != '']
-    print("Tokenizando texto")
+    print("Tokenizando texto a 50, 150 y 441 tokens")
+    # Tokenizamos a 441 tokens
     df_limpio['tokenized_text'] = df_limpio['text'].apply(tokenize_and_reduce)
-
+    # Tokenizamos a 50 tokens
+    df_limpio['tokenized_text_50'] = df_limpio['text'].apply(tokenize_and_reduce_50)
+    # Tokenizamos a 150 tokens
+    df_limpio['tokenized_text_150'] = df_limpio['text'].apply(tokenize_and_reduce_150)
     return df_limpio
 
 
@@ -280,6 +287,79 @@ def imprime_estadistica(dfDataSet, name):
     # imprimimos los datos en forma de tabla tabulada
     print("\n" + name)
     print(tabulate(data, headers=["Campo", "Valor"], tablefmt="grid"))
+
+
+def imprime_estadistica_subtarea_B(df_train_B, df_test_B, df_fase_1):
+    # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
+    print("Imprimiendo estadistica Subtarea A\n")
+    X_train = df_train_B['text']
+    y_train = df_train_B['label']
+    X_test = df_test_B['text']
+    y_test = df_test_B['label']
+    X_test_f01 = df_fase_1['text']
+    y_test_f01 = df_fase_1['label']
+    # print(y_train)
+
+    # Número total de instancias en el dataset original
+    n_total = len(df_train_B) + len(df_test_B) + len(df_fase_1)
+    # Número de instancias en el conjunto de entrenamiento
+    n_train = len(df_train_B)
+    # Número de instancias en el conjunto de prueba
+    n_test = len(df_test_B)
+    # Número de instancias en el conjunto de prueba fase 01
+    n_test_f01 = len(df_fase_1)
+    # Número de instancias humanas en el conjunto de entrenamiento
+    n_human_train = sum(y_train == 0)
+    # Número de instancias generadas ChatGPT en el conjunto de entrenamiento
+    n_cGPT_train = sum(y_train == 1)
+    # Número de instancias generadas cohere en el conjunto de entrenamiento
+    n_cohere_train = sum(y_train == 2)
+    # Número de instancias generadas davinci en el conjunto de entrenamiento
+    n_davinci_train = sum(y_train == 3)
+    # Número de instancias generadas bloomz en el conjunto de entrenamiento
+    n_bloomz_train = sum(y_train == 4)
+    # Número de instancias generadas dolly en el conjunto de entrenamiento
+    n_dolly_train = sum(y_train == 5)
+    # Número de instancias humanas en el conjunto de prueba
+    n_human_test = sum(y_test == 0)
+    # Número de instancias generadas ChatGPT en el conjunto de prueba
+    n_cGPT_test = sum(y_test == 1)
+    # Número de instancias generadas cohere en el conjunto de prueba
+    n_cohere_test = sum(y_test == 2)
+    # Número de instancias generadas davinci en el conjunto de prueba
+    n_davinci_test = sum(y_test == 3)
+    # Número de instancias generadas bloomz en el conjunto de prueba
+    n_bloomz_test = sum(y_test == 4)
+    # Número de instancias generadas dolly en el conjunto de prueba
+    n_dolly_test = sum(y_test == 5)
+    # Número de instancias humanas en el conjunto de prueba
+    n_human_test_f01 = sum(y_test_f01 == 0)
+    # Número de instancias generadas en el conjunto de prueba
+    n_generated_test_f01 = sum(y_test_f01 == 1)
+
+    # Creamos una lista de listas con los datos
+    data = [
+        ["Número total de instancias", n_total],
+        ["Número de instancias del training", n_train],
+        ["Número de instancias del test", n_test],
+        ["Número de instancias del test fase_01", n_test_f01],
+        ["Número de instancias humanas en el training", n_human_train],
+        ["Número de instancias ChatGPT en el training", n_cGPT_train],
+        ["Número de instancias Cohere en el training", n_cohere_train],
+        ["Número de instancias Davinci en el training", n_davinci_train],
+        ["Número de instancias Bloomz en el training", n_bloomz_train],
+        ["Número de instancias Dolly en el training", n_dolly_train],
+        ["Número de instancias humanas en el test", n_human_test],
+        ["Número de instancias ChatGPT en el test", n_cGPT_test],
+        ["Número de instancias Cohere en el test", n_cohere_test],
+        ["Número de instancias Davinci en el test", n_davinci_test],
+        ["Número de instancias Bloomz en el test", n_bloomz_test],
+        ["Número de instancias Dolly en el test", n_dolly_test],
+        ["Número de instancias humanas en el test fase_01", n_human_test_f01],
+        ["Número de instancias generadas en el test fase_01", n_generated_test_f01]
+    ]
+    # Imprimimos los datos en forma de tabla tabulada
+    print(tabulate(data, headers=["Descripción", "Valor"], tablefmt="grid"))
 
 
 def imprime_estadistica_subtarea_A(df_train_A, df_test_A, df_fase_1):
