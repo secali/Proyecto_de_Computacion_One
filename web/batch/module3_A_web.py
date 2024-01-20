@@ -185,7 +185,7 @@ def batchThree(modelo, texto):
     batch.functions.guardar_clf_vct('clf_A', best_model)
     batch.functions.guardar_clf_vct('vct_A', vectorizer)
 
-    batch.module3_B.batchThree(texto, modelo)
+    batch.module3_B.batchThree()
 
     '''
     best_model = None

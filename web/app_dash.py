@@ -2,6 +2,10 @@ import dash
 from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output, State
+from web.batch import module4_web
+
+
+
 
 # Inicializa la aplicación Dash con suppress_callback_exceptions=True
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
@@ -45,6 +49,7 @@ index_layout = html.Div([
     ])
 ])
 
+
 # Define la lógica de la aplicación
 @app.callback(
     Output('resultado', 'children'),
@@ -52,7 +57,6 @@ index_layout = html.Div([
     [State('modelo', 'value'),
      State('texto', 'value')]
 )
-
 def analizar_texto(n_clicks, modelo, texto):
     print(f'Número de clics: {n_clicks}')
     print(f'Modelo seleccionado: {modelo}')
@@ -60,12 +64,16 @@ def analizar_texto(n_clicks, modelo, texto):
 
     if n_clicks is not None and n_clicks > 0:
         # Realiza aquí la lógica de análisis según el modelo y el texto
+
+        module4_web.batchFour(modelo, texto)
+
         resultado = texto
         print(f'Resultado: {resultado}')
         return resultado  # Devuelve solo un elemento
     else:
         print('Botón no ha sido pulsado')
         return 'Presiona el botón "Analizar" para ver el saludo'
+
 
 # Establece el diseño de la aplicación
 app.layout = index_layout
