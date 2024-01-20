@@ -5,8 +5,7 @@ import batch.module3_B
 import batch.module3_A
 
 
-
-# batch 2 - modulo que usamos para cargar fichero, hacer estadísticas y balancear los datos
+# batch 2 - Módulo que usamos para cargar fichero, hacer estadísticas y balancear los datos
 def batchTwo(modelo, texto):
     print("\n############ Ejecutando Batch 2: carga ficheros, estadística y manejo de datos #############")
     # obtener ficheros a cargar
@@ -30,9 +29,15 @@ def batchTwo(modelo, texto):
     df_fase_1.columns = ['text', 'label']
     df_fase_1['label'].replace({'h': 0, 'g': 1}, inplace=True)
 
-    # Preparamos datos
-
     print("\nPreparando los datos...")
+    #   Preparamos datosVamos a tratar en todos los ficheros:
+    #   - Limpiar texto < de 20 caracteres
+    #   - Limpiar tabulaciones, saltos de línea y dobles espacios
+    #   - Limpiar texto que no esté en inglés.
+    #   - Eliminar filas duplicadas.
+    #   - Eliminar filas con alguna columna vacía.
+    #   - Tokenizer a 441 tokens, 50 tokens y 150 tokens, en columnas diferentes
+
     # Tratamos datos de Train A
     batch.functions.guardar_dataset(df_train_A, 'DSTrain_A_sucio.tsv')
     df_train_A = batch.functions.limpia_texto_df(df_train_A)
@@ -58,8 +63,7 @@ def batchTwo(modelo, texto):
     df_fase_1['tokenized_text'] = df_fase_1['text'].apply(batch.functions.tokenize_and_reduce)
     batch.functions.guardar_dataset(df_fase_1, 'DSTest_fase01.tsv')
 
-
-    # Imprimimos estadisticas
+    # Imprimimos estadísticas
     print("\nImprimiendo estadísticas...")
     batch.functions.imprime_estadistica(df_train_A, 'Estadísticas Subtask A Train')
     batch.functions.imprime_estadistica(df_test_A, 'Estadísticas Subtask A Test')
@@ -67,9 +71,5 @@ def batchTwo(modelo, texto):
     batch.functions.imprime_estadistica(df_test_B, 'Estadísticas Subtask B Test')
     batch.functions.imprime_estadistica(df_fase_1, 'Estadísticas Data Frame Fase 01')
 
-
-    # Pasamos al modulo 3, para hacer el tratamiento de los datos
+    # Pasamos al módulo 3, para hacer el tratamiento de los datos
     batch.module3_A.batchThree(modelo, texto)
-
-
-
