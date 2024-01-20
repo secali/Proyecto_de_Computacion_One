@@ -63,7 +63,15 @@
   }
   
   /* Estilos del formulario */
-  form {
+  #formulario {
+    max-width: 800px;
+    margin: 100px auto 50px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+    #formulario {
     max-width: 800px;
     margin: 100px auto 50px;
     padding: 20px;
@@ -87,7 +95,7 @@
     font-size: inherit;
   }
   
-  input[type="submit"] {
+#analizar-button {
     display: block;
     width: 200px;
     margin: 0 auto;
