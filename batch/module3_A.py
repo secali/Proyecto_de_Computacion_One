@@ -126,7 +126,7 @@ def batchThree(modelo, texto):
     X_test.to_csv(ruta_carpeta_xtest, index=False)
     X_test_f01.to_csv(ruta_carpeta_xtest_f01, index=False)'''
 
-    # pasamos a numérico la columna label
+    # Pasamos a numérico la columna label
     le = LabelEncoder()
     y_train = le.fit_transform(train_df["label"])
     y_test = le.transform(test_df["label"])

@@ -54,10 +54,6 @@ def batchThree(modelo, texto):
     # Imrpimimos estadistica
     batch.functions.imprime_estadistica_subtarea_A(df_train_B, df_test_B, df_fase_1)
 
-    '''# Balanceando fichero de train
-    print("Balanceamos los ficheros")
-    df_train_B = batch.functions.balacearDF(df_train_B)
-    df_test_B = batch.functions.balacearDF(df_test_B)'''
 
 
     # determine avg text length in tokens
