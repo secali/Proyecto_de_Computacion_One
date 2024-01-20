@@ -170,7 +170,6 @@ def limpia_texto_df(df):
     # print ("\nAplicar BeautifulSoup")
     # df_limpio['text'] = df_limpio.apply(lambda row: remove_unwanted_tags(row['text']) if row['label'] != 0 else row['text'], axis=1)
 
-    # print (df_limpio)
 
     print("\nLimpiar texto")
     pbar = tqdm(total=total_filas)  # Inicializa la barra de progreso
@@ -204,7 +203,11 @@ def limpia_texto_df(df):
     df_limpio = df_limpio[df_limpio['text'] != '']
     df_limpio = df_limpio[df_limpio['label'] != '']
     print("Tokenizando texto a 50, 150 y 441 tokens")
-    # Tokenizamos a 441 tokens
+    # Descargamos datos asolciados al tokenizador Punkt
+    nltk.download('punkt')
+    # Tokenizamos a 441 tokens - media de los textos sacada de la funcion comentada siguiente:
+    #   num=int(df_train_B["text"].map(lambda x: len(x.split(" "))).mean())
+    #   print("Numero de caracteres al que reducimos el texto",num)
     df_limpio['tokenized_text'] = df_limpio['text'].apply(tokenize_and_reduce)
     # Tokenizamos a 50 tokens
     df_limpio['tokenized_text_50'] = df_limpio['text'].apply(tokenize_and_reduce_50)
@@ -291,7 +294,7 @@ def imprime_estadistica(dfDataSet, name):
 
 def imprime_estadistica_subtarea_B(df_train_B, df_test_B, df_fase_1):
     # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
-    print("Imprimiendo estadistica Subtarea A\n")
+    print("Imprimiendo estadistica Subtarea B\n")
     X_train = df_train_B['text']
     y_train = df_train_B['label']
     X_test = df_test_B['text']

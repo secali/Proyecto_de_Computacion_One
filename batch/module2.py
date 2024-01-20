@@ -3,7 +3,7 @@ import batch.functions
 import pandas as pd
 import batch.module3_B
 import batch.module3_A
-import nltk
+
 
 
 # batch 2 - modulo que usamos para cargar fichero, hacer estadísticas y balancear los datos
@@ -31,29 +31,29 @@ def batchTwo(modelo, texto):
     df_fase_1['label'].replace({'h': 0, 'g': 1}, inplace=True)
 
     # Preparamos datos
-    nltk.download('punkt')
+
     print("\nPreparando los datos...")
+    # Tratamos datos de Train A
     batch.functions.guardar_dataset(df_train_A, 'DSTrain_A_sucio.tsv')
     df_train_A = batch.functions.limpia_texto_df(df_train_A)
-    #df_train_A['tokenized_text'] = df_train_A['text'].apply(batch.functions.tokenize_and_reduce)
     batch.functions.guardar_dataset(df_train_A, 'DSTrain_A.tsv')
 
+    # Tratamos datos de Test A
     batch.functions.guardar_dataset(df_test_A, 'DSTest_A_sucio.tsv')
     df_test_A = batch.functions.limpia_texto_df(df_test_A)
-    #df_test_A['tokenized_text'] = df_test_A['text'].apply(batch.functions.tokenize_and_reduce)
     batch.functions.guardar_dataset(df_test_A, 'DSTest_A.tsv')
 
-
+    # Tratamos datos de Train B
     batch.functions.guardar_dataset(df_train_B, 'DSTrain_B_sucio.tsv')
     df_train_B = batch.functions.limpia_texto_df(df_train_B)
-    #df_train_B['tokenized_text'] = df_train_B['text'].apply(batch.functions.tokenize_and_reduce)
     batch.functions.guardar_dataset(df_train_B, 'DSTrain_B.tsv')
 
+    # Tratamos datos de Test B
     batch.functions.guardar_dataset(df_test_B, 'DSTest_B_sucio.tsv')
     df_test_B = batch.functions.limpia_texto_df(df_test_B)
-    #df_test_B['tokenized_text'] = df_test_B['text'].apply(batch.functions.tokenize_and_reduce)
     batch.functions.guardar_dataset(df_test_B, 'DSTest_B.tsv')
 
+    # Tratamos datos fichero fase 01
     batch.functions.guardar_dataset(df_fase_1, 'DSTest_fase01_largo.tsv')
     df_fase_1['tokenized_text'] = df_fase_1['text'].apply(batch.functions.tokenize_and_reduce)
     batch.functions.guardar_dataset(df_fase_1, 'DSTest_fase01.tsv')
@@ -68,70 +68,8 @@ def batchTwo(modelo, texto):
     batch.functions.imprime_estadistica(df_fase_1, 'Estadísticas Data Frame Fase 01')
 
 
-    #print(df_train_A)
-    #print(df_test_A)
-    #print(df_train_B)
-    #print(df_test_B)
-    #print(df_fase_1)
-    '''
-    # Limpiar Texto, eliminar cadenas vacias, eliminar duplicados
-    print("\nLimpiando texto...")
-    print("\nTrain A...")
-    df_train_A=batch.functions.limpia_texto_df(df_train_A)
-    #df_train_A['text'] = df_train_A['text'].apply(batch.functions.limpiar_texto)
-    df_train_A = df_train_A[df_train_A['text'] != '']
-    df_train_A = df_train_A.drop_duplicates()
-    df_train_A = df_train_A.dropna(subset=['text'])
-    df_train_A = df_train_A.dropna(subset=['label'])
-    batch.functions.guardar_dataset(df_train_A,'DSTrain_A.tsv')
-    print("\nTest A...")
-    df_test_A = batch.functions.limpia_texto_df(df_test_A)
-    # df_test_A['text'] = df_test_A['text'].apply(batch.functions.limpiar_texto)
-    df_test_A = df_test_A[df_test_A['text'] != '']
-    df_test_A = df_test_A.drop_duplicates()
-    df_test_A = df_test_A.dropna(subset=['text'])
-    df_test_A = df_test_A.dropna(subset=['label'])
-    batch.functions.guardar_dataset(df_test_A, 'DSTest_A.tsv')
-    print("\nTrain B...")
-    df_train_B = batch.functions.limpia_texto_df(df_train_B)
-    # df_train_B['text'] = df_train_B['text'].apply(batch.functions.limpiar_texto)
-    df_train_B = df_train_B[df_train_B['text'] != '']
-    df_train_B = df_train_B.drop_duplicates()
-    df_train_B = df_train_B.dropna(subset=['text'])
-    df_train_B = df_train_B.dropna(subset=['label'])
-    batch.functions.guardar_dataset(df_train_B, 'DSTrain_B.tsv')
-    print("\nTest B...")
-    df_test_B = batch.functions.limpia_texto_df(df_test_B)
-    # df_test_B['text'] = df_test_B['text'].apply(batch.functions.limpiar_texto)
-    df_test_B = df_test_B[df_test_B['text'] != '']
-    df_test_B = df_test_B.drop_duplicates()
-    df_test_B = df_test_B.dropna(subset=['text'])
-    df_test_B = df_test_B.dropna(subset=['label'])
-    batch.functions.guardar_dataset(df_test_B, 'DSTest_B.tsv')
-    print("\nTest fase 01...")
-    batch.functions.guardar_dataset(df_fase_1, 'DSTest_fase01.tsv')
-
-
-    # Imprimimos estadisticas
-    print("\nImprimiendo estadísticas...")
-    batch.functions.imprime_estadistica(df_train_A, 'Estadísticas Subtask A Train')
-    batch.functions.imprime_estadistica(df_test_A, 'Estadísticas Subtask A Test')
-    batch.functions.imprime_estadistica(df_train_B, 'Estadísticas Subtask B Train')
-    batch.functions.imprime_estadistica(df_test_B, 'Estadísticas Subtask B Test')
-    batch.functions.imprime_estadistica(df_fase_1, 'Estadísticas Data Frame Fase 01')
-
-    # Balancear resultados
-    # df_train_A = batch.functions.balacearDF(df_train_A)
-    # df_train_B = batch.functions.balacearDF(df_train_B)
-
-    # guardamos los dataset finales balanceados, por si tuvieramos que recuperarlos
-    # batch.functions.guardar_dataset(df_train_A, 'df_train_A.tsv')
-    # batch.functions.guardar_dataset(df_test_A, 'df_test_A.tsv')
-    # batch.functions.guardar_dataset(df_train_B, 'df_train_B.tsv')
-    # batch.functions.guardar_dataset(df_test_B, 'df_test_B.tsv')
-    # batch.functions.guardar_dataset(df_fase_1, 'df_fase_1.tsv')
-'''
+    # Pasamos al modulo 3, para hacer el tratamiento de los datos
     batch.module3_A.batchThree(modelo, texto)
-    #batch.module4.batchFour(df_train_B, df_test_B, df_fase_1)
+
 
 
