@@ -54,8 +54,8 @@ def obtener_datos_2():
     # Tomamos los ultimos archivos que se cargan y se procesan, para ver si esta realizada la descarga
     file_01 = obtener_ruta_guardado('Descargas', 'subtaskB_train.jsonl')
     file_02 = obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
-    file_03_01 = obtener_ruta_guardado('SaveCLF', 'clf_B.tsv')
-    file_03_02 = obtener_ruta_guardado('SaveVCT', 'vtc_B.tsv')
+    file_03_01 = obtener_ruta_guardado('SaveCLF', 'clf_B.joblib')
+    file_03_02 = obtener_ruta_guardado('SaveVCT', 'vct_B.joblib')
     flag_tratamiento = 0
 
     if (os.path.exists(file_03_01)) and (os.path.exists(file_03_02)):
@@ -234,17 +234,17 @@ def guardar_dataset(dfDataSet, archivo):
 def guardar_clf_vct(tipo, fichero, tarea):
     if tipo == 'clf':
         if tarea == 'A':
-            ruta_carpeta = obtener_ruta_guardado('SaveCLF', 'clf_A')
+            ruta_carpeta = obtener_ruta_guardado('SaveCLF', 'clf_A.joblib')
         elif tarea == 'B':
-            ruta_carpeta = obtener_ruta_guardado('SaveCLF', 'clf_B')
+            ruta_carpeta = obtener_ruta_guardado('SaveCLF', 'clf_B.joblib')
         else:
             print("No se puede guardar porque la tarea enviada no es correcta")
             return
     else:
         if tarea == 'A':
-            ruta_carpeta = obtener_ruta_guardado('SaveVCT', 'vct_A')
+            ruta_carpeta = obtener_ruta_guardado('SaveVCT', 'vct_A.joblib')
         elif tarea == 'B':
-            ruta_carpeta = obtener_ruta_guardado('SaveVCT', 'vct_B')
+            ruta_carpeta = obtener_ruta_guardado('SaveVCT', 'vct_B.joblib')
         else:
             print("No se puede guardar porque la tarea enviada no es correcta")
             return
