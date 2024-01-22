@@ -34,7 +34,7 @@ def batchFour(modelo, texto):
             # cargar el vectorizador desde un archivo
             loaded_vectorizador_B = load(functions.obtener_ruta_guardado('SaveVCT', 'vct_B.joblib'))
             print("Vectorizador B cargado")
-            texto_vectorizado = loaded_vectorizador_B.transform(texto)
+            texto_vectorizado = loaded_vectorizador_B.transform([texto])
             # lanzamos la prediccion
             y_pred = loaded_classifier_B.predict(texto_vectorizado)
             if y_pred == 0:
