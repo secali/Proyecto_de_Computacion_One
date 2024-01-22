@@ -111,8 +111,15 @@ def obtener_datos_2():
             else:
                 print("Faltan datos para poder seleccionar esta acción."
                       "\nEjecuta la acción desde un punto anterior")
-
         def opcion_4():
+            print("\nHas seleccionado comenzar elegiendo clasificador y vectorizador de tarea B")
+            if flag_tratamiento > 1:
+                batch.module3_B.batchThree()
+            else:
+                print("Faltan datos para poder seleccionar esta acción."
+                      "\nEjecuta la acción desde un punto anterior")
+
+        def opcion_5():
             print("\nHas seleccionado comenzar arrancando la prevision de la web")
             if flag_tratamiento > 2:
                 batch.module4.batchFour(" ", " ")
@@ -130,12 +137,13 @@ def obtener_datos_2():
             print("\nMenú de Selección:")
             print("1. Descargar los datos")
             print("2. Tratar los datos")
-            print("3. Elegir clasificador y vectorizador")
-            print("4. Arrancar servicio web - Predicciones")
-            print("5. Salir")
+            print("3. Elegir clasificador y vectorizador en ambas tareas")
+            print("4. Elegir clasificador y vectorizador en tarea B")
+            print("5. Arrancar servicio web - Predicciones")
+            print("6. Salir")
 
             # Solicita la entrada del usuario
-            opcion = input("Selecciona una opción (1, 2, 3, 4, 5): ")
+            opcion = input("Selecciona una opción (1, 2, 3, 4, 5, 6): ")
 
             # Realiza acciones según la opción seleccionada
             if opcion == '1':
@@ -147,57 +155,11 @@ def obtener_datos_2():
             elif opcion == '4':
                 opcion_4()
             elif opcion == '5':
+                opcion_5()
+            elif opcion == '6':
                 opcion_salir()
             else:
                 print("Opción no válida. Por favor, selecciona una opción válida.")
-
-
-def obtener_datos():
-    global ruta_script, ruta_carpeta, file_01
-    # obtener ruta si existe dataset DataSet - format TSV
-    # file = os.sep + 'SaveDF' + os.sep + 'DSTest_B.tsv'
-    file_02 = obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
-    file_01 = obtener_ruta_guardado('Descargas', 'subtaskB_train.jsonl')
-
-    # Verificar si el archivo existe en la ruta proporcionada
-    if os.path.exists(file_01):
-        # Obtener la fecha de modificación del archivo
-        fecha_modificacion = datetime.datetime.fromtimestamp(os.path.getmtime(file_01))
-        # Obtener la fecha de creación del archivo (solo disponible en algunos sistemas)
-        fecha_creacion = datetime.datetime.fromtimestamp(os.path.getctime(file_01))
-
-        # Mostrar las fechas
-        print(f"El archivo existe.\nFecha de modificación: {fecha_modificacion}")
-        if 'fecha_creacion' in locals():
-            print(f"Fecha de creación: {fecha_creacion}")
-        else:
-            print("No se pudo obtener la fecha de creación en este sistema.")
-        valores_aceptados = ['S', 'N']
-        entrada = 'a'
-        while entrada != valores_aceptados:
-            entrada = input("\n¿Desea actualizar los datos? S/N:\n")
-            if entrada in ['S', 's']:
-                while entrada != valores_aceptados:
-                    entrada = input("\n¿Desea omitir descarga y tratar los datos existentes? S/N:\n")
-                    if entrada in ['S', 's']:
-                        batch.module2.batchTwo("modelo", "mi texto")
-                    elif entrada in ['N', 'n']:
-                        batch.module1.batchOne("modelo", "mi texto")
-                    else:
-                        print("Seleccione una opción válida")
-            elif entrada in ['N', 'n']:
-                if os.path.exists(file_02):
-                    print("Existe un fichero con los datos tratados.  Los usamos.")
-                    batch.module3_B.batchThree("modelo", "mi texto")
-                else:
-                    print("No existen los datos tratados.  Vamos a volver a generar los datos tratados")
-                    batch.module2.batchTwo("modelo", "mi texto")
-            else:
-                print("Seleccione una opción válida")
-    else:
-        print("El archivo no existe en la ruta proporcionada.")
-        print("Obteniendo datos....")
-        batch.module1.batchOne("modelo", "mi texto")
 
 
 def obtener_datos_web(modelo, texto):

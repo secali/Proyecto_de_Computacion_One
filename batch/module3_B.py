@@ -44,14 +44,17 @@ def batchThree():
     fileATest = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
     fileFase1 = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTest_fase01.tsv')
 
+
     # creamos dataframe con datos de los ficheros
     print("\nCreando DataFrames...")
     df_train_B = pd.read_csv(fileATrain, delimiter='\t')
     df_test_B = pd.read_csv(fileATest, delimiter='\t')
     df_fase_1 = pd.read_csv(fileFase1, delimiter='\t')
 
+
+
     # Imrpimimos estadistica
-    batch.functions.imprime_estadistica_subtarea_A(df_train_B, df_test_B, df_fase_1)
+    batch.functions.imprime_estadistica_subtarea_B(df_train_B, df_test_B, df_fase_1)
 
     # determine avg text length in tokens
     num=int(df_train_B["text"].map(lambda x: len(x.split(" "))).mean())
