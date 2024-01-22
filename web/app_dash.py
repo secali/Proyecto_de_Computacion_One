@@ -74,8 +74,10 @@ app.layout = index_layout
 
 
 def runInDebugMode():
-    app.run_server(debug=True)
+    app.run_server(debug=True,  threaded=True)
+
 
 # Corre la aplicación en el servidor local
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True,  threaded=True)
+

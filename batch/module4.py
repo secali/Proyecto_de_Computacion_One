@@ -11,13 +11,14 @@ def batchFour(modelo, texto):
     print("\n############ Ejecutando Batch 4: Carga clasificador y realizar predicciones - Uso WEB#############")
     if (modelo != " " and texto != " "):
         if modelo == 'subtareaA':
+            print(modelo, " : \n", texto+"\n")
             # cargamos el clasificador desde el archivo
             loaded_classifier_A = load(functions.obtener_ruta_guardado('SaveCLF', 'clf_A.joblib'))
             print("Clasificador A cargado")
             # cargar el vectorizador desde un archivo
             loaded_vectorizador_A = load(functions.obtener_ruta_guardado('SaveVCT', 'vct_A.joblib'))
             print("Vectorizador A cargado")
-            texto_vectorizado = loaded_vectorizador_A.transform(texto)
+            texto_vectorizado = loaded_vectorizador_A.transform([texto])
             # lanzamos la prediccion
             y_pred = loaded_classifier_A.predict(texto_vectorizado)
             if y_pred == 0:
