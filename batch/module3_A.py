@@ -32,8 +32,8 @@ import nltk
 from nltk.tokenize import word_tokenize
 
 
-# batch 3 - modulo que usamos para crear los test, elegir modelo, entrenar y guardar clasificador y vectorizador
-def batchThree(modelo, texto):
+# batch 3 - Módulo que usamos para crear los test, elegir modelo, entrenar y guardar clasificador y vectorizador
+def batchThree():
     print("\n############ Ejecutando Batch 3: Clasificador - Subtarea A #############")
     # creamos y asignamos valor a las variables
     max_instances_per_class = 1000  # 100  # numero de instancias por clase
@@ -134,6 +134,7 @@ def batchThree(modelo, texto):
     print("\nEligiendo calsificador")
     # Obtener una lista de todos los clasificadores disponibles
     classifiers = all_estimators(type_filter='classifier')
+    # print (classifiers)
 
     # Calcular mejor algoritmo
     best_model = None
@@ -175,7 +176,7 @@ def batchThree(modelo, texto):
     # entrenamos clasificador con mejor modelo
     try:
         print(best_model)
-        best_model.fit(X_train, y_train)
+        best_model = best_model.fit(X_train, y_train)
         print(f"Modelo: {best_model.__class__.__name__} entrenado.\nGuardando clasificador...")
     except Exception as e:
         print(f"Error al entrenar el mejor modelo: {e}")
@@ -185,7 +186,7 @@ def batchThree(modelo, texto):
     batch.functions.guardar_clf_vct('clf_A', best_model)
     batch.functions.guardar_clf_vct('vct_A', vectorizer)
 
-    batch.module3_B.batchThree(texto, modelo)
+    batch.module3_B.batchThree()
 
     '''
     best_model = None

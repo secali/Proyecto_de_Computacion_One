@@ -9,6 +9,7 @@ from batch import module1
 from batch import module2
 from batch import module3_A
 from batch import module3_B
+from batch import module4
 import os
 import datetime
 from joblib import dump
@@ -28,9 +29,11 @@ def tokenize_and_reduce(text):
     tokens = word_tokenize(text)
     return ' '.join(tokens[:441])
 
+
 def tokenize_and_reduce_50(text):
     tokens = word_tokenize(text)
     return ' '.join(tokens[:50])
+
 
 def tokenize_and_reduce_150(text):
     tokens = word_tokenize(text)
@@ -43,6 +46,105 @@ def limpia_texto(list):
         if len(text.get_text()) >= 20 and detect(text.get_text()) == 'en':
             lista_txt_limpio.append(text.get_text().replace('\t', '').replace('\n', ''))
     return lista_txt_limpio
+
+
+def obtener_datos_2():
+    # global ruta_script, ruta_carpeta, file_01, file02
+    # obtener ruta si existe dataset DataSet - format TSV
+    # Tomamos los ultimos archivos que se cargan y se procesan, para ver si esta realizada la descarga
+    file_01 = obtener_ruta_guardado('Descargas', 'subtaskB_train.jsonl')
+    file_02 = obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
+    file_03_01 = obtener_ruta_guardado('SaveCLF', 'clf_B.tsv')
+    file_03_02 = obtener_ruta_guardado('SaveVCT', 'vtc_B.tsv')
+    flag_tratamiento = 0
+
+    if (os.path.exists(file_03_01)) and (os.path.exists(file_03_02)):
+        # Obtener la fecha de modificación del archivo
+        fecha_modificacion = datetime.datetime.fromtimestamp(os.path.getmtime(file_03_01))
+        # Obtener la fecha de creación del archivo (solo disponible en algunos sistemas)
+        flag_tratamiento = 3
+        # Mostrar las fechas
+        print(f"\nYa se ha seleccionado el mejor clasificador y el vectorizador."
+              f"\nFecha de modificación: {fecha_modificacion}")
+        print("Si desea continuar con el proceso sin tocar los datos anteriores seleccione la opcion 4")
+    elif os.path.exists(file_02):
+        # Obtener la fecha de modificación del archivo
+        fecha_modificacion = datetime.datetime.fromtimestamp(os.path.getmtime(file_02))
+        # Obtener la fecha de creación del archivo (solo disponible en algunos sistemas)
+        flag_tratamiento = 2
+        # Mostrar las fechas
+        print(f"\nYa se ha realizado un procesamiento de datos."
+              f"\nFecha de modificación: {fecha_modificacion}")
+        print("Si desea continuar con el proceso sin tocar los datos anteriores seleccione la opcion 3")
+    elif os.path.exists(file_01):
+        # Obtener la fecha de modificación del archivo
+        fecha_modificacion = datetime.datetime.fromtimestamp(os.path.getmtime(file_01))
+        # Obtener la fecha de creación del archivo (solo disponible en algunos sistemas)
+        flag_tratamiento = 1
+        # Mostrar las fechas
+        print(f"\nYa se ha realizado una descarga anterior."
+              f"\nFecha de descarga: {fecha_modificacion}")
+        print("Si desea continuar con el proceso sin tocar los datos anteriores seleccione la opcion 2")
+    else:
+        print("\nNo se ha realizado previamente ninguna descarga.  Vamos a lanzar la aplicacion completa")
+
+    if flag_tratamiento != 0:
+        # Hacemos el menu de selección de la aplicacion
+        # Definimos las opciones
+        def opcion_1():
+            print("\nHas seleccionado volver a descargar los datos y realizar todo el proceso.")
+            batch.module1.batchOne()
+        def opcion_2():
+            print("\nHas seleccionado comenzar desde el tratamiento de datos")
+            if flag_tratamiento > 0:
+                batch.module2.batchTwo()
+            else:
+                print("Faltan datos para poder seleccionar esta acción."
+                      "\nEjecuta la acción desde un punto anterior")
+        def opcion_3():
+            print("\nHas seleccionado comenzar elegiendo clasificador y vectorizador")
+            if flag_tratamiento > 1:
+                batch.module3_A.batchThree()
+            else:
+                print("Faltan datos para poder seleccionar esta acción."
+                      "\nEjecuta la acción desde un punto anterior")
+        def opcion_4():
+            print("\nHas seleccionado comenzar arrancando la prevision de la web")
+            if flag_tratamiento > 2:
+                batch.module4.batchFour(" "," ")
+            else:
+                print("Faltan datos para poder seleccionar esta acción."
+                      "\nEjecuta la acción desde un punto anterior")
+
+        def opcion_salir():
+            print("\nSaliendo del programa.")
+            exit()
+        # Presentamos el menu en pantalla
+        while True:
+            # Muestra el menú
+            print("\nMenú de Selección:")
+            print("1. Descargar los datos")
+            print("2. Tratar los datos")
+            print("3. Elegir clasificador y vectorizador")
+            print("4. Arrancar servicio web - Predicciones")
+            print("5. Salir")
+
+            # Solicita la entrada del usuario
+            opcion = input("Selecciona una opción (1, 2, 3, 4, 5): ")
+
+            # Realiza acciones según la opción seleccionada
+            if opcion == '1':
+                opcion_1()
+            elif opcion == '2':
+                opcion_2()
+            elif opcion == '3':
+                opcion_3()
+            elif opcion == '4':
+                opcion_4()
+            elif opcion == '5':
+                opcion_salir()
+            else:
+                print("Opción no válida. Por favor, selecciona una opción válida.")
 
 
 def obtener_datos():
@@ -113,7 +215,7 @@ def obtener_datos_web(modelo, texto):
             print(f"Fecha de creación: {fecha_creacion}")
         else:
             print("No se pudo obtener la fecha de creación en este sistema.")
-        batch.module1.batchOne(modelo, texto)
+        batch.module1.batchOne()
 
 
 def guardar_dataset(dfDataSet, archivo):
@@ -170,7 +272,6 @@ def limpia_texto_df(df):
     # print ("\nAplicar BeautifulSoup")
     # df_limpio['text'] = df_limpio.apply(lambda row: remove_unwanted_tags(row['text']) if row['label'] != 0 else row['text'], axis=1)
 
-
     print("\nLimpiar texto")
     pbar = tqdm(total=total_filas)  # Inicializa la barra de progreso
     for index, row in df_limpio.iterrows():
@@ -195,7 +296,7 @@ def limpia_texto_df(df):
     # Cierra la barra de progreso al finalizar
     pbar.close()
 
-    # Eliminamos duplicados, filas vacias y filas con algun campo vacio
+    # Eliminamos duplicados, filas vacias y filas con algún campo vacio
     print("Eliminando duplicados y filas vacías")
     df_limpio = df_limpio.drop_duplicates()
     df_limpio = df_limpio.dropna(subset=['text'])

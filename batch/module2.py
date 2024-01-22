@@ -6,7 +6,7 @@ import batch.module3_A
 
 
 # batch 2 - Módulo que usamos para cargar fichero, hacer estadísticas y balancear los datos
-def batchTwo(modelo, texto):
+def batchTwo():
     print("\n############ Ejecutando Batch 2: carga ficheros, estadística y manejo de datos #############")
     # obtener ficheros a cargar
     print("\nCargando ficheros...")
@@ -72,4 +72,4 @@ def batchTwo(modelo, texto):
     batch.functions.imprime_estadistica(df_fase_1, 'Estadísticas Data Frame Fase 01')
 
     # Pasamos al módulo 3, para hacer el tratamiento de los datos
-    batch.module3_A.batchThree(modelo, texto)
+    batch.module3_A.batchThree()

@@ -31,7 +31,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 
 # batch 3 - modulo que usamos para crear los test, elegir modelo, entrenar y guardar clasificador y vectorizador
-def batchThree(modelo, texto):
+def batchThree():
     print("\n############ Ejecutando Batch 3: Clasificador - Subtarea B #############")
     # creamos y asignamos valor a las variables
     max_instances_per_class = 1000 #100  # numero de instancias por clase
@@ -154,4 +154,4 @@ def batchThree(modelo, texto):
     batch.functions.guardar_clf_vct('clf_B', best_model)
     batch.functions.guardar_clf_vct('vct_B', vectorizer)
 
-    batch.module4.batchFour(modelo, texto)
+    batch.module4.batchFour("", "")
