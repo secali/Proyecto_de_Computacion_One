@@ -87,6 +87,7 @@ def obtener_datos_2():
         print("Si desea continuar con el proceso sin tocar los datos anteriores seleccione la opcion 2")
     else:
         print("\nNo se ha realizado previamente ninguna descarga.  Vamos a lanzar la aplicacion completa")
+        batch.module1.batchOne()
 
     if flag_tratamiento != 0:
         # Hacemos el menu de selección de la aplicacion
@@ -94,6 +95,7 @@ def obtener_datos_2():
         def opcion_1():
             print("\nHas seleccionado volver a descargar los datos y realizar todo el proceso.")
             batch.module1.batchOne()
+
         def opcion_2():
             print("\nHas seleccionado comenzar desde el tratamiento de datos")
             if flag_tratamiento > 0:
@@ -101,6 +103,7 @@ def obtener_datos_2():
             else:
                 print("Faltan datos para poder seleccionar esta acción."
                       "\nEjecuta la acción desde un punto anterior")
+
         def opcion_3():
             print("\nHas seleccionado comenzar elegiendo clasificador y vectorizador")
             if flag_tratamiento > 1:
@@ -108,10 +111,11 @@ def obtener_datos_2():
             else:
                 print("Faltan datos para poder seleccionar esta acción."
                       "\nEjecuta la acción desde un punto anterior")
+
         def opcion_4():
             print("\nHas seleccionado comenzar arrancando la prevision de la web")
             if flag_tratamiento > 2:
-                batch.module4.batchFour(" "," ")
+                batch.module4.batchFour(" ", " ")
             else:
                 print("Faltan datos para poder seleccionar esta acción."
                       "\nEjecuta la acción desde un punto anterior")
@@ -119,6 +123,7 @@ def obtener_datos_2():
         def opcion_salir():
             print("\nSaliendo del programa.")
             exit()
+
         # Presentamos el menu en pantalla
         while True:
             # Muestra el menú
@@ -226,11 +231,23 @@ def guardar_dataset(dfDataSet, archivo):
     print("DataFrame save in: " + ruta_carpeta)
 
 
-def guardar_clf_vct(tipo, fichero):
+def guardar_clf_vct(tipo, fichero, tarea):
     if tipo == 'clf':
-        ruta_carpeta = obtener_ruta_guardado('SaveCLF', 'clf_A.joblib')
+        if tarea == 'A':
+            ruta_carpeta = obtener_ruta_guardado('SaveCLF', 'clf_A')
+        elif tarea == 'B':
+            ruta_carpeta = obtener_ruta_guardado('SaveCLF', 'clf_B')
+        else:
+            print("No se puede guardar porque la tarea enviada no es correcta")
+            return
     else:
-        ruta_carpeta = obtener_ruta_guardado('SaveVCT', 'vct_A.joblib')
+        if tarea == 'A':
+            ruta_carpeta = obtener_ruta_guardado('SaveVCT', 'vct_A')
+        elif tarea == 'B':
+            ruta_carpeta = obtener_ruta_guardado('SaveVCT', 'vct_B')
+        else:
+            print("No se puede guardar porque la tarea enviada no es correcta")
+            return
     print("\nGuardando el fichero...")
     dump(fichero, ruta_carpeta)
     print("Clasificador save in: " + ruta_carpeta)

@@ -42,7 +42,6 @@ def batchThree():
     print("\nCargando ficheros...")
     fileATrain = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTrain_B.tsv')
     fileATest = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
-    # fileFase1 = batch.functions.obtener_ruta_guardado('SaveDF', 'DataSetFinal.tsv')
     fileFase1 = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTest_fase01.tsv')
 
     # creamos dataframe con datos de los ficheros
@@ -54,16 +53,10 @@ def batchThree():
     # Imrpimimos estadistica
     batch.functions.imprime_estadistica_subtarea_A(df_train_B, df_test_B, df_fase_1)
 
-
-
     # determine avg text length in tokens
     num=int(df_train_B["text"].map(lambda x: len(x.split(" "))).mean())
     print("Numero de caracteres al que reducimos el texto",num)
 
-
-    # Imrpimimos estadistica
-    print("\nEstadistica con fichero balanceado")
-    batch.functions.imprime_estadistica_subtarea_B(df_train_B, df_test_B, df_fase_1)
 
     print("\nPreparando datos para hacer entrenamiento y test")
 
@@ -151,7 +144,7 @@ def batchThree():
 
     # guardamos clasificador y vectorizador
     print("Clasificador y vectorizador guardado en fichero")
-    batch.functions.guardar_clf_vct('clf_B', best_model)
-    batch.functions.guardar_clf_vct('vct_B', vectorizer)
+    batch.functions.guardar_clf_vct('clf', best_model,'B')
+    batch.functions.guardar_clf_vct('vct', vectorizer, 'B')
 
     batch.module4.batchFour("", "")
