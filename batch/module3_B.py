@@ -150,4 +150,4 @@ def batchThree():
     batch.functions.guardar_clf_vct('clf', best_model,'B')
     batch.functions.guardar_clf_vct('vct', vectorizer, 'B')
 
-    batch.module4.batchFour("", "")
+    batch.module4.batchFour(" ", " ")

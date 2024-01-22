@@ -2,9 +2,7 @@ import dash
 from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output, State
-from web.batch import module4_web
-
-
+from batch import module4
 
 
 # Inicializa la aplicación Dash con suppress_callback_exceptions=True
@@ -39,7 +37,7 @@ index_layout = html.Div([
         html.Button("Analizar", id='analizar-button', n_clicks=0),
     ], id='formulario'),
 
-    dcc.Store(id='resultado-store', data='Presiona el botón "Analizar" para ver el saludo'),
+    dcc.Store(id='resultado-store', data='Presiona el botón "Analizar"'),
 
     html.Br(),
     html.Div([
@@ -63,16 +61,20 @@ def analizar_texto(n_clicks, modelo, texto):
     if n_clicks is not None and n_clicks > 0:
         # Realiza aquí la lógica de análisis según el modelo y el texto
 
-        resultado = module4_web.batchFour(modelo, texto)
+        resultado = module4.batchFour(modelo, texto)
         print(f'Resultado: {resultado}')
         return resultado  # Devuelve solo un elemento
     else:
         print('Botón no ha sido pulsado')
-        return 'Presiona el botón "Analizar" para ver el saludo'
+        return 'Presiona el botón "Analizar"'
 
 
 # Establece el diseño de la aplicación
 app.layout = index_layout
+
+
+def runInDebugMode():
+    app.run_server(debug=True)
 
 # Corre la aplicación en el servidor local
 if __name__ == '__main__':

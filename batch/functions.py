@@ -22,7 +22,7 @@ import pandas as pd
 import pandas as pd
 import nltk
 from nltk.tokenize import word_tokenize
-
+from web import app_dash
 
 # Function to tokenize and reduce to 50 words
 def tokenize_and_reduce(text):
@@ -122,7 +122,7 @@ def obtener_datos_2():
         def opcion_5():
             print("\nHas seleccionado comenzar arrancando la prevision de la web")
             if flag_tratamiento > 2:
-                batch.module4.batchFour(" ", " ")
+                app_dash.runInDebugMode()
             else:
                 print("Faltan datos para poder seleccionar esta acción."
                       "\nEjecuta la acción desde un punto anterior")
