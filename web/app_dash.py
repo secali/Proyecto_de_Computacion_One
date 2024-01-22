@@ -20,12 +20,10 @@ index_layout = html.Div([
         dcc.Dropdown(
             id='modelo',
             options=[
-                {'label': 'BERT', 'value': 'bert'},
-                {'label': 'GPT-3', 'value': 'gpt-3'},
-                {'label': 'DistilBERT', 'value': 'distilbert'},
-                {'label': 'Transformer', 'value': 'transformer'}
+                {'label': 'Subtarea A', 'value': 'subtareaA'},
+                {'label': 'Subtarea B', 'value': 'subtareaB'},
             ],
-            value='bert'
+            value='subtareaA'
         ),
         html.Br(),
         html.Div([
@@ -65,9 +63,7 @@ def analizar_texto(n_clicks, modelo, texto):
     if n_clicks is not None and n_clicks > 0:
         # Realiza aquí la lógica de análisis según el modelo y el texto
 
-        module4_web.batchFour(modelo, texto)
-
-        resultado = texto
+        resultado = module4_web.batchFour(modelo, texto)
         print(f'Resultado: {resultado}')
         return resultado  # Devuelve solo un elemento
     else:

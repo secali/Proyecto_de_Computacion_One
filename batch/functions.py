@@ -228,9 +228,9 @@ def guardar_dataset(dfDataSet, archivo):
 
 def guardar_clf_vct(tipo, fichero):
     if tipo == 'clf':
-        ruta_carpeta = obtener_ruta_guardado('SaveCLF', 'CLF.joblib')
+        ruta_carpeta = obtener_ruta_guardado('SaveCLF', 'clf_A.joblib')
     else:
-        ruta_carpeta = obtener_ruta_guardado('SaveVCT', 'vct.joblib')
+        ruta_carpeta = obtener_ruta_guardado('SaveVCT', 'vct_A.joblib')
     print("\nGuardando el fichero...")
     dump(fichero, ruta_carpeta)
     print("Clasificador save in: " + ruta_carpeta)
