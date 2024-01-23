@@ -402,7 +402,7 @@ def imprime_estadistica(dfDataSet, name, fichero):
             ["Longitud media de instancias Cohere tokenizadas 441", f"{long_media_cohere_t:.2f}"],
             ["Longitud media de instancias Davinci tokenizadas 441", f"{long_media_davinci_t:.2f}"],
             ["Longitud media de instancias Bloomz tokenizadas 441", f"{long_media_bloomz_t:.2f}"],
-            ["Longitud media de instancias Dolly tokenizadas 150", f"{long_media_dolly_t150:.2f}"],
+            ["Longitud media de instancias Dolly tokenizadas 441", f"{long_media_dolly_t:.2f}"],
             ["Longitud media de instancias humanas tokenizadas 150", f"{long_media_humano_t150:.2f}"],
             ["Longitud media de instancias Chat GPT tokenizadas 150", f"{long_media_chatGPT_t150:.2f}"],
             ["Longitud media de instancias Cohere tokenizadas 150", f"{long_media_cohere_t150:.2f}"],
