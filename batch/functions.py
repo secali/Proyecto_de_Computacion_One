@@ -1,7 +1,6 @@
+import csv
 import numpy as np
-
 import sys
-
 import batch
 
 sys.path.append("../batch")
@@ -9,7 +8,6 @@ from batch import module1
 from batch import module2
 from batch import module3_A
 from batch import module3_B
-from batch import module4
 import os
 import datetime
 from joblib import dump
@@ -19,33 +17,8 @@ import gdown
 from tqdm import tqdm
 from tabulate import tabulate
 import pandas as pd
-import pandas as pd
 import nltk
 from nltk.tokenize import word_tokenize
-from web import app_dash
-
-# Function to tokenize and reduce to 50 words
-def tokenize_and_reduce(text):
-    tokens = word_tokenize(text)
-    return ' '.join(tokens[:441])
-
-
-def tokenize_and_reduce_50(text):
-    tokens = word_tokenize(text)
-    return ' '.join(tokens[:50])
-
-
-def tokenize_and_reduce_150(text):
-    tokens = word_tokenize(text)
-    return ' '.join(tokens[:150])
-
-
-def limpia_texto(list):
-    lista_txt_limpio = []
-    for text in list:
-        if len(text.get_text()) >= 20 and detect(text.get_text()) == 'en':
-            lista_txt_limpio.append(text.get_text().replace('\t', '').replace('\n', ''))
-    return lista_txt_limpio
 
 
 def obtener_datos_2():
@@ -111,6 +84,7 @@ def obtener_datos_2():
             else:
                 print("Faltan datos para poder seleccionar esta acción."
                       "\nEjecuta la acción desde un punto anterior")
+
         def opcion_4():
             print("\nHas seleccionado comenzar elegiendo clasificador y vectorizador de tarea B")
             if flag_tratamiento > 1:
@@ -216,6 +190,16 @@ def guardar_clf_vct(tipo, fichero, tarea):
     print("Clasificador save in: " + ruta_carpeta)
 
 
+def guardar_estadisticas(data, nombre):
+    fichero = obtener_ruta_guardado('Estadisticas', nombre)
+    # Escribir los datos en el archivo TSV
+    with open(fichero, mode='w', newline='') as file:
+        writer = csv.writer(file,delimiter='\t')
+        writer.writerows(data)
+
+    print(f"Los datos se han guardado en {fichero}.")
+
+
 def obtener_ruta_guardado(carpeta, fichero):
     ruta_script = os.path.abspath(__file__)  # Ruta absoluta del script actual
     ruta_carpeta = os.path.dirname(ruta_script)  # Ruta del directorio del script
@@ -241,16 +225,37 @@ def descarga_archivos(archivos):
         gdown.download(url, ruta, fuzzy=True)
 
 
+# Funciones para tokenizar a diferentes tamaños
+def tokenize_and_reduce(text):
+    tokens = word_tokenize(text)
+    return ' '.join(tokens[:441])
+
+
+def tokenize_and_reduce_50(text):
+    tokens = word_tokenize(text)
+    return ' '.join(tokens[:50])
+
+
+def tokenize_and_reduce_150(text):
+    tokens = word_tokenize(text)
+    return ' '.join(tokens[:150])
+
+
+def limpia_texto(list):
+    lista_txt_limpio = []
+    for text in list:
+        if len(text.get_text()) >= 20 and detect(text.get_text()) == 'en':
+            lista_txt_limpio.append(text.get_text().replace('\t', '').replace('\n', ''))
+    return lista_txt_limpio
+
+
 def limpia_texto_df(df):
+
     # Crea una copia del DataFrame para evitar modificar el original
     df_limpio = df.copy()
 
     # Obtén la cantidad total de filas en el DataFrame
     total_filas = len(df_limpio)
-
-    # Aplica la limpieza solo a las filas donde el campo 'label' es diferente de cero
-    # print ("\nAplicar BeautifulSoup")
-    # df_limpio['text'] = df_limpio.apply(lambda row: remove_unwanted_tags(row['text']) if row['label'] != 0 else row['text'], axis=1)
 
     print("\nLimpiar texto")
     pbar = tqdm(total=total_filas)  # Inicializa la barra de progreso
@@ -294,6 +299,7 @@ def limpia_texto_df(df):
     df_limpio['tokenized_text_50'] = df_limpio['text'].apply(tokenize_and_reduce_50)
     # Tokenizamos a 150 tokens
     df_limpio['tokenized_text_150'] = df_limpio['text'].apply(tokenize_and_reduce_150)
+
     return df_limpio
 
 
@@ -310,7 +316,7 @@ def remove_unwanted_tags(html_content):
     return str(soup)
 
 
-def imprime_estadistica(dfDataSet, name):
+def imprime_estadistica(dfDataSet, name, fichero):
     # calcular el número total de instancias
     n_total = len(dfDataSet)
 
@@ -351,6 +357,7 @@ def imprime_estadistica(dfDataSet, name):
             ["Longitud media de instancias humanas", f"{long_media_humano:.2f}"],
             ["Longitud media de instancias generadas", f"{long_media_chatGPT:.2f}"]
         ]
+        guardar_estadisticas(data,fichero)
     else:
         data = [
             ["Número total de instancias", n_total],
@@ -367,6 +374,7 @@ def imprime_estadistica(dfDataSet, name):
             ["Longitud media de instancias Bloomz", f"{long_media_bloomz:.2f}"],
             ["Longitud media de instancias Dolly", f"{long_media_dolly:.2f}"]
         ]
+        guardar_estadisticas(data,fichero)
 
     # imprimimos los datos en forma de tabla tabulada
     print("\n" + name)

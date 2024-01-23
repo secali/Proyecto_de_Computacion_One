@@ -8,6 +8,7 @@ def batchOne():
     print("\n############ Ejecutando Batch 1: Descarga de ficheros #############\n")
     # TODO: CONECTAR CON GOOGLE DRIVE Y OBTENER LOS DATOS CON GDOWN, LUEGO PARSEAMOS A JSON
 
+    # Creamos lista de ficheros a descargar con direccion - nombre
     archivos = [
         ('https://drive.google.com/file/d/1e_G-9a66AryHxBOwGWhriePYCCa4_29e/view', 'subtaskA_dev_monolingual.jsonl'),
         ('https://drive.google.com/file/d/1HeCgnLuDoUHhP-2OsTSSC3FXRLVoI6OG/view', 'subtaskA_train_monolingual.jsonl'),
@@ -15,7 +16,8 @@ def batchOne():
         ('https://drive.google.com/file/d/1k5LMwmYF7PF-BzYQNE2ULBae79nbM268/view', 'subtaskB_train.jsonl'),
         ('https://drive.google.com/file/d/1ZEmXha1_apQlu3il2fSbE6CyQzNFm3di/view', 'DataSetFinal.tsv')
     ]
-    # descargamos los archivos
+    # Descargamos los archivos
     batch.functions.descarga_archivos(archivos)
 
+    # Pasamos al siguiente módulo
     batch.module2.batchTwo()

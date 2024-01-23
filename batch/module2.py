@@ -6,7 +6,7 @@ import batch.module3_B
 import batch.module3_A
 
 
-# batch 2 - Módulo que usamos para cargar fichero, hacer estadísticas y balancear los datos
+# batch 2 - Módulo que usamos para cargar ficheros, preparar los datos e imprimir estadísticas
 def batchTwo():
     print("\n############ Ejecutando Batch 2: carga ficheros, estadística y manejo de datos #############")
 
@@ -62,16 +62,16 @@ def batchTwo():
 
     # Tratamos datos fichero fase 01
     batch.functions.guardar_dataset(df_fase_1, 'DSTest_fase01_largo.tsv')
-    df_fase_1['tokenized_text'] = df_fase_1['text'].apply(batch.functions.tokenize_and_reduce)
+    df_fase_1 = batch.functions.limpia_texto_df(df_fase_1)
     batch.functions.guardar_dataset(df_fase_1, 'DSTest_fase01.tsv')
 
-    # Imprimimos estadísticas
+    # Imprimimos estadísticas y las guardamos en /Estadisticas
     print("\nImprimiendo estadísticas...")
-    batch.functions.imprime_estadistica(df_train_A, 'Estadísticas Subtask A Train')
-    batch.functions.imprime_estadistica(df_test_A, 'Estadísticas Subtask A Test')
-    batch.functions.imprime_estadistica(df_train_B, 'Estadísticas Subtask B Train')
-    batch.functions.imprime_estadistica(df_test_B, 'Estadísticas Subtask B Test')
-    batch.functions.imprime_estadistica(df_fase_1, 'Estadísticas Data Frame Fase 01')
+    batch.functions.imprime_estadistica(df_train_A, 'Estadísticas Subtask A Train','E_SubtaskA_Train.tsv')
+    batch.functions.imprime_estadistica(df_test_A, 'Estadísticas Subtask A Test','E_SubtaskA_Test.tsv')
+    batch.functions.imprime_estadistica(df_train_B, 'Estadísticas Subtask B Train','E_SubtaskB_Train.tsv')
+    batch.functions.imprime_estadistica(df_test_B, 'Estadísticas Subtask B Test','E_SubtaskA_Test.tsv')
+    batch.functions.imprime_estadistica(df_fase_1, 'Estadísticas Data Frame Fase 01','E_Fase01_Test.tsv')
 
     # Pasamos al módulo 3, para hacer el tratamiento de los datos
     batch.module3_A.batchThree()
