@@ -66,11 +66,11 @@ def batchTwo():
 
     # Imprimimos estadísticas y las guardamos en /Estadísticas
     print("\nImprimiendo y guardando estadísticas...")
-    batch.functions.imprime_estadistica(df_train_A, 'Estadísticas Subtask A Train', 'E_SubtaskA_Train.tsv')
-    batch.functions.imprime_estadistica(df_test_A, 'Estadísticas Subtask A Test', 'E_SubtaskA_Test.tsv')
-    batch.functions.imprime_estadistica(df_train_B, 'Estadísticas Subtask B Train', 'E_SubtaskB_Train.tsv')
-    batch.functions.imprime_estadistica(df_test_B, 'Estadísticas Subtask B Test', 'E_SubtaskA_Test.tsv')
-    batch.functions.imprime_estadistica(df_fase_1, 'Estadísticas Data Frame Fase 01', 'E_Fase01_Test.tsv')
+    batch.functions.imprime_estadistica(df_train_A, 'Estadísticas Subtask A Train', 'E_SubtaskA_Modulo02_Train.tsv')
+    batch.functions.imprime_estadistica(df_test_A, 'Estadísticas Subtask A Test', 'E_SubtaskA_Modulo02_Test.tsv')
+    batch.functions.imprime_estadistica(df_train_B, 'Estadísticas Subtask B Train', 'E_SubtaskB_Modulo02_Train.tsv')
+    batch.functions.imprime_estadistica(df_test_B, 'Estadísticas Subtask B Test', 'E_SubtaskA_Modulo02_Test.tsv')
+    batch.functions.imprime_estadistica(df_fase_1, 'Estadísticas Data Frame Fase 01', 'E_Fase01_Modulo02_Test.tsv')
 
     # Pasamos al módulo 3, para hacer el tratamiento de los datos
     batch.module3_A.batchThree()

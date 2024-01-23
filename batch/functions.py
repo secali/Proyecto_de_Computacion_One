@@ -21,7 +21,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 
 
-def obtener_datos_2():
+def obtener_datos():
     # global ruta_script, ruta_carpeta, file_01, file02
     # obtener ruta si existe dataset DataSet - format TSV
     # Tomamos los ultimos archivos que se cargan y se procesan, para ver si esta realizada la descarga
@@ -39,7 +39,7 @@ def obtener_datos_2():
         # Mostrar las fechas
         print(f"\nYa se ha seleccionado el mejor clasificador y el vectorizador."
               f"\nFecha de modificación: {fecha_modificacion}")
-        print("Si desea continuar con el proceso sin tocar los datos anteriores seleccione la opcion 4")
+        print("Si desea continuar con el proceso sin tocar los datos anteriores seleccione la opción 4")
     elif os.path.exists(file_02):
         # Obtener la fecha de modificación del archivo
         fecha_modificacion = datetime.datetime.fromtimestamp(os.path.getmtime(file_02))
@@ -48,7 +48,7 @@ def obtener_datos_2():
         # Mostrar las fechas
         print(f"\nYa se ha realizado un procesamiento de datos."
               f"\nFecha de modificación: {fecha_modificacion}")
-        print("Si desea continuar con el proceso sin tocar los datos anteriores seleccione la opcion 3")
+        print("Si desea continuar con el proceso sin tocar los datos anteriores seleccione la opción 3")
     elif os.path.exists(file_01):
         # Obtener la fecha de modificación del archivo
         fecha_modificacion = datetime.datetime.fromtimestamp(os.path.getmtime(file_01))
@@ -57,9 +57,9 @@ def obtener_datos_2():
         # Mostrar las fechas
         print(f"\nYa se ha realizado una descarga anterior."
               f"\nFecha de descarga: {fecha_modificacion}")
-        print("Si desea continuar con el proceso sin tocar los datos anteriores seleccione la opcion 2")
+        print("Si desea continuar con el proceso sin tocar los datos anteriores seleccione la opción 2")
     else:
-        print("\nNo se ha realizado previamente ninguna descarga.  Vamos a lanzar la aplicacion completa")
+        print("\nNo se ha realizado previamente ninguna descarga.  Vamos a lanzar la aplicación completa")
         batch.module1.batchOne()
 
     if flag_tratamiento != 0:
@@ -347,6 +347,24 @@ def imprime_estadistica(dfDataSet, name, fichero):
     long_media_davinci = dfDavinci['text'].str.len().mean()
     long_media_bloomz = dfBloomz['text'].str.len().mean()
     long_media_dolly = dfDolly['text'].str.len().mean()
+    long_media_humano_t = dfHuman['tokenized_text'].str.len().mean()
+    long_media_chatGPT_t = dfChatGPT['tokenized_text'].str.len().mean()
+    long_media_cohere_t = dfCohere['tokenized_text'].str.len().mean()
+    long_media_davinci_t = dfDavinci['tokenized_text'].str.len().mean()
+    long_media_bloomz_t = dfBloomz['tokenized_text'].str.len().mean()
+    long_media_dolly_t = dfDolly['tokenized_text'].str.len().mean()
+    long_media_humano_t150 = dfHuman['tokenized_text_150'].str.len().mean()
+    long_media_chatGPT_t150 = dfChatGPT['tokenized_text_150'].str.len().mean()
+    long_media_cohere_t150 = dfCohere['tokenized_text_150'].str.len().mean()
+    long_media_davinci_t150 = dfDavinci['tokenized_text_150'].str.len().mean()
+    long_media_bloomz_t150 = dfBloomz['tokenized_text_150'].str.len().mean()
+    long_media_dolly_t150 = dfDolly['tokenized_text_150'].str.len().mean()
+    long_media_humano_t50 = dfHuman['tokenized_text_50'].str.len().mean()
+    long_media_chatGPT_t50 = dfChatGPT['tokenized_text_50'].str.len().mean()
+    long_media_cohere_t50 = dfCohere['tokenized_text_50'].str.len().mean()
+    long_media_davinci_t50 = dfDavinci['tokenized_text_50'].str.len().mean()
+    long_media_bloomz_t50 = dfBloomz['tokenized_text_50'].str.len().mean()
+    long_media_dolly_t50 = dfDolly['tokenized_text_50'].str.len().mean()
 
     # creamos una lista de listas con los datos en funcion del tipo
     if len(n_valores) == 2:
@@ -355,7 +373,13 @@ def imprime_estadistica(dfDataSet, name, fichero):
             ["Número de instancias humanas", n_humano],
             ["Número de instancias generadas", n_chatGPT],
             ["Longitud media de instancias humanas", f"{long_media_humano:.2f}"],
-            ["Longitud media de instancias generadas", f"{long_media_chatGPT:.2f}"]
+            ["Longitud media de instancias generadas", f"{long_media_chatGPT:.2f}"],
+            ["Longitud media de instancias humanas tokenizdas 441", f"{long_media_humano_t:.2f}"],
+            ["Longitud media de instancias generadas tokenizadas 441", f"{long_media_chatGPT_t:.2f}"],
+            ["Longitud media de instancias humanas tokenizdas 150", f"{long_media_humano_t150:.2f}"],
+            ["Longitud media de instancias generadas tokenizadas 150", f"{long_media_chatGPT_t150:.2f}"],
+            ["Longitud media de instancias humanas tokenizdas 50", f"{long_media_humano_t50:.2f}"],
+            ["Longitud media de instancias generadas tokenizadas 50", f"{long_media_chatGPT_t50:.2f}"]
         ]
         guardar_estadisticas(data,fichero)
     else:
@@ -372,7 +396,25 @@ def imprime_estadistica(dfDataSet, name, fichero):
             ["Longitud media de instancias Cohere", f"{long_media_cohere:.2f}"],
             ["Longitud media de instancias Davinci", f"{long_media_davinci:.2f}"],
             ["Longitud media de instancias Bloomz", f"{long_media_bloomz:.2f}"],
-            ["Longitud media de instancias Dolly", f"{long_media_dolly:.2f}"]
+            ["Longitud media de instancias Dolly", f"{long_media_dolly:.2f}"],
+            ["Longitud media de instancias humanas tokenizadas 441", f"{long_media_humano_t:.2f}"],
+            ["Longitud media de instancias Chat GPT tokenizadas 441", f"{long_media_chatGPT_t:.2f}"],
+            ["Longitud media de instancias Cohere tokenizadas 441", f"{long_media_cohere_t:.2f}"],
+            ["Longitud media de instancias Davinci tokenizadas 441", f"{long_media_davinci_t:.2f}"],
+            ["Longitud media de instancias Bloomz tokenizadas 441", f"{long_media_bloomz_t:.2f}"],
+            ["Longitud media de instancias Dolly tokenizadas 150", f"{long_media_dolly_t150:.2f}"],
+            ["Longitud media de instancias humanas tokenizadas 150", f"{long_media_humano_t150:.2f}"],
+            ["Longitud media de instancias Chat GPT tokenizadas 150", f"{long_media_chatGPT_t150:.2f}"],
+            ["Longitud media de instancias Cohere tokenizadas 150", f"{long_media_cohere_t150:.2f}"],
+            ["Longitud media de instancias Davinci tokenizadas 150", f"{long_media_davinci_t150:.2f}"],
+            ["Longitud media de instancias Bloomz tokenizadas 150", f"{long_media_bloomz_t150:.2f}"],
+            ["Longitud media de instancias Dolly tokenizadas 150", f"{long_media_dolly_t150:.2f}"],
+            ["Longitud media de instancias humanas tokenizadas 50", f"{long_media_humano_t50:.2f}"],
+            ["Longitud media de instancias Chat GPT tokenizadas 50", f"{long_media_chatGPT_t50:.2f}"],
+            ["Longitud media de instancias Cohere tokenizadas 50", f"{long_media_cohere_t50:.2f}"],
+            ["Longitud media de instancias Davinci tokenizadas 50", f"{long_media_davinci_t50:.2f}"],
+            ["Longitud media de instancias Bloomz tokenizadas 50", f"{long_media_bloomz_t50:.2f}"],
+            ["Longitud media de instancias Dolly tokenizadas 50", f"{long_media_dolly_t50:.2f}"]
         ]
         guardar_estadisticas(data,fichero)
 
@@ -381,7 +423,7 @@ def imprime_estadistica(dfDataSet, name, fichero):
     print(tabulate(data, headers=["Campo", "Valor"], tablefmt="grid"))
 
 
-def imprime_estadistica_subtarea_B(df_train_B, df_test_B, df_fase_1):
+def imprime_estadistica_subtarea_B(df_train_B, df_test_B, df_fase_1, nombre):
     # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
     print("Imprimiendo estadistica Subtarea B\n")
     X_train = df_train_B['text']
@@ -450,11 +492,13 @@ def imprime_estadistica_subtarea_B(df_train_B, df_test_B, df_fase_1):
         ["Número de instancias humanas en el test fase_01", n_human_test_f01],
         ["Número de instancias generadas en el test fase_01", n_generated_test_f01]
     ]
+    # Guardamos la estadistica
+    guardar_estadisticas(data,nombre)
     # Imprimimos los datos en forma de tabla tabulada
     print(tabulate(data, headers=["Descripción", "Valor"], tablefmt="grid"))
 
 
-def imprime_estadistica_subtarea_A(df_train_A, df_test_A, df_fase_1):
+def imprime_estadistica_subtarea_A(df_train_A, df_test_A, df_fase_1, nombre):
     # Dividir los datos en conjuntos de entrenamiento y prueba (80% entrenamiento, 20% prueba)
     print("Imprimiendo estadistica Subtarea A\n")
     X_train = df_train_A['text']
@@ -499,10 +543,19 @@ def imprime_estadistica_subtarea_A(df_train_A, df_test_A, df_fase_1):
         ["Número de instancias humanas en el test fase_01", n_human_test_f01],
         ["Número de instancias generadas en el test fase_01", n_generated_test_f01]
     ]
+    # Guardamos la estadística
+    guardar_estadisticas(data,nombre)
     # Imprimimos los datos en forma de tabla tabulada
     print(tabulate(data, headers=["Descripción", "Valor"], tablefmt="grid"))
 
-
+def guardar_report(nombre_modelo,score,report,file_name):
+    fichero = obtener_ruta_guardado('Estadisticas', file_name)
+    with open(fichero, "w") as file:
+        file.write(f"Best Model: {nombre_modelo}\n")
+        file.write(f"Macro F1 on Test Data: {score:.3f}\n")
+        file.write("Best Report:\n")
+        file.write(report)
+    print("Report guardada en ", fichero)
 def balacearDF(dfDataSet):
     # dividir instancias humanas y generadas
     dfHuman = dfDataSet[dfDataSet['label'] == 0]

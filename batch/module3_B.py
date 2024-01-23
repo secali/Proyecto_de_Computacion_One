@@ -54,7 +54,7 @@ def batchThree():
 
 
     # Imrpimimos estadistica
-    batch.functions.imprime_estadistica_subtarea_B(df_train_B, df_test_B, df_fase_1)
+    batch.functions.imprime_estadistica_subtarea_B(df_train_B, df_test_B, df_fase_1,'E_SubtaskB_FicheroBalanceado.tsv')
 
     # determine avg text length in tokens
     num=int(df_train_B["text"].map(lambda x: len(x.split(" "))).mean())
