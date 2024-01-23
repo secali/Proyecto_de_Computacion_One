@@ -1,3 +1,4 @@
+
 # import required libraries
 import batch.functions
 import pandas as pd
@@ -8,15 +9,16 @@ import batch.module3_A
 # batch 2 - Módulo que usamos para cargar fichero, hacer estadísticas y balancear los datos
 def batchTwo():
     print("\n############ Ejecutando Batch 2: carga ficheros, estadística y manejo de datos #############")
-    # obtener ficheros a cargar
+
+    # Obtenemos ruta de ficheros a cargar
     print("\nCargando ficheros...")
     fileATrain = batch.functions.obtener_ruta_guardado('Descargas', 'subtaskA_train_monolingual.jsonl')
     fileATest = batch.functions.obtener_ruta_guardado('Descargas', 'subtaskA_dev_monolingual.jsonl')
     fileBTrain = batch.functions.obtener_ruta_guardado('Descargas', 'subtaskB_train.jsonl')
     fileBTest = batch.functions.obtener_ruta_guardado('Descargas', 'subtaskB_dev.jsonl')
-    fileFase1 = batch.functions.obtener_ruta_guardado('SaveDF', 'DataSetFinal.tsv')
+    fileFase1 = batch.functions.obtener_ruta_guardado('Descargas', 'DataSetFinal.tsv')
 
-    # creamos dataframe con datos fichero
+    # Creamos dataframe de los ficheros que obtuvimos ruta, cada uno con su tipo.
     print("\nCreando DataFrames...")
     df_train_A = pd.read_json(fileATrain, lines=True)
     df_test_A = pd.read_json(fileATest, lines=True)
@@ -24,7 +26,7 @@ def batchTwo():
     df_test_B = pd.read_json(fileBTest, lines=True)
     df_fase_1 = pd.read_csv(fileFase1, delimiter='\t')
 
-    # Actualizamos nombre columnas df_fase_1 para estandarizarlas con el resto
+    # Actualizamos nombre columnas df_fase_1 para estandarizarlas con el resto de dataframes
     print("\nActualizando datos DataFrame fase_01...")
     df_fase_1.columns = ['text', 'label']
     df_fase_1['label'].replace({'h': 0, 'g': 1}, inplace=True)
