@@ -134,29 +134,32 @@ def batchThree():
                 # Configuramos el TfidfVectorizer
                 if analyzer != 'word':
                     vectorizer = TfidfVectorizer(max_features=max_features,
-                                             analyzer=analyzer, ngram_range=ngram_range,
-                                             use_idf=(tfidf_option == 'use_idf'),
-                                             smooth_idf=(tfidf_option == 'smooth_idf'),
-                                             sublinear_tf=(tfidf_option == 'sublinear_tf'))
+                                                 analyzer=analyzer, ngram_range=ngram_range,
+                                                 use_idf=(tfidf_option == 'use_idf'),
+                                                 smooth_idf=(tfidf_option == 'smooth_idf'),
+                                                 sublinear_tf=(tfidf_option == 'sublinear_tf'))
                 else:
                     vectorizer = TfidfVectorizer(max_features=max_features, stop_words="english",
-                                             analyzer=analyzer, ngram_range=ngram_range,
-                                             use_idf=(tfidf_option == 'use_idf'),
-                                             smooth_idf=(tfidf_option == 'smooth_idf'),
-                                             sublinear_tf=(tfidf_option == 'sublinear_tf'))
+                                                 analyzer=analyzer, ngram_range=ngram_range,
+                                                 use_idf=(tfidf_option == 'use_idf'),
+                                                 smooth_idf=(tfidf_option == 'smooth_idf'),
+                                                 sublinear_tf=(tfidf_option == 'sublinear_tf'))
+
+                print("Variables vectorizador: " + analyzer + " " + ngram_range_to_text(ngram_range)
+                      + " " + tfidf_option)
                 # Aplicamos la transformación TF-IDF a los datos
                 # Vectorizamos textos de train y test
-                X_train = vectorizer.fit_transform(train_df["text"])
-                X_test = vectorizer.transform(test_df["text"])
+                # X_train = vectorizer.fit_transform(train_df["text"])
+                # X_test = vectorizer.transform(test_df["text"])
                 # X_train = vectorizer.fit_transform(train_df["tokenized_text_50"])
                 # X_test = vectorizer.transform(test_df["tokenized_text_50"])
                 # X_test_f01 = vectorizer.transform(test_df_f01["tokenized_text_50"])
                 # X_train = vectorizer.fit_transform(train_df["tokenized_text_150"])
                 # X_test = vectorizer.transform(test_df["tokenized_text_150"])
                 # X_test_f01 = vectorizer.transform(test_df_f01["tokenized_text_150"])
-                # X_train = vectorizer.fit_transform(train_df["tokenized_text"])
-                # X_test = vectorizer.transform(test_df["tokenized_text"])
-                # X_test_f01 = vectorizer.transform(test_df_f01["tokenized_text"])
+                X_train = vectorizer.fit_transform(train_df["tokenized_text"])
+                X_test = vectorizer.transform(test_df["tokenized_text"])
+                X_test_f01 = vectorizer.transform(test_df_f01["tokenized_text"])
 
                 print("\nEligiendo calsificador")
                 # Obtener una lista de todos los clasificadores disponibles
@@ -241,16 +244,23 @@ def batchThree():
                                    "FINAL_SubtareaA_Modulo3A_MejorModelo_" + best_analyzer_a + "_"
                                    + ngram_range_to_text(best_ngram_ranges_a) + "_" + best_tfidf_options_a + ".tsv")
     # Guardamos tabla con valores de todos los entrenamientos
-    df_total.csv(batch.functions.obtener_ruta_guardado('Estadisticas','SubtareaA_tablaMejores.tsv')
-                 , sep='\t', index=False)
+    df_total.to_csv(batch.functions.obtener_ruta_guardado('Estadisticas', 'SubtareaA_tablaMejores.tsv')
+                    , sep='\t', index=False)
     mejor_vectorizer = TfidfVectorizer(max_features=max_features, stop_words="english",
                                        analyzer=best_analyzer_a, ngram_range=best_ngram_ranges_a,
                                        use_idf=(best_tfidf_options_a == 'use_idf'),
                                        smooth_idf=(best_tfidf_options_a == 'smooth_idf'),
                                        sublinear_tf=(best_tfidf_options_a == 'sublinear_tf'))
 
-    X_train = mejor_vectorizer.fit_transform(train_df["text"])
-    X_test_f01 = mejor_vectorizer.transform(test_df_f01["text"])
+    #X_train = mejor_vectorizer.fit_transform(train_df["text"])
+    #X_test_f01 = mejor_vectorizer.transform(test_df_f01["text"])
+    X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text"])
+    X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text"])
+    #X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text_150"])
+    #X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text_150"])
+    #X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text_50"])
+    #X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text_50"])
+
     # Testeamos modelo fase 1 e imprimimos report
     try:
         print("\nProbamos con test de fase 01 el modelo ", best_model_group_a)
@@ -282,4 +292,4 @@ def batchThree():
     batch.functions.guardar_clf_vct('vct', mejor_vectorizer, 'A')
     print("\nClasificador y vectorizador guardado en fichero")
 
-    # batch.module3_B.batchThree()
+    batch.module3_B.batchThree()
