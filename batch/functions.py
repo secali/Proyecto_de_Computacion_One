@@ -122,7 +122,8 @@ def obtener_datos_2():
         def opcion_5():
             print("\nHas seleccionado comenzar arrancando la prevision de la web")
             if flag_tratamiento > 2:
-                app_dash.runInDebugMode()
+                True
+                # app_dash.runInDebugMode()
             else:
                 print("Faltan datos para poder seleccionar esta acción."
                       "\nEjecuta la acción desde un punto anterior")
