@@ -106,6 +106,7 @@ def batchThree():
     # Creamos dataframe para guardar todos los datos
     column_names = ['Subtarea', 'max_features', 'analyzer', 'ngram_range', 'tfidf_option', 'model', 'score', 'report']
     df_total = pd.DataFrame(columns=column_names)
+
     # Definimos las variables en las que vamos a ir guardando los mejores resultado de cada bucle
     best_score_group_a = -np.inf
     best_model_group_a = None
@@ -200,8 +201,8 @@ def batchThree():
                 # Cierra la barra de progreso al finalizar
                 pbar.close()
                 # Añadir fila a dataframe
-                new_row = ['A', max_features, analyzer, ngram_range, tfidf_option, best_model.__class__.__name__,
-                           best_score, best_report]
+                new_row = ['A', max_features, analyzer, ngram_range_to_text(ngram_range), tfidf_option,
+                           best_model.__class__.__name__, best_score, best_report]
                 df_total.loc[len(df_total)] = new_row
                 # Imprimimos los resultados y los guardamos en fichero
                 print(f"\nBest Model: {best_model.__class__.__name__}")
@@ -281,4 +282,4 @@ def batchThree():
     batch.functions.guardar_clf_vct('vct', mejor_vectorizer, 'A')
     print("\nClasificador y vectorizador guardado en fichero")
 
-    batch.module3_B.batchThree()
+    # batch.module3_B.batchThree()
