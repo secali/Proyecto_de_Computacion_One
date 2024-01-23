@@ -103,6 +103,9 @@ def batchThree():
     ngram_ranges = [(1, 1), (1, 2), (2, 2)]  # Experimentamos con diferentes valores
     tfidf_options = ['binary', 'use_idf', 'smooth_idf', 'sublinear_tf']
 
+    # Creamos dataframe para guardar todos los datos
+    column_names = ['Subtarea', 'max_features', 'analyzer', 'ngram_range', 'tfidf_option', 'model', 'score', 'report']
+    df_total = pd.DataFrame(columns=column_names)
     # Definimos las variables en las que vamos a ir guardando los mejores resultado de cada bucle
     best_score_group_a = -np.inf
     best_model_group_a = None
@@ -128,12 +131,18 @@ def batchThree():
             best_tfidf_options_t = None
             for tfidf_option in tfidf_options:
                 # Configuramos el TfidfVectorizer
-                vectorizer = TfidfVectorizer(max_features=max_features, stop_words="english",
+                if analyzer != 'word':
+                    vectorizer = TfidfVectorizer(max_features=max_features,
                                              analyzer=analyzer, ngram_range=ngram_range,
                                              use_idf=(tfidf_option == 'use_idf'),
                                              smooth_idf=(tfidf_option == 'smooth_idf'),
                                              sublinear_tf=(tfidf_option == 'sublinear_tf'))
-
+                else:
+                    vectorizer = TfidfVectorizer(max_features=max_features, stop_words="english",
+                                             analyzer=analyzer, ngram_range=ngram_range,
+                                             use_idf=(tfidf_option == 'use_idf'),
+                                             smooth_idf=(tfidf_option == 'smooth_idf'),
+                                             sublinear_tf=(tfidf_option == 'sublinear_tf'))
                 # Aplicamos la transformación TF-IDF a los datos
                 # Vectorizamos textos de train y test
                 X_train = vectorizer.fit_transform(train_df["text"])
@@ -190,7 +199,10 @@ def batchThree():
                     pbar.update(1)
                 # Cierra la barra de progreso al finalizar
                 pbar.close()
-
+                # Añadir fila a dataframe
+                new_row = ['A', max_features, analyzer, ngram_range, tfidf_option, best_model.__class__.__name__,
+                           best_score, best_report]
+                df_total.loc[len(df_total)] = new_row
                 # Imprimimos los resultados y los guardamos en fichero
                 print(f"\nBest Model: {best_model.__class__.__name__}")
                 print(f"Macro F1 on Test Data: {best_score:.3f}")
@@ -223,9 +235,13 @@ def batchThree():
     print(f"\nBest Model: {best_model_group_a.__class__.__name__}")
     print(f"Macro F1 on Test Data: {best_score_group_a:.3f}")
     print(f"Best Report: {best_report_group_a}")
+    # Guardamos report
     batch.functions.guardar_report(best_model_group_a.__class__.__name__, best_score_group_a, best_report_group_a,
-                                   "FINAL_SubtareaA_Modulo3A_MejorModelo_"+best_analyzer_a + "_"
+                                   "FINAL_SubtareaA_Modulo3A_MejorModelo_" + best_analyzer_a + "_"
                                    + ngram_range_to_text(best_ngram_ranges_a) + "_" + best_tfidf_options_a + ".tsv")
+    # Guardamos tabla con valores de todos los entrenamientos
+    df_total.csv(batch.functions.obtener_ruta_guardado('Estadisticas','SubtareaA_tablaMejores.tsv')
+                 , sep='\t', index=False)
     mejor_vectorizer = TfidfVectorizer(max_features=max_features, stop_words="english",
                                        analyzer=best_analyzer_a, ngram_range=best_ngram_ranges_a,
                                        use_idf=(best_tfidf_options_a == 'use_idf'),
