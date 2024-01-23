@@ -8,7 +8,7 @@ def batchOne():
     print("\n############ Ejecutando Batch 1: Descarga de ficheros #############\n")
     # TODO: CONECTAR CON GOOGLE DRIVE Y OBTENER LOS DATOS CON GDOWN, LUEGO PARSEAMOS A JSON
 
-    # Creamos lista de ficheros a descargar con direccion - nombre
+    # Creamos lista de ficheros a descargar con dirección - nombre
     archivos = [
         ('https://drive.google.com/file/d/1e_G-9a66AryHxBOwGWhriePYCCa4_29e/view', 'subtaskA_dev_monolingual.jsonl'),
         ('https://drive.google.com/file/d/1HeCgnLuDoUHhP-2OsTSSC3FXRLVoI6OG/view', 'subtaskA_train_monolingual.jsonl'),
