@@ -1,6 +1,4 @@
 # import required libraries
-import sys
-
 import inflect
 import pandas as pd
 import warnings
@@ -23,7 +21,7 @@ from tqdm import tqdm
 def batchThree():
     print("\n############ Ejecutando Batch 3: Clasificador - Subtarea A #############")
     # creamos y asignamos valor a las variables
-    max_instances_per_class = 1000  # 1000  # 100  # numero de instancias por clase
+    max_instances_per_class = 300  # 1000  # 100  # numero de instancias por clase
     max_features = 5000  # 5000  # maximum number of features extracted for our instances
     random_seed = 777  # set random seed for reproducibility
 
@@ -84,25 +82,28 @@ def batchThree():
     def ngram_range_to_text(ngram_range):
         p = inflect.engine()
         start, end = ngram_range
-        return f"{p.number_to_words(start)}-gram to {p.number_to_words(end)}-gram"
+        return f"{p.number_to_words(start)}-{p.number_to_words(end)}"
 
     # Configuraciones para TfidfVectorizer
+    # analyzer:
+    #   - word: cada caracteristia una palabra individual
+    #   - char: Cada característica representa un n-grama de caracteres, donde n es determinado por ngram_range
+    #   - char_wb: Similar a 'char', pero solo incluye n-gramas que están dentro de los límites de las palabras.
+    # ngram_range: determina el rango de n-gramas que se utilizarán. Por ejemplo, (1, 1) significa solo unigramas
+    #   (palabras individuales), (1, 2) significa unigramas y bigramas, y (2, 2) significa solo bigramas.
+    # tfidf_options:
+    #   - binary: Las frecuencias de términos son binarias (0 o 1) indicando la presencia o ausencia de un término.
+    #   - use_idf: Usa la Frecuencia de Documento Inversa (IDF) para ponderar las frecuencias de términos.
+    #       Las palabras raras tendrán un peso más alto.
+    #   - smooth_idf: Similar a 'use_idf', pero con un término de suavizado en el denominador para evitar divisiones
+    #       por cero.
+    #   - sublinear_tf: Aplica una escala logarítmica a las frecuencias de términos antes de aplicar TF-IDF.
+    #       Esto puede ayudar a manejar mejor la varianza en las frecuencias de términos.
     analyzer_options = ['word', 'char', 'char_wb']
-    ngram_ranges = [(1, 1), (1, 2), (2, 2)]  # Experimenta con diferentes valores
+    ngram_ranges = [(1, 1), (1, 2), (2, 2)]  # Experimentamos con diferentes valores
     tfidf_options = ['binary', 'use_idf', 'smooth_idf', 'sublinear_tf']
 
-    best_score_group_t = -np.inf
-    best_model_group_t = None
-    best_report_group_t = None
-    best_analyzer_t = None
-    best_ngram_ranges_t = [(1, 1)]
-    best_tfidf_options_t = None
-    best_score_group_n = -np.inf
-    best_model_group_n = None
-    best_report_group_n = None
-    best_analyzer_n = None
-    best_ngram_ranges_n = [(1, 1)]
-    best_tfidf_options_n = None
+    # Definimos las variables en las que vamos a ir guardando los mejores resultado de cada bucle
     best_score_group_a = -np.inf
     best_model_group_a = None
     best_report_group_a = None
@@ -110,18 +111,30 @@ def batchThree():
     best_ngram_ranges_a = [(1, 1)]
     best_tfidf_options_a = None
 
-    # Iterar sobre las configuraciones
+    # Iteramos sobre las configuraciones
     for analyzer in analyzer_options:
+        best_score_group_n = -np.inf
+        best_model_group_n = None
+        best_report_group_n = None
+        best_analyzer_n = None
+        best_ngram_ranges_n = [(1, 1)]
+        best_tfidf_options_n = None
         for ngram_range in ngram_ranges:
+            best_score_group_t = -np.inf
+            best_model_group_t = None
+            best_report_group_t = None
+            best_analyzer_t = None
+            best_ngram_ranges_t = [(1, 1)]
+            best_tfidf_options_t = None
             for tfidf_option in tfidf_options:
-                # Configurar el TfidfVectorizer
+                # Configuramos el TfidfVectorizer
                 vectorizer = TfidfVectorizer(analyzer=analyzer, ngram_range=ngram_range,
                                              use_idf=(tfidf_option == 'use_idf'),
                                              smooth_idf=(tfidf_option == 'smooth_idf'),
                                              sublinear_tf=(tfidf_option == 'sublinear_tf'))
 
-                # Aplicar la transformación TF-IDF a los datos
-                # vectorizamos textos de train y test
+                # Aplicamos la transformación TF-IDF a los datos
+                # Vectorizamos textos de train y test
                 X_train = vectorizer.fit_transform(train_df["text"])
                 X_test = vectorizer.transform(test_df["text"])
                 # X_train = vectorizer.fit_transform(train_df["tokenized_text_50"])
@@ -134,16 +147,9 @@ def batchThree():
                 # X_test = vectorizer.transform(test_df["tokenized_text"])
                 # X_test_f01 = vectorizer.transform(test_df_f01["tokenized_text"])
 
-                # Imprimir información sobre la configuración actual
-                #  print(f"\nConfiguration: Analyzer={analyzer}, Ngram Range={ngram_range}, TF-IDF Option={tfidf_option}")
-                # print(f"Number of features: {len(vectorizer.get_feature_names())}")
-                # print(f"Example feature names: {vectorizer.get_feature_names()[:5]}")
-                # print(f"TF-IDF Matrix shape: {tfidf_matrix.shape}")
-
                 print("\nEligiendo calsificador")
                 # Obtener una lista de todos los clasificadores disponibles
                 classifiers = all_estimators(type_filter='classifier')
-                # print (classifiers)
 
                 # Calcular mejor algoritmo
                 best_model = None
@@ -217,9 +223,8 @@ def batchThree():
     print(f"Macro F1 on Test Data: {best_score_group_a:.3f}")
     print(f"Best Report: {best_report_group_a}")
     batch.functions.guardar_report(best_model_group_a.__class__.__name__, best_score_group_a, best_report_group_a,
-                                   best_analyzer_a + "_"
-                                   + ngram_range_to_text(best_ngram_ranges_a) + "_" + best_tfidf_options_a + "_"
-                                   + "SubtareaA_Modulo3A_MejorModelo_FINAL.tsv")
+                                   "FINAL_SubtareaA_Modulo3A_MejorModelo_"+best_analyzer_a + "_"
+                                   + ngram_range_to_text(best_ngram_ranges_a) + "_" + best_tfidf_options_a + ".tsv")
     mejor_vectorizer = TfidfVectorizer(analyzer=best_analyzer_a, ngram_range=best_ngram_ranges_a,
                                        use_idf=(best_tfidf_options_a == 'use_idf'),
                                        smooth_idf=(best_tfidf_options_a == 'smooth_idf'),
