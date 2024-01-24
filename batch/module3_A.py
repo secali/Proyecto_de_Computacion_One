@@ -151,8 +151,8 @@ def batchThree():
                 # Vectorizamos textos de train y test
                 # X_train = vectorizer.fit_transform(train_df["text"])
                 # X_test = vectorizer.transform(test_df["text"])
-                # X_train = vectorizer.fit_transform(train_df["tokenized_text_50"])
-                # X_test = vectorizer.transform(test_df["tokenized_text_50"])
+                #X_train = vectorizer.fit_transform(train_df["tokenized_text_50"])
+                #X_test = vectorizer.transform(test_df["tokenized_text_50"])
                 # X_test_f01 = vectorizer.transform(test_df_f01["tokenized_text_50"])
                 # X_train = vectorizer.fit_transform(train_df["tokenized_text_150"])
                 # X_test = vectorizer.transform(test_df["tokenized_text_150"])

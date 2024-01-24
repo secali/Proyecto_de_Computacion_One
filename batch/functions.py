@@ -8,6 +8,7 @@ from batch import module1
 from batch import module2
 from batch import module3_A
 from batch import module3_B
+from batch import module3_C
 import os
 import datetime
 from joblib import dump
@@ -94,6 +95,13 @@ def obtener_datos():
                       "\nEjecuta la acción desde un punto anterior")
 
         def opcion_5():
+            print("\nHas seleccionado comenzar elegiendo clasificador y vectorizador de tarea C")
+            if flag_tratamiento > 2:
+                batch.module3_C.batchThree()
+            else:
+                print("Faltan datos para poder seleccionar esta acción."
+                      "\nEjecuta la acción desde un punto anterior")
+        def opcion_6():
             print("\nHas seleccionado comenzar arrancando la prevision de la web")
             if flag_tratamiento > 2:
                 True
@@ -101,7 +109,6 @@ def obtener_datos():
             else:
                 print("Faltan datos para poder seleccionar esta acción."
                       "\nEjecuta la acción desde un punto anterior")
-
         def opcion_salir():
             print("\nSaliendo del programa.")
             exit()
@@ -114,8 +121,9 @@ def obtener_datos():
             print("2. Tratar los datos")
             print("3. Elegir clasificador y vectorizador en ambas tareas")
             print("4. Elegir clasificador y vectorizador en tarea B")
-            print("5. Arrancar servicio web - Predicciones")
-            print("6. Salir")
+            print("5. Entrenar con mejor clasificador y vectorizador ambas tareas")
+            print("6. Arrancar servicio web - Predicciones")
+            print("7. Salir")
 
             # Solicita la entrada del usuario
             opcion = input("Selecciona una opción (1, 2, 3, 4, 5, 6): ")
@@ -132,6 +140,8 @@ def obtener_datos():
             elif opcion == '5':
                 opcion_5()
             elif opcion == '6':
+                opcion_6()
+            elif opcion == '7':
                 opcion_salir()
             else:
                 print("Opción no válida. Por favor, selecciona una opción válida.")
@@ -167,6 +177,27 @@ def guardar_dataset(dfDataSet, archivo):
     dfDataSet.to_csv(ruta_carpeta, sep='\t', index=False)
     print("DataFrame save in: " + ruta_carpeta)
 
+
+def guardar_clf_vct_nombre(tipo, fichero, tarea, nombre):
+    if tipo == 'clf':
+        if tarea == 'A':
+            ruta_carpeta = obtener_ruta_guardado('SaveCLF', nombre+'_clf_A.joblib')
+        elif tarea == 'B':
+            ruta_carpeta = obtener_ruta_guardado('SaveCLF', nombre+'_clf_B.joblib')
+        else:
+            print("No se puede guardar porque la tarea enviada no es correcta")
+            return
+    else:
+        if tarea == 'A':
+            ruta_carpeta = obtener_ruta_guardado('SaveVCT', nombre+'vct_A.joblib')
+        elif tarea == 'B':
+            ruta_carpeta = obtener_ruta_guardado('SaveVCT', nombre+'vct_B.joblib')
+        else:
+            print("No se puede guardar porque la tarea enviada no es correcta")
+            return
+    print("\nGuardando el fichero...")
+    dump(fichero, ruta_carpeta)
+    print("Clasificador save in: " + ruta_carpeta)
 
 def guardar_clf_vct(tipo, fichero, tarea):
     if tipo == 'clf':
@@ -240,6 +271,12 @@ def tokenize_and_reduce_150(text):
     tokens = word_tokenize(text)
     return ' '.join(tokens[:150])
 
+def limpia_texto_simple(text):
+
+    if len(text.get_text()) >= 20 and detect(text.get_text()) == 'en':
+         return text.replace('\t', '').replace('\n', '').replace('  ', '')
+    else:
+        return  " "
 
 def limpia_texto(list):
     lista_txt_limpio = []

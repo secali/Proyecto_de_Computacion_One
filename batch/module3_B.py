@@ -2,7 +2,7 @@
 import inflect
 import pandas as pd
 import warnings
-import batch.module4
+import batch.module3_C
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.utils import all_estimators
@@ -26,14 +26,14 @@ def batchThree():
 
     # obtener ficheros a cargar
     print("\nCargando ficheros...")
-    fileATrain = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTrain_B.tsv')
-    fileATest = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
+    fileBTrain = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTrain_B.tsv')
+    fileBTest = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTest_B.tsv')
     fileFase1 = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTest_fase01.tsv')
 
     # creamos dataframe con datos de los ficheros
     print("\nCreando DataFrames...")
-    df_train_B = pd.read_csv(fileATrain, delimiter='\t')
-    df_test_B = pd.read_csv(fileATest, delimiter='\t')
+    df_train_B = pd.read_csv(fileBTrain, delimiter='\t')
+    df_test_B = pd.read_csv(fileBTest, delimiter='\t')
     df_fase_1 = pd.read_csv(fileFase1, delimiter='\t')
 
     # Imrpimimos estadistica
@@ -141,16 +141,16 @@ def batchThree():
                       + " " + tfidf_option)
                 # Aplicamos la transformación TF-IDF a los datos
                 # Vectorizamos textos de train y test
-                # X_train = vectorizer.fit_transform(train_df["text"])
-                # X_test = vectorizer.transform(test_df["text"])
+                X_train = vectorizer.fit_transform(train_df["text"])
+                X_test = vectorizer.transform(test_df["text"])
                 # X_train = vectorizer.fit_transform(train_df["tokenized_text_50"])
                 # X_test = vectorizer.transform(test_df["tokenized_text_50"])
                 # X_test_f01 = vectorizer.transform(test_df_f01["tokenized_text_50"])
                 # X_train = vectorizer.fit_transform(train_df["tokenized_text_150"])
                 # X_test = vectorizer.transform(test_df["tokenized_text_150"])
                 # X_test_f01 = vectorizer.transform(test_df_f01["tokenized_text_150"])
-                X_train = vectorizer.fit_transform(train_df["tokenized_text"])
-                X_test = vectorizer.transform(test_df["tokenized_text"])
+                # X_train = vectorizer.fit_transform(train_df["tokenized_text"])
+                # X_test = vectorizer.transform(test_df["tokenized_text"])
                 # X_test_f01 = vectorizer.transform(test_df_f01["tokenized_text"])
 
                 print("\nEligiendo calsificador")
@@ -244,12 +244,20 @@ def batchThree():
                                        smooth_idf=(best_tfidf_options_a == 'smooth_idf'),
                                        sublinear_tf=(best_tfidf_options_a == 'sublinear_tf'))
 
-    # X_train = mejor_vectorizer.fit_transform(train_df["text"])
-    # X_test_f01 = mejor_vectorizer.transform(test_df_f01["text"])
-    X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text"])
-    X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text"])
-    # X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text_150"])
-    # X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text_150"])
+    # Actualizamos train_Df  para poder hacer predicción con fichero fase 01
+    # Actualizar la columna para que los valores diferentes de 0 sean 1
+    # train_df['label'] = train_df['label'].apply(lambda x: 1 if x != 0 else 0)
+    # Otra formma de actuar puede ser la siguiente: OJO, NUNCA DEJAR LAS DOS.
+    train_df = train_df[train_df['label'] <= 1]
+    # Balanceamos el dataset reultante, para que no existan sesgos
+    batch.functions.balacearDF(train_df)
+
+    X_train = mejor_vectorizer.fit_transform(train_df["text"])
+    X_test_f01 = mejor_vectorizer.transform(test_df_f01["text"])
+    # X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text"])
+    # X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text"])
+    #X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text_150"])
+    #X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text_150"])
     # X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text_50"])
     # X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text_50"])
     # Testeamos modelo fase 1 e imprimimos report
@@ -283,4 +291,4 @@ def batchThree():
     batch.functions.guardar_clf_vct('vct', mejor_vectorizer, 'B')
     print("\nClasificador y vectorizador guardado en fichero")
 
-    batch.module4.batchFour(" ", " ")
+    batch.module3_C.batchThree()
