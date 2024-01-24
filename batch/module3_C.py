@@ -17,8 +17,8 @@ from sklearn.ensemble import AdaBoostClassifier
 def batchThree():
     print("\n############ Ejecutando Batch 3: Clasificador - Mejores de ambas subtareas #############")
     # creamos y asignamos valor a las variables
-    max_instances_per_class = 4000  # 1000  # 100  # numero de instancias por clase
-    max_features = 20000  # 5000  # maximum number of features extracted for our instances
+    max_instances_per_class = 4000  # nº de instancias (ejemplos de datos) que se utilizarán por cada clase
+    max_features = 20000  # nº máximo de características (atributos o variables) que se extraerán o utilizarán
     random_seed = 777  # set random seed for reproducibility
 
     # obtener ficheros a cargar
