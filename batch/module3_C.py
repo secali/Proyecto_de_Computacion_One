@@ -17,8 +17,8 @@ from sklearn.ensemble import AdaBoostClassifier
 def batchThree():
     print("\n############ Ejecutando Batch 3: Clasificador - Mejores de ambas subtareas #############")
     # creamos y asignamos valor a las variables
-    max_instances_per_class = 4000  # nº de instancias (ejemplos de datos) que se utilizarán por cada clase
-    max_features = 20000  # nº máximo de características (atributos o variables) que se extraerán o utilizarán
+    max_instances_per_class = 50  # 4000  # nº de instancias (ejemplos de datos) que se utilizarán por cada clase
+    max_features = 50  # 20000  # nº máximo de características (atributos o variables) que se extraerán o utilizarán
     random_seed = 777  # set random seed for reproducibility
 
     # obtener ficheros a cargar
@@ -41,19 +41,17 @@ def batchThree():
     # Balanceando fichero de train
     print("Balanceamos los ficheros de la tarea A")
     df_train_A = batch.functions.balacearDF(df_train_A)
-    df_test_A = batch.functions.balacearDF(df_test_A)
-    df_fase_1 = batch.functions.balacearDF(df_fase_1)
+    # df_test_A = batch.functions.balacearDF(df_test_A)
+    # df_fase_1 = batch.functions.balacearDF(df_fase_1)
 
     print("\nPreparando datos para hacer entrenamiento y test")
 
     # retocamos train_df, agrupandolo por tipo y tomamos muestra aleatoria de filas
     df_train_A = df_train_A.groupby("label").sample(n=max_instances_per_class, random_state=random_seed)
-    df_train_B = df_train_B.groupby("label").sample(n=max_instances_per_class, random_state=random_seed)
-
 
     # Configuraciones para TfidfVectorizer
     # analyzer:
-    #   - word: cada caracteristia una palabra individual
+    #   - word: cada caracteristica una palabra individual
     #   - char: Cada característica representa un n-grama de caracteres, donde n es determinado por ngram_range
     #   - char_wb: Similar a 'char', pero solo incluye n-gramas que están dentro de los límites de las palabras.
     # ngram_range: determina el rango de n-gramas que se utilizarán. Por ejemplo, (1, 1) significa solo unigramas
@@ -66,7 +64,6 @@ def batchThree():
     #       por cero.
     #   - sublinear_tf: Aplica una escala logarítmica a las frecuencias de términos antes de aplicar TF-IDF.
     #       Esto puede ayudar a manejar mejor la varianza en las frecuencias de términos.
-
 
     # Creamos dataframe para guardar todos los datos
     column_names = ['Subtarea', 'max_features', 'analyzer', 'ngram_range', 'tfidf_option', 'model', 'score', 'report']
@@ -93,17 +90,17 @@ def batchThree():
     v_B_150 = TfidfVectorizer(max_features=max_features, analyzer='char_wb', ngram_range=(2, 2))
     v_B_50 = TfidfVectorizer(max_features=max_features, analyzer='char_wb', ngram_range=(2, 2), use_idf=True)
 
-    # Creamos clasificadores Clasificadores
+    # Creamos Clasificadores
     c_A_completo = BernoulliNB()
     c_A_441 = BernoulliNB()
     c_A_150 = svm.SVC(kernel='linear')
-    c_A_50 = RandomForestClassifier(n_estimators=1000,
+    c_A_50 = RandomForestClassifier(n_estimators=50,  # 1000,
                                     random_state=42)  # ojo, bajar n_estimator (nº arboles) a 100 si se bloquea
-    c_B_completo = GradientBoostingClassifier(n_estimators=1000,
-                                              random_state=42)  # ojo, bajar n_estimator (nº arboles) a 100 si se bloquea
-    c_B_441 = GradientBoostingClassifier(n_estimators=1000,
+    c_B_completo = GradientBoostingClassifier(n_estimators=50,  # 1000,
+                                              random_state=42)  # bajar n_estimator (nº arboles) a 100 si se bloquea
+    c_B_441 = GradientBoostingClassifier(n_estimators=50,  # 1000,
                                          random_state=42)  # ojo, bajar n_estimator (nº arboles) a 100 si se bloquea
-    c_B_150 = GradientBoostingClassifier(n_estimators=1000,
+    c_B_150 = GradientBoostingClassifier(n_estimators=50,  # 1000,
                                          random_state=42)  # ojo, bajar n_estimator (nº arboles) a 100 si se bloquea
     c_B_50 = AdaBoostClassifier(n_estimators=500,
                                 random_state=42)  # ojo, bajar n_estimator (nº arboles) a 50 si se bloquea
@@ -117,9 +114,8 @@ def batchThree():
     column_names = ['subtarea', 'columna', 'modelo', 'model', 'score', 'report', 'score_f01', 'report_f01']
     df_total = pd.DataFrame(columns=column_names)
 
-
-
     def comprobar_sistema(vectorizer, clasificador, df_train, df_test, columna, subtarea, nombre_mostrar):
+        print("\n Cargando vectorizador para Subtarea ", subtarea, " usando la columna ", columna)
         X_train = vectorizer.fit_transform(df_train[columna])
         X_test = vectorizer.transform(df_test[columna])
         X_test_f01 = vectorizer.transform(df_fase_1[columna])
@@ -138,7 +134,7 @@ def batchThree():
             report_f01 = classification_report(y_test_f01, y_pred_f01)
             # Calculamos el score
             score = f1_score(y_test, y_pred, average="macro")
-            score_f01 = f1_score(y_test, y_pred_f01, average="macro")
+            score_f01 = f1_score(y_test_f01, y_pred_f01, average="macro")
             new_row = [subtarea, columna, clasificador.__class__.__name__, score, report, report_f01, score_f01]
             df_total.loc[len(df_total)] = new_row
         except Exception as e:
@@ -157,7 +153,7 @@ def batchThree():
     comprobar_sistema(v_A_50, c_A_50, df_train_A, df_test_A, txt_50, 'A', 'S_A_50')
 
     # Datos subtarea B
-    comprobar_sistema(v_B_completo, c_B_completo, df_train_B, df_test_B, txt_completo, 'B', 'S_B_completo')
+    #comprobar_sistema(v_B_completo, c_B_completo, df_train_B, df_test_B, txt_completo, 'B', 'S_B_completo')
     comprobar_sistema(v_B_441, c_B_441, df_train_B, df_test_B, txt_441, 'B', 'S_B_441')
     comprobar_sistema(v_B_150, c_B_150, df_train_B, df_test_B, txt_150, 'B', 'S_B_150')
     comprobar_sistema(v_B_50, c_B_50, df_train_B, df_test_B, txt_50, 'B', 'S_B_50')

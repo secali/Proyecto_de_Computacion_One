@@ -44,8 +44,8 @@ def batchThree():
     # Balanceando fichero de train
     print("Balanceamos los ficheros")
     df_train_A = batch.functions.balacearDF(df_train_A)
-    df_test_A = batch.functions.balacearDF(df_test_A)
-    df_fase_1 = batch.functions.balacearDF(df_fase_1)
+    # df_test_A = batch.functions.balacearDF(df_test_A)
+    # df_fase_1 = batch.functions.balacearDF(df_fase_1)
 
     # determine avg text length in tokens
     num = int(df_train_A["text"].map(lambda x: len(x.split(" "))).mean())

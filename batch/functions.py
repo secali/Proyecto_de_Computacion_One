@@ -197,7 +197,7 @@ def guardar_clf_vct_nombre(tipo, fichero, tarea, nombre):
             return
     print("\nGuardando el fichero...")
     dump(fichero, ruta_carpeta)
-    print("Clasificador save in: " + ruta_carpeta)
+    print("Fichero guardado en: " + ruta_carpeta)
 
 def guardar_clf_vct(tipo, fichero, tarea):
     if tipo == 'clf':
