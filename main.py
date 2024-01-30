@@ -2,7 +2,7 @@
 from batch import functions
 
 if __name__ == '__main__':
-    functions.obtener_datos()
+    file_01 =functions.obtener_datos()
 
 
 def runScript():
