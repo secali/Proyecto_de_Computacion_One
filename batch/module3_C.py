@@ -13,13 +13,17 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import AdaBoostClassifier
 import numpy as np
 
+# Definimos variables globales
+best_score_a = -np.inf
+best_score_b = -np.inf
+
 
 # batch 3 - Módulo que usamos para crear los test, elegir modelo, entrenar y guardar clasificador y vectorizador
 def batchThree():
     print("\n############ Ejecutando Batch 3: Clasificador - Mejores de ambas subtareas #############")
     # creamos y asignamos valor a las variables
-    max_instances_per_class = 50  # 4000  # nº de instancias (ejemplos de datos) que se utilizarán por cada clase
-    max_features = 50  # 20000  # nº máximo de características (atributos o variables) que se extraerán o utilizarán
+    max_instances_per_class = 4000  # nº de instancias (ejemplos de datos) que se utilizarán por cada clase
+    max_features = 20000  # nº máximo de características (atributos o variables) que se extraerán o utilizarán
     random_seed = 777  # set random seed for reproducibility
 
     # obtener ficheros a cargar
@@ -49,6 +53,7 @@ def batchThree():
 
     # retocamos train_df, agrupandolo por tipo y tomamos muestra aleatoria de filas
     df_train_A = df_train_A.groupby("label").sample(n=max_instances_per_class, random_state=random_seed)
+    df_train_B = df_train_B.groupby("label").sample(n=max_instances_per_class, random_state=random_seed)
 
     # Configuraciones para TfidfVectorizer
     # analyzer:
@@ -65,10 +70,6 @@ def batchThree():
     #       por cero.
     #   - sublinear_tf: Aplica una escala logarítmica a las frecuencias de términos antes de aplicar TF-IDF.
     #       Esto puede ayudar a manejar mejor la varianza en las frecuencias de términos.
-
-    # Creamos dataframe para guardar todos los datos
-    column_names = ['Subtarea', 'max_features', 'analyzer', 'ngram_range', 'tfidf_option', 'model', 'score', 'report']
-    df_total = pd.DataFrame(columns=column_names)
 
     # SUBTAREA A
     # Completo -BernoulliNB 0.675 - Vectorizador _char_two-two_binary
@@ -95,13 +96,13 @@ def batchThree():
     c_A_completo = BernoulliNB()
     c_A_441 = BernoulliNB()
     c_A_150 = svm.SVC(kernel='linear')
-    c_A_50 = RandomForestClassifier(n_estimators=50,  # 1000,
+    c_A_50 = RandomForestClassifier(n_estimators=1000,
                                     random_state=42)  # ojo, bajar n_estimator (nº arboles) a 100 si se bloquea
     c_B_completo = GradientBoostingClassifier()  # n_estimators=50,  # 1000,
     # random_state=42)  # bajar n_estimator (nº arboles) a 100 si se bloquea
-    c_B_441 = GradientBoostingClassifier(n_estimators=50,  # 1000,
+    c_B_441 = GradientBoostingClassifier(n_estimators=1000,
                                          random_state=42)  # ojo, bajar n_estimator (nº arboles) a 100 si se bloquea
-    c_B_150 = GradientBoostingClassifier(n_estimators=50,  # 1000,
+    c_B_150 = GradientBoostingClassifier(n_estimators=1000,
                                          random_state=42)  # ojo, bajar n_estimator (nº arboles) a 100 si se bloquea
     c_B_50 = AdaBoostClassifier(n_estimators=500,
                                 random_state=42)  # ojo, bajar n_estimator (nº arboles) a 50 si se bloquea
@@ -115,13 +116,10 @@ def batchThree():
     column_names = ['subtarea', 'columna', 'modelo', 'model', 'score', 'report', 'score_f01', 'report_f01']
     df_total = pd.DataFrame(columns=column_names)
 
-    best_score_a = -np.inf
-    best_score_b = -np.inf
-
     def comprobar_sistema(vectorizer, clasificador, df_train, df_test, columna, subtarea, nombre_mostrar):
         global best_score_a, best_score_b
 
-        print("\n Cargando vectorizador para Subtarea ", subtarea, " usando la columna ", columna)
+        print("\nCargando vectorizador para Subtarea ", subtarea, " usando la columna ", columna)
         X_train = vectorizer.fit_transform(df_train[columna])
         X_test = vectorizer.transform(df_test[columna])
         X_test_f01 = vectorizer.transform(df_fase_1[columna])
@@ -139,9 +137,10 @@ def batchThree():
             report = classification_report(y_test, y_pred)
             report_f01 = classification_report(y_test_f01, y_pred_f01)
             # Calculamos el score
-            score = f1_score(y_test, y_pred, average="macro")
-            score_f01 = f1_score(y_test_f01, y_pred_f01, average="macro")
-            new_row = [subtarea, columna, clasificador.__class__.__name__, score, report, report_f01, score_f01]
+            score = f1_score(y_test, y_pred, average="macro", zero_division=1)
+            score_f01 = f1_score(y_test_f01, y_pred_f01, average="macro",zero_division=1)
+            new_row = [subtarea, columna, clasificador.__class__.__name__, clasificador, score, report, report_f01,
+                       score_f01]
             df_total.loc[len(df_total)] = new_row
         except Exception as e:
             print(f"Error : {e}")
@@ -149,13 +148,13 @@ def batchThree():
         if subtarea == 'A':
             if score > best_score_a:
                 best_score_a = score
-                print("\nGuardando clasificador...")
+                print("\nGuardando clasificador, mejor de subtarea A de momento, con f1_score = ",score)
                 batch.functions.guardar_clf_vct('clf', clasificador, 'A')
                 batch.functions.guardar_clf_vct('vct', vectorizer, 'A')
         else:
             if score > best_score_b:
                 best_score_b = score
-                print("\nGuardando clasificador...")
+                print("\nGuardando clasificador, mejor de subtarea B de momento, con f1_score = ",score)
                 batch.functions.guardar_clf_vct('clf', clasificador, 'B')
                 batch.functions.guardar_clf_vct('vct', vectorizer, 'B')
 
