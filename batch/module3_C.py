@@ -27,7 +27,6 @@ def batchThree():
     random_seed = 777  # set random seed for reproducibility
 
     # obtener ficheros a cargar
-    # obtener ficheros a cargar
     print("\nCargando ficheros...")
     fileATrain = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTrain_A.tsv')
     fileATest = batch.functions.obtener_ruta_guardado('SaveDF', 'DSTest_A.tsv')
@@ -46,11 +45,9 @@ def batchThree():
     # Balanceando fichero de train
     print("Balanceamos los ficheros de la tarea A")
     df_train_A = batch.functions.balacearDF(df_train_A)
-    # df_test_A = batch.functions.balacearDF(df_test_A)
-    # df_fase_1 = batch.functions.balacearDF(df_fase_1)
+
 
     print("\nPreparando datos para hacer entrenamiento y test")
-
     # retocamos train_df, agrupandolo por tipo y tomamos muestra aleatoria de filas
     df_train_A = df_train_A.groupby("label").sample(n=max_instances_per_class, random_state=random_seed)
     df_train_B = df_train_B.groupby("label").sample(n=max_instances_per_class, random_state=random_seed)
@@ -135,14 +132,14 @@ def batchThree():
             # Calculamos el score
             score = f1_score(y_test, y_pred, average="macro", zero_division=1)
             score_f01 = f1_score(y_test_f01, y_pred_f01, average="macro", zero_division=1)
-            new_row = [subtarea, columna, clasificador.__class__.__name__, clasificador, score, report, report_f01,
-                       score_f01]
+            new_row = [subtarea, columna, clasificador.__class__.__name__, clasificador, score, report, score_f01,
+                       report_f01]
             df_total.loc[len(df_total)] = new_row
             # Guardamos tabla con valores de todos los entrenamientos hasta ahora.  Pisamos la anterior
             df_total.to_csv(batch.functions.obtener_ruta_guardado('Estadisticas', 'TODOS_tabla_mejoresModulo3C.tsv'))
         except Exception as e:
             print(f"Error : {e}")
-            # guardamos clasificador y vectorizador
+            # guardamos clasificador y vectorizador mejor de cata tipo, si tiene más acierto
         if subtarea == 'A':
             if score > best_score_a:
                 best_score_a = score
