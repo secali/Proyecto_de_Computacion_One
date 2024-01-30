@@ -142,6 +142,8 @@ def batchThree():
             new_row = [subtarea, columna, clasificador.__class__.__name__, clasificador, score, report, report_f01,
                        score_f01]
             df_total.loc[len(df_total)] = new_row
+            # Guardamos tabla con valores de todos los entrenamientos hasta ahora.  Pisamos la anterior
+            df_total.to_csv(batch.functions.obtener_ruta_guardado('Estadisticas', 'TODOS_tabla_mejoresModulo3C.tsv'))
         except Exception as e:
             print(f"Error : {e}")
             # guardamos clasificador y vectorizador
