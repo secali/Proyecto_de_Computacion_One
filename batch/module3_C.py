@@ -96,17 +96,13 @@ def batchThree():
     c_A_completo = BernoulliNB()
     c_A_441 = BernoulliNB()
     c_A_150 = svm.SVC(kernel='linear')
-    c_A_50 = RandomForestClassifier(n_estimators=1000,
-                                    random_state=42)  # ojo, bajar n_estimator (nº arboles) a 100 si se bloquea
-    c_B_completo = GradientBoostingClassifier()  # n_estimators=50,  # 1000,
-    # random_state=42)  # bajar n_estimator (nº arboles) a 100 si se bloquea
-    c_B_441 = GradientBoostingClassifier(n_estimators=1000,
-                                         random_state=42)  # ojo, bajar n_estimator (nº arboles) a 100 si se bloquea
-    c_B_150 = GradientBoostingClassifier(n_estimators=1000,
-                                         random_state=42)  # ojo, bajar n_estimator (nº arboles) a 100 si se bloquea
-    c_B_50 = AdaBoostClassifier(n_estimators=500,
-                                random_state=42)  # ojo, bajar n_estimator (nº arboles) a 50 si se bloquea
-    # tipos de columna
+    c_A_50 = RandomForestClassifier(n_estimators=150, random_state=42)
+    c_B_completo = GradientBoostingClassifier(n_estimators=100, random_state=42)
+    c_B_441 = GradientBoostingClassifier(n_estimators=100, random_state=42)
+    c_B_150 = GradientBoostingClassifier(n_estimators=100, random_state=42)
+    c_B_50 = AdaBoostClassifier(n_estimators=50, random_state=42)
+
+    # Definimos tipos de columna a usar
     txt_completo = "text"
     txt_441 = "tokenized_text"
     txt_150 = "tokenized_text_150"
@@ -138,7 +134,7 @@ def batchThree():
             report_f01 = classification_report(y_test_f01, y_pred_f01)
             # Calculamos el score
             score = f1_score(y_test, y_pred, average="macro", zero_division=1)
-            score_f01 = f1_score(y_test_f01, y_pred_f01, average="macro",zero_division=1)
+            score_f01 = f1_score(y_test_f01, y_pred_f01, average="macro", zero_division=1)
             new_row = [subtarea, columna, clasificador.__class__.__name__, clasificador, score, report, report_f01,
                        score_f01]
             df_total.loc[len(df_total)] = new_row
@@ -150,13 +146,13 @@ def batchThree():
         if subtarea == 'A':
             if score > best_score_a:
                 best_score_a = score
-                print("\nGuardando clasificador, mejor de subtarea A de momento, con f1_score = ",score)
+                print("\nGuardando clasificador, mejor de subtarea A de momento, con f1_score = ", score)
                 batch.functions.guardar_clf_vct('clf', clasificador, 'A')
                 batch.functions.guardar_clf_vct('vct', vectorizer, 'A')
         else:
             if score > best_score_b:
                 best_score_b = score
-                print("\nGuardando clasificador, mejor de subtarea B de momento, con f1_score = ",score)
+                print("\nGuardando clasificador, mejor de subtarea B de momento, con f1_score = ", score)
                 batch.functions.guardar_clf_vct('clf', clasificador, 'B')
                 batch.functions.guardar_clf_vct('vct', vectorizer, 'B')
 
