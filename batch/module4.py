@@ -1,19 +1,20 @@
 import sys
 
-import pandas as pd
 from joblib import load
-
 import batch.functions
 from batch import functions
 
 
-# batch 4 - modulo que usamos para cargar clasificador y vectorizador y realizar predicciones
+# batch 4 - módulo que usamos para cargar clasificador y vectorizador y realizar predicciones
 # el vectorizador se utiliza para convertir el texto en una representación numérica antes de alimentarlo al modelo de clasificación
 def batchFour(modelo, texto):
     print("\n############ Ejecutando Batch 4: Carga clasificador y realizar predicciones - Uso WEB#############")
+    #mi_app = web.app_dash_2.configurar_aplicacion()
+    #web.app_dash_2.arrancar_servidor(mi_app)
+
     if (modelo != " " and texto != " "):
         # limpiamos el texto
-        texto = batch.functions.limpia_texto(texto)
+        texto = batch.functions.limpia_texto_simple(texto)
         if texto != " ":
             if modelo == 'subtareaA':
                 print(modelo, " : \n", texto + "\n")

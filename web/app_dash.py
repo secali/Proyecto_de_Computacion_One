@@ -3,6 +3,7 @@ from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output, State
 from batch import module4
+from batch import functions
 
 
 # Inicializa la aplicación Dash con suppress_callback_exceptions=True
@@ -80,4 +81,5 @@ def runInDebugMode():
 # Corre la aplicación en el servidor local
 if __name__ == '__main__':
     app.run_server(debug=True,  threaded=True)
+
 

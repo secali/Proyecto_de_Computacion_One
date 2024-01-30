@@ -2,13 +2,8 @@ import csv
 import numpy as np
 import sys
 import batch
-
 sys.path.append("../batch")
-from batch import module1
-from batch import module2
-from batch import module3_A
-from batch import module3_B
-from batch import module3_C
+from batch import module1, module2, module3_A, module3_B, module3_C, module4
 import os
 import datetime
 from joblib import dump
@@ -101,14 +96,17 @@ def obtener_datos():
             else:
                 print("Faltan datos para poder seleccionar esta acción."
                       "\nEjecuta la acción desde un punto anterior")
+
         def opcion_6():
-            print("\nHas seleccionado comenzar arrancando la prevision de la web")
+            print("\nHas seleccionado comenzar arrancando server para que se conecte la web")
             if flag_tratamiento > 2:
-                True
+                batch.module4.batchFour(" "," ")
+                # True
                 # app_dash.runInDebugMode()
             else:
                 print("Faltan datos para poder seleccionar esta acción."
                       "\nEjecuta la acción desde un punto anterior")
+
         def opcion_salir():
             print("\nSaliendo del programa.")
             exit()
@@ -122,11 +120,11 @@ def obtener_datos():
             print("3. Elegir clasificador y vectorizador en ambas tareas")
             print("4. Elegir clasificador y vectorizador en tarea B")
             print("5. Entrenar con mejor clasificador y vectorizador ambas tareas")
-            print("6. Arrancar servicio web - Predicciones")
+            print("6. Arrancar modulo para usar con servicio web - Predicciones")
             print("7. Salir")
 
             # Solicita la entrada del usuario
-            opcion = input("Selecciona una opción (1, 2, 3, 4, 5, 6): ")
+            opcion = input("Selecciona una opción (1, 2, 3, 4, 5, 6, 7): ")
 
             # Realiza acciones según la opción seleccionada
             if opcion == '1':
@@ -181,23 +179,24 @@ def guardar_dataset(dfDataSet, archivo):
 def guardar_clf_vct_nombre(tipo, fichero, tarea, nombre):
     if tipo == 'clf':
         if tarea == 'A':
-            ruta_carpeta = obtener_ruta_guardado('SaveCLF', nombre+'_clf_A.joblib')
+            ruta_carpeta = obtener_ruta_guardado('SaveCLF', nombre + '_clf_A.joblib')
         elif tarea == 'B':
-            ruta_carpeta = obtener_ruta_guardado('SaveCLF', nombre+'_clf_B.joblib')
+            ruta_carpeta = obtener_ruta_guardado('SaveCLF', nombre + '_clf_B.joblib')
         else:
             print("No se puede guardar porque la tarea enviada no es correcta")
             return
     else:
         if tarea == 'A':
-            ruta_carpeta = obtener_ruta_guardado('SaveVCT', nombre+'vct_A.joblib')
+            ruta_carpeta = obtener_ruta_guardado('SaveVCT', nombre + 'vct_A.joblib')
         elif tarea == 'B':
-            ruta_carpeta = obtener_ruta_guardado('SaveVCT', nombre+'vct_B.joblib')
+            ruta_carpeta = obtener_ruta_guardado('SaveVCT', nombre + 'vct_B.joblib')
         else:
             print("No se puede guardar porque la tarea enviada no es correcta")
             return
     print("\nGuardando el fichero...")
     dump(fichero, ruta_carpeta)
     print("Fichero guardado en: " + ruta_carpeta)
+
 
 def guardar_clf_vct(tipo, fichero, tarea):
     if tipo == 'clf':
@@ -225,7 +224,7 @@ def guardar_estadisticas(data, nombre):
     fichero = obtener_ruta_guardado('Estadisticas', nombre)
     # Escribir los datos en el archivo TSV
     with open(fichero, mode='w', newline='') as file:
-        writer = csv.writer(file,delimiter='\t')
+        writer = csv.writer(file, delimiter='\t')
         writer.writerows(data)
 
     print(f"Los datos se han guardado en {fichero}.")
@@ -271,23 +270,25 @@ def tokenize_and_reduce_150(text):
     tokens = word_tokenize(text)
     return ' '.join(tokens[:150])
 
-def limpia_texto_simple(text):
 
-    if len(text.get_text()) >= 20 and detect(text.get_text()) == 'en':
-         return text.replace('\t', '').replace('\n', '').replace('  ', '')
+def limpia_texto_simple(text):
+    if len(text) >= 20 and detect(text) == 'en':
+        return text.replace('\t', '').replace('\n', '').replace('  ', '')
     else:
-        return  " "
+        return " "
+
 
 def limpia_texto(list):
     lista_txt_limpio = []
     for text in list:
         if len(text.get_text()) >= 20 and detect(text.get_text()) == 'en':
             lista_txt_limpio.append(text.get_text().replace('\t', '').replace('\n', ''))
-    return lista_txt_limpio
+            return lista_txt_limpio
+        else:
+            return " "
 
 
 def limpia_texto_df(df):
-
     # Crea una copia del DataFrame para evitar modificar el original
     df_limpio = df.copy()
 
@@ -418,7 +419,7 @@ def imprime_estadistica(dfDataSet, name, fichero):
             ["Longitud media de instancias humanas tokenizdas 50", f"{long_media_humano_t50:.2f}"],
             ["Longitud media de instancias generadas tokenizadas 50", f"{long_media_chatGPT_t50:.2f}"]
         ]
-        guardar_estadisticas(data,fichero)
+        guardar_estadisticas(data, fichero)
     else:
         data = [
             ["Número total de instancias", n_total],
@@ -453,7 +454,7 @@ def imprime_estadistica(dfDataSet, name, fichero):
             ["Longitud media de instancias Bloomz tokenizadas 50", f"{long_media_bloomz_t50:.2f}"],
             ["Longitud media de instancias Dolly tokenizadas 50", f"{long_media_dolly_t50:.2f}"]
         ]
-        guardar_estadisticas(data,fichero)
+        guardar_estadisticas(data, fichero)
 
     # imprimimos los datos en forma de tabla tabulada
     print("\n" + name)
@@ -530,7 +531,7 @@ def imprime_estadistica_subtarea_B(df_train_B, df_test_B, df_fase_1, nombre):
         ["Número de instancias generadas en el test fase_01", n_generated_test_f01]
     ]
     # Guardamos la estadistica
-    guardar_estadisticas(data,nombre)
+    guardar_estadisticas(data, nombre)
     # Imprimimos los datos en forma de tabla tabulada
     print(tabulate(data, headers=["Descripción", "Valor"], tablefmt="grid"))
 
@@ -581,11 +582,12 @@ def imprime_estadistica_subtarea_A(df_train_A, df_test_A, df_fase_1, nombre):
         ["Número de instancias generadas en el test fase_01", n_generated_test_f01]
     ]
     # Guardamos la estadística
-    guardar_estadisticas(data,nombre)
+    guardar_estadisticas(data, nombre)
     # Imprimimos los datos en forma de tabla tabulada
     print(tabulate(data, headers=["Descripción", "Valor"], tablefmt="grid"))
 
-def guardar_report(nombre_modelo,score,report,file_name):
+
+def guardar_report(nombre_modelo, score, report, file_name):
     fichero = obtener_ruta_guardado('Estadisticas', file_name)
     with open(fichero, "w") as file:
         file.write(f"Best Model: {nombre_modelo}\n")
@@ -593,6 +595,8 @@ def guardar_report(nombre_modelo,score,report,file_name):
         file.write("Best Report:\n")
         file.write(report)
     print("Report guardada en ", fichero)
+
+
 def balacearDF(dfDataSet):
     # dividir instancias humanas y generadas
     dfHuman = dfDataSet[dfDataSet['label'] == 0]

@@ -1,7 +1,8 @@
 # import required libraries
 from batch import functions
 
-file_01 = functions.obtener_datos()
+if __name__ == '__main__':
+    functions.obtener_datos()
 
 
 def runScript():
