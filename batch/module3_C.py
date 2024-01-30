@@ -11,6 +11,7 @@ from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import AdaBoostClassifier
+import numpy as np
 
 
 # batch 3 - Módulo que usamos para crear los test, elegir modelo, entrenar y guardar clasificador y vectorizador
@@ -96,8 +97,8 @@ def batchThree():
     c_A_150 = svm.SVC(kernel='linear')
     c_A_50 = RandomForestClassifier(n_estimators=50,  # 1000,
                                     random_state=42)  # ojo, bajar n_estimator (nº arboles) a 100 si se bloquea
-    c_B_completo = GradientBoostingClassifier(n_estimators=50,  # 1000,
-                                              random_state=42)  # bajar n_estimator (nº arboles) a 100 si se bloquea
+    c_B_completo = GradientBoostingClassifier()  # n_estimators=50,  # 1000,
+    # random_state=42)  # bajar n_estimator (nº arboles) a 100 si se bloquea
     c_B_441 = GradientBoostingClassifier(n_estimators=50,  # 1000,
                                          random_state=42)  # ojo, bajar n_estimator (nº arboles) a 100 si se bloquea
     c_B_150 = GradientBoostingClassifier(n_estimators=50,  # 1000,
@@ -114,7 +115,12 @@ def batchThree():
     column_names = ['subtarea', 'columna', 'modelo', 'model', 'score', 'report', 'score_f01', 'report_f01']
     df_total = pd.DataFrame(columns=column_names)
 
+    best_score_a = -np.inf
+    best_score_b = -np.inf
+
     def comprobar_sistema(vectorizer, clasificador, df_train, df_test, columna, subtarea, nombre_mostrar):
+        global best_score_a, best_score_b
+
         print("\n Cargando vectorizador para Subtarea ", subtarea, " usando la columna ", columna)
         X_train = vectorizer.fit_transform(df_train[columna])
         X_test = vectorizer.transform(df_test[columna])
@@ -140,6 +146,18 @@ def batchThree():
         except Exception as e:
             print(f"Error : {e}")
             # guardamos clasificador y vectorizador
+        if subtarea == 'A':
+            if score > best_score_a:
+                best_score_a = score
+                print("\nGuardando clasificador...")
+                batch.functions.guardar_clf_vct('clf', clasificador, 'A')
+                batch.functions.guardar_clf_vct('vct', vectorizer, 'A')
+        else:
+            if score > best_score_b:
+                best_score_b = score
+                print("\nGuardando clasificador...")
+                batch.functions.guardar_clf_vct('clf', clasificador, 'B')
+                batch.functions.guardar_clf_vct('vct', vectorizer, 'B')
 
         print("\nGuardando clasificador...")
         batch.functions.guardar_clf_vct_nombre('clf', clasificador, subtarea, nombre_mostrar)
@@ -153,7 +171,7 @@ def batchThree():
     comprobar_sistema(v_A_50, c_A_50, df_train_A, df_test_A, txt_50, 'A', 'S_A_50')
 
     # Datos subtarea B
-    #comprobar_sistema(v_B_completo, c_B_completo, df_train_B, df_test_B, txt_completo, 'B', 'S_B_completo')
+    comprobar_sistema(v_B_completo, c_B_completo, df_train_B, df_test_B, txt_completo, 'B', 'S_B_completo')
     comprobar_sistema(v_B_441, c_B_441, df_train_B, df_test_B, txt_441, 'B', 'S_B_441')
     comprobar_sistema(v_B_150, c_B_150, df_train_B, df_test_B, txt_150, 'B', 'S_B_150')
     comprobar_sistema(v_B_50, c_B_50, df_train_B, df_test_B, txt_50, 'B', 'S_B_50')
