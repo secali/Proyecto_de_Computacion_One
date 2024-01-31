@@ -149,17 +149,18 @@ def batchThree():
                       + " " + tfidf_option)
                 # Aplicamos la transformación TF-IDF a los datos
                 # Vectorizamos textos de train y test
-                # X_train = vectorizer.fit_transform(train_df["text"])
-                # X_test = vectorizer.transform(test_df["text"])
-                #X_train = vectorizer.fit_transform(train_df["tokenized_text_50"])
-                #X_test = vectorizer.transform(test_df["tokenized_text_50"])
+                X_train = vectorizer.fit_transform(train_df["text"])
+                X_test = vectorizer.transform(test_df["text"])
+                # X_test_f01 = vectorizer.transform(test_df_f01["text"])
+                # X_train = vectorizer.fit_transform(train_df["tokenized_text_50"])
+                # X_test = vectorizer.transform(test_df["tokenized_text_50"])
                 # X_test_f01 = vectorizer.transform(test_df_f01["tokenized_text_50"])
                 # X_train = vectorizer.fit_transform(train_df["tokenized_text_150"])
                 # X_test = vectorizer.transform(test_df["tokenized_text_150"])
                 # X_test_f01 = vectorizer.transform(test_df_f01["tokenized_text_150"])
-                X_train = vectorizer.fit_transform(train_df["tokenized_text"])
-                X_test = vectorizer.transform(test_df["tokenized_text"])
-                X_test_f01 = vectorizer.transform(test_df_f01["tokenized_text"])
+                # X_train = vectorizer.fit_transform(train_df["tokenized_text"])
+                # X_test = vectorizer.transform(test_df["tokenized_text"])
+                # X_test_f01 = vectorizer.transform(test_df_f01["tokenized_text"])
 
                 print("\nEligiendo calsificador")
                 # Obtener una lista de todos los clasificadores disponibles
@@ -252,14 +253,14 @@ def batchThree():
                                        smooth_idf=(best_tfidf_options_a == 'smooth_idf'),
                                        sublinear_tf=(best_tfidf_options_a == 'sublinear_tf'))
 
-    #X_train = mejor_vectorizer.fit_transform(train_df["text"])
-    #X_test_f01 = mejor_vectorizer.transform(test_df_f01["text"])
-    X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text"])
-    X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text"])
-    #X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text_150"])
-    #X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text_150"])
-    #X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text_50"])
-    #X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text_50"])
+    X_train = mejor_vectorizer.fit_transform(train_df["text"])
+    X_test_f01 = mejor_vectorizer.transform(test_df_f01["text"])
+    #X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text"])
+    #X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text"])
+    # X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text_150"])
+    # X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text_150"])
+    # X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text_50"])
+    # X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text_50"])
 
     # Testeamos modelo fase 1 e imprimimos report
     try:
