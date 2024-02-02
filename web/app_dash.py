@@ -5,7 +5,6 @@ from dash.dependencies import Input, Output, State
 from batch import module4
 from batch import functions
 
-
 # Inicializa la aplicación Dash con suppress_callback_exceptions=True
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
 
@@ -42,14 +41,15 @@ index_layout = html.Div([
 
     html.Br(),
     html.Div([
-        html.Label(id='resultado')
+        html.Label(id='resultado'),
+        html.Label(id='probabilidades-adicionales')
     ])
 ])
 
-
 # Define la lógica de la aplicación
 @app.callback(
-    Output('resultado', 'children'),
+    [Output('resultado', 'children'),
+     Output('probabilidades-adicionales', 'children')],
     [Input('analizar-button', 'n_clicks')],
     [State('modelo', 'value'),
      State('texto', 'value')]
@@ -62,24 +62,21 @@ def analizar_texto(n_clicks, modelo, texto):
     if n_clicks is not None and n_clicks > 0:
         # Realiza aquí la lógica de análisis según el modelo y el texto
 
-        resultado = module4.batchFour(modelo, texto)
+        resultado, probabilidades_adicionales = module4.batchFour(modelo, texto)
+
+
         print(f'Resultado: {resultado}')
-        return resultado  # Devuelve solo un elemento
+        return resultado, probabilidades_adicionales
     else:
         print('Botón no ha sido pulsado')
-        return 'Presiona el botón "Analizar"'
-
+        return 'Presiona el botón "Analizar"', 'Probabilidad...'
 
 # Establece el diseño de la aplicación
 app.layout = index_layout
 
-
 def runInDebugMode():
-    app.run_server(debug=True,  threaded=True)
-
+    app.run_server(debug=True, threaded=True)
 
 # Corre la aplicación en el servidor local
 if __name__ == '__main__':
-    app.run_server(debug=True,  threaded=True)
-
-
+    app.run_server(debug=True, threaded=True)
