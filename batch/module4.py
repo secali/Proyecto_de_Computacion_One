@@ -50,7 +50,7 @@ def batchFour(modelo, texto):
                 texto_vectorizado = loaded_vectorizador_B.transform([texto])
                 # Calcular % de probabilidad de ser de uno u otro tipo
 
-                probabilidades = str
+                probabilidades = ''
                 y_pred_probs = loaded_classifier_B.predict_proba(texto_vectorizado.reshape(1, -1))
                 for class_label, prob in enumerate(y_pred_probs[0]):
                     print(f"Probabilidad para clase {class_label}: {prob:.2%}")
