@@ -255,8 +255,8 @@ def batchThree():
 
     X_train = mejor_vectorizer.fit_transform(train_df["text"])
     X_test_f01 = mejor_vectorizer.transform(test_df_f01["text"])
-    #X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text"])
-    #X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text"])
+    # X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text"])
+    # X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text"])
     # X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text_150"])
     # X_test_f01 = mejor_vectorizer.transform(test_df_f01["tokenized_text_150"])
     # X_train = mejor_vectorizer.fit_transform(train_df["tokenized_text_50"])
