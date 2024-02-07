@@ -71,6 +71,6 @@ def batchFour(modelo, texto):
                     return 'El texto introducido ha sido generado por Dolly', probabilidades
         else:
             print('El texto no cumple las caracteristícas necesararias.\nIntroduzca otro texto')
-            return 'El texto no cumple las caracteristícas necesararias.\nIntroduzca otro texto'
+            return 'El texto no cumple las caracteristícas necesararias.\nIntroduzca otro texto', ""
     else:
         print('Esperando a recibir petición web')

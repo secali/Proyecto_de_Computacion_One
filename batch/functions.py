@@ -272,7 +272,7 @@ def tokenize_and_reduce_150(text):
 
 
 def limpia_texto_simple(text):
-    if len(text) >= 20 and detect(text) == 'en':
+    if text is not None and len(text) >= 20 and detect(text) == 'en':
         return text.replace('\t', '').replace('\n', '').replace('  ', '')
     else:
         return " "
